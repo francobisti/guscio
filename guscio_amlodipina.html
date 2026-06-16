@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO — Amlodipina EG 10mg</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
+
+  :root {
+    --verde: #2D5016;
+    --ocra: #C4860A;
+    --crema: #F7F4EE;
+    --testo: #1A1A1A;
+    --grigio: #6B6B6B;
+    --bordo: #E2DDD4;
+    --allerta: #8B1A1A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--crema);
+    color: var(--testo);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--verde);
+    padding: 20px 24px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .guscio-logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 22px;
+    color: #fff;
+    letter-spacing: 0.08em;
+  }
+
+  .guscio-logo span {
+    color: var(--ocra);
+  }
+
+  .lang-switcher {
+    display: flex;
+    gap: 6px;
+  }
+
+  .lang-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.2s;
+  }
+
+  .lang-btn.active {
+    background: var(--ocra);
+    border-color: var(--ocra);
+  }
+
+  .farmaco-nome {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: #fff;
+  }
+
+  .farmaco-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 2px;
+  }
+
+  /* PULSANTE ASCOLTA */
+  .ascolta-bar {
+    background: var(--ocra);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .ascolta-bar:active { background: #a0700a; }
+
+  .play-icon {
+    width: 44px;
+    height: 44px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .play-icon svg { margin-left: 3px; }
+
+  .ascolta-testo strong {
+    display: block;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .ascolta-testo span {
+    color: rgba(255,255,255,0.85);
+    font-size: 12px;
+  }
+
+  /* SEZIONI */
+  .sezioni-nav {
+    display: flex;
+    overflow-x: auto;
+    gap: 0;
+    background: #fff;
+    border-bottom: 2px solid var(--bordo);
+    scrollbar-width: none;
+  }
+
+  .sezioni-nav::-webkit-scrollbar { display: none; }
+
+  .nav-btn {
+    padding: 12px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--grigio);
+    border: none;
+    background: none;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .nav-btn.active {
+    color: var(--verde);
+    border-bottom-color: var(--verde);
+  }
+
+  /* CONTENUTO */
+  .contenuto {
+    padding: 0 0 80px;
+  }
+
+  .sezione {
+    display: none;
+    padding: 24px 20px;
+  }
+
+  .sezione.attiva { display: block; }
+
+  .sezione h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--verde);
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+
+  .sezione h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--testo);
+    margin: 20px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .sezione p {
+    font-size: 15px;
+    color: var(--testo);
+    margin-bottom: 12px;
+    line-height: 1.7;
+  }
+
+  .box-allerta {
+    background: #FFF5F5;
+    border-left: 4px solid var(--allerta);
+    padding: 14px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+  }
+
+  .box-allerta strong {
+    display: block;
+    color: var(--allerta);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  .box-allerta p {
+    font-size: 14px;
+    margin: 0;
+    color: #4A1A1A;
+  }
+
+  .box-info {
+    background: #F0F5EB;
+    border-left: 4px solid var(--verde);
+    padding: 14px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+  }
+
+  .box-info strong {
+    display: block;
+    color: var(--verde);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  .box-info p {
+    font-size: 14px;
+    margin: 0;
+  }
+
+  ul.lista {
+    padding-left: 0;
+    list-style: none;
+    margin-bottom: 12px;
+  }
+
+  ul.lista li {
+    font-size: 15px;
+    padding: 8px 0 8px 20px;
+    border-bottom: 1px solid var(--bordo);
+    position: relative;
+    line-height: 1.5;
+  }
+
+  ul.lista li::before {
+    content: "–";
+    position: absolute;
+    left: 0;
+    color: var(--ocra);
+    font-weight: 600;
+  }
+
+  ul.lista li:last-child { border-bottom: none; }
+
+  /* DOSE CARD */
+  .dose-card {
+    background: var(--verde);
+    color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    text-align: center;
+  }
+
+  .dose-numero {
+    font-family: 'Fraunces', serif;
+    font-size: 52px;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--ocra);
+  }
+
+  .dose-unita {
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 4px;
+  }
+
+  .dose-desc {
+    font-size: 13px;
+    opacity: 0.8;
+    margin-top: 8px;
+  }
+
+  /* FOOTER GUSCIO */
+  .footer-guscio {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--crema);
+    border-top: 1px solid var(--bordo);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--grigio);
+  }
+
+  .footer-guscio a {
+    color: var(--verde);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  /* SPEAKING STATE */
+  .speaking .play-icon {
+    background: var(--verde);
+  }
+
+  .pulse {
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="guscio-logo">GUSC<span>I</span>O</div>
+    <div class="lang-switcher">
+      <button class="lang-btn active" onclick="setLang('it')">IT</button>
+      <button class="lang-btn" onclick="setLang('de')">DE</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+  <div class="farmaco-nome" id="farmaco-nome">Amlodipina EG® 10 mg compresse</div>
+  <div class="farmaco-sub" id="farmaco-sub">Medicinale equivalente · Calcio-antagonista</div>
+</div>
+
+<div class="ascolta-bar" onclick="ascolta()" id="ascolta-bar">
+  <div class="play-icon" id="play-icon">
+    <svg width="16" height="18" viewBox="0 0 16 18" fill="none">
+      <path d="M1 1L15 9L1 17V1Z" fill="#2D5016"/>
+    </svg>
+  </div>
+  <div class="ascolta-testo">
+    <strong id="ascolta-label">Ascolta questo foglio</strong>
+    <span id="ascolta-sub">Sintesi vocale · sezione corrente</span>
+  </div>
+</div>
+
+<nav class="sezioni-nav">
+  <button class="nav-btn active" onclick="mostraSezione('cos-e', this)" id="nav-it">A cosa serve</button>
+  <button class="nav-btn" onclick="mostraSezione('dose', this)">Dose</button>
+  <button class="nav-btn" onclick="mostraSezione('attenzione', this)">Attenzione</button>
+  <button class="nav-btn" onclick="mostraSezione('effetti', this)">Effetti</button>
+  <button class="nav-btn" onclick="mostraSezione('conserva', this)">Conservazione</button>
+</nav>
+
+<div class="contenuto">
+
+  <!-- SEZIONE: A COSA SERVE -->
+  <div class="sezione attiva" id="cos-e">
+    <h2 id="title-cose">A cosa serve questo medicinale</h2>
+    <p id="desc-cose">L'Amlodipina è un farmaco calcio-antagonista. Viene usata per trattare la pressione alta (ipertensione) e un tipo di dolore al petto chiamato angina.</p>
+    <p id="desc-cose2">Agisce rilassando i vasi sanguigni, permettendo al sangue di scorrere più facilmente e alleggerendo il lavoro del cuore.</p>
+    <div class="box-info">
+      <strong id="box-prescritto">Farmaco prescritto</strong>
+      <p id="box-prescritto-desc">Questo medicinale è stato prescritto solo per lei. Non lo dia ad altre persone.</p>
+    </div>
+  </div>
+
+  <!-- SEZIONE: DOSE -->
+  <div class="sezione" id="dose">
+    <h2>Come prendere Amlodipina EG</h2>
+    <div class="dose-card">
+      <div class="dose-numero">1</div>
+      <div class="dose-unita">compressa al giorno</div>
+      <div class="dose-desc">Sempre alla stessa ora · con un po' d'acqua</div>
+    </div>
+    <div class="box-allerta">
+      <strong>⚠ Importante</strong>
+      <p>Non prenda Amlodipina con succo di pompelmo. Il pompelmo aumenta l'effetto del farmaco in modo imprevedibile.</p>
+    </div>
+    <h3>Bambini e adolescenti (6–17 anni)</h3>
+    <p>La dose iniziale raccomandata è di 2,5 mg al giorno. La dose massima è 5 mg al giorno.</p>
+    <h3>Se dimentica una dose</h3>
+    <p>Prenda la dose successiva all'orario abituale. Non prenda mai una dose doppia per recuperare quella dimenticata.</p>
+    <h3>Se prende troppa Amlodipina</h3>
+    <div class="box-allerta">
+      <strong>🚨 Contatti subito il medico</strong>
+      <p>Un eccesso può abbassare pericolosamente la pressione. Sintomi: capogiri, svenimento, rossore cutaneo.</p>
+    </div>
+  </div>
+
+  <!-- SEZIONE: ATTENZIONE -->
+  <div class="sezione" id="attenzione">
+    <h2>Quando fare attenzione</h2>
+    <h3>Non prenda questo farmaco se</h3>
+    <ul class="lista">
+      <li>È allergico all'amlodipina o ad altri calcio-antagonisti</li>
+      <li>Ha la pressione molto bassa (ipotensione grave)</li>
+      <li>Ha una stenosi aortica grave o shock cardiogeno</li>
+      <li>Ha avuto un attacco di cuore negli ultimi 4 settimane</li>
+    </ul>
+    <h3>Parli prima con il medico se</h3>
+    <ul class="lista">
+      <li>Ha avuto recentemente un attacco cardiaco</li>
+      <li>Ha insufficienza cardiaca</li>
+      <li>Ha problemi al fegato</li>
+      <li>È anziano e il suo dosaggio deve essere valutato</li>
+    </ul>
+    <div class="box-allerta">
+      <strong>⚠ Pompelmo</strong>
+      <p>Eviti il pompelmo e il suo succo durante la terapia. Può aumentare l'effetto ipotensivo del farmaco.</p>
+    </div>
+    <h3>Gravidanza e allattamento</h3>
+    <p>La sicurezza in gravidanza non è stabilita. Informi sempre il medico se è incinta, pensa di esserlo o sta allattando.</p>
+    <h3>Guida e macchinari</h3>
+    <p>Il farmaco può causare capogiri o affaticamento. Valuti con il medico la sua capacità di guidare.</p>
+  </div>
+
+  <!-- SEZIONE: EFFETTI -->
+  <div class="sezione" id="effetti">
+    <h2>Possibili effetti indesiderati</h2>
+    <p>Come tutti i medicinali, può avere effetti indesiderati, ma non tutte le persone li manifestano.</p>
+    <h3>Molto comuni (più di 1 persona su 10)</h3>
+    <ul class="lista">
+      <li>Gonfiore alle caviglie o ai piedi (edema)</li>
+    </ul>
+    <h3>Comuni (fino a 1 persona su 10)</h3>
+    <ul class="lista">
+      <li>Mal di testa · capogiri · sonnolenza</li>
+      <li>Palpitazioni · rossore al viso</li>
+      <li>Nausea · dolori addominali</li>
+      <li>Affaticamento · debolezza</li>
+    </ul>
+    <div class="box-allerta">
+      <strong>🚨 Contatti subito il medico se</strong>
+      <p>Ha difficoltà respiratorie improvvise, gonfiore a viso/labbra/gola, o dolore toracico intenso.</p>
+    </div>
+    <h3>Segnalazione degli effetti</h3>
+    <p>Se manifesta effetti indesiderati, parli con il medico o il farmacista. Può anche segnalarli direttamente su <strong>www.aifa.gov.it</strong></p>
+  </div>
+
+  <!-- SEZIONE: CONSERVAZIONE -->
+  <div class="sezione" id="conserva">
+    <h2>Come conservare Amlodipina EG</h2>
+    <div class="box-info">
+      <strong>📦 Conservazione</strong>
+      <p>Non conservare a temperatura superiore a 25°C. Tenere nella confezione originale per proteggere dall'umidità.</p>
+    </div>
+    <ul class="lista">
+      <li>Tenere fuori dalla portata dei bambini</li>
+      <li>Non usare dopo la data di scadenza riportata sulla confezione</li>
+      <li>Non gettare i medicinali nell'acqua o nei rifiuti domestici</li>
+      <li>Chiedere al farmacista come smaltire i medicinali non utilizzati</li>
+    </ul>
+    <h3>Contenuto della confezione</h3>
+    <p>Ogni compressa contiene 10 mg di amlodipina (come besilato). Eccipiente con effetto noto: meno di 1 mmol di sodio per compressa.</p>
+  </div>
+
+</div>
+
+<div class="footer-guscio">
+  <span>Powered by <a href="#">GUSCIO</a> · guscio.ai</span>
+  <span>la sicurezza è un atto d'amore</span>
+</div>
+
+<script>
+  // Contenuti multilingua
+  const testi = {
+    it: {
+      farmaco: "Amlodipina EG® 10 mg compresse",
+      sub: "Medicinale equivalente · Calcio-antagonista",
+      ascolta: "Ascolta questo foglio",
+      ascoltaSub: "Sintesi vocale · sezione corrente",
+      nav: ["A cosa serve", "Dose", "Attenzione", "Effetti", "Conservazione"]
+    },
+    de: {
+      farmaco: "Amlodipin EG® 10 mg Tabletten",
+      sub: "Generikum · Kalziumantagonist",
+      ascolta: "Diesen Beipackzettel anhören",
+      ascoltaSub: "Sprachausgabe · aktueller Abschnitt",
+      nav: ["Verwendung", "Dosierung", "Warnhinweise", "Nebenwirkungen", "Lagerung"]
+    },
+    en: {
+      farmaco: "Amlodipine EG® 10 mg tablets",
+      sub: "Generic medicine · Calcium channel blocker",
+      ascolta: "Listen to this leaflet",
+      ascoltaSub: "Text to speech · current section",
+      nav: ["What it's for", "Dosage", "Warnings", "Side effects", "Storage"]
+    }
+  };
+
+  let lingua = 'it';
+
+  function setLang(l) {
+    lingua = l;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    const t = testi[l];
+    document.getElementById('farmaco-nome').textContent = t.farmaco;
+    document.getElementById('farmaco-sub').textContent = t.sub;
+    document.getElementById('ascolta-label').textContent = t.ascolta;
+    document.getElementById('ascolta-sub').textContent = t.ascoltaSub;
+    const navBtns = document.querySelectorAll('.nav-btn');
+    navBtns.forEach((btn, i) => { btn.textContent = t.nav[i]; });
+  }
+
+  function mostraSezione(id, btn) {
+    document.querySelectorAll('.sezione').forEach(s => s.classList.remove('attiva'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('attiva');
+    btn.classList.add('active');
+    window.speechSynthesis.cancel();
+  }
+
+  function ascolta() {
+    const sezioneAttiva = document.querySelector('.sezione.attiva');
+    const testo = sezioneAttiva.innerText;
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+      document.getElementById('ascolta-bar').classList.remove('speaking');
+      return;
+    }
+    const utterance = new SpeechSynthesisUtterance(testo);
+    utterance.lang = lingua === 'it' ? 'it-IT' : lingua === 'de' ? 'de-DE' : 'en-GB';
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+    document.getElementById('ascolta-bar').classList.add('speaking');
+    utterance.onend = () => {
+      document.getElementById('ascolta-bar').classList.remove('speaking');
+    };
+    window.speechSynthesis.speak(utterance);
+  }
+</script>
+</body>
+</html>
