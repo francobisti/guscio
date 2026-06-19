@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO · Doppio Malto</title>
+<style>
+  :root{
+    --cream:#F5EFE3;
+    --malt:#3D2B1F;
+    --amber:#C9862E;
+    --foam:#FAF6EC;
+    --ink:#241A12;
+    --line:#D8C9AC;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Roman',serif;min-height:100vh;}
+  body{display:flex;flex-direction:column;align-items:center;padding:28px 18px 60px;}
+
+  .wrap{width:100%;max-width:480px;}
+
+  .mark{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+  .mark-icon{width:34px;height:34px;border-radius:50%;background:var(--malt);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .mark-icon svg{width:18px;height:18px;}
+  .mark-text{font-family:Georgia,serif;font-size:22px;font-weight:700;letter-spacing:0.5px;color:var(--malt);}
+
+  .tagline{font-size:13px;color:#7A6A52;font-style:italic;margin-bottom:28px;padding-left:44px;}
+
+  .lang-row{display:flex;gap:6px;margin-bottom:26px;flex-wrap:wrap;}
+  .lang-btn{
+    flex:1 1 18%;min-width:52px;padding:9px 4px;border:1.5px solid var(--line);border-radius:8px;
+    background:var(--foam);color:var(--ink);font-family:Georgia,serif;font-size:13px;font-weight:600;
+    cursor:pointer;transition:all .2s;text-align:center;
+  }
+  .lang-btn.active{background:var(--malt);color:var(--foam);border-color:var(--malt);}
+
+  [dir="rtl"] .item-price{float:left;}
+  [dir="rtl"] .footer-note,[dir="rtl"] .tagline{direction:rtl;}
+
+  .section-title{
+    font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);
+    font-family:Helvetica,Arial,sans-serif;font-weight:700;margin-bottom:6px;
+  }
+  .table-name{font-size:28px;font-weight:700;color:var(--malt);margin-bottom:24px;line-height:1.15;}
+
+  .play-card{
+    background:var(--foam);border:1.5px solid var(--line);border-radius:16px;padding:22px;
+    margin-bottom:18px;
+  }
+  .play-btn{
+    width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+    background:var(--malt);color:var(--foam);border:none;border-radius:30px;
+    padding:16px;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:600;
+    cursor:pointer;letter-spacing:0.3px;transition:opacity .2s;
+  }
+  .play-btn:active{opacity:0.8;}
+  .play-btn.speaking{background:var(--amber);}
+  .play-btn svg{width:18px;height:18px;flex-shrink:0;}
+
+  .item{
+    border-bottom:1px solid var(--line);padding:14px 0;
+  }
+  .item:last-child{border-bottom:none;}
+  .item-name{font-size:16px;font-weight:700;color:var(--ink);}
+  .item-desc{font-size:13.5px;color:#6B5B43;font-style:italic;margin-top:2px;}
+  .item-price{font-size:13px;color:var(--amber);font-weight:700;float:right;}
+
+  .footer-note{
+    text-align:center;font-size:11.5px;color:#9A8A6E;margin-top:30px;line-height:1.6;
+    font-family:Helvetica,Arial,sans-serif;
+  }
+  .footer-note a{color:var(--amber);text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="mark">
+    <div class="mark-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 11C4 6.5 7.5 3 12 3C16.5 3 20 6.5 20 11V13C20 17.5 16.5 21 12 21C7.5 21 4 17.5 4 13V11Z" stroke="#F5EFE3" stroke-width="1.6"/>
+        <path d="M4 11.5C6 10.2 9 9.5 12 9.5C15 9.5 18 10.2 20 11.5" stroke="#F5EFE3" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="mark-text">GUSCIO</div>
+  </div>
+  <div class="tagline" id="tagline">il menu che si racconta</div>
+
+  <div class="lang-row" id="langRow">
+    <button class="lang-btn active" data-lang="it">IT</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="de">DE</button>
+    <button class="lang-btn" data-lang="fr">FR</button>
+    <button class="lang-btn" data-lang="pl">PL</button>
+    <button class="lang-btn" data-lang="cs">CZ</button>
+    <button class="lang-btn" data-lang="zh">中文</button>
+    <button class="lang-btn" data-lang="ja">日本語</button>
+    <button class="lang-btn" data-lang="ar">عربي</button>
+  </div>
+
+  <div class="section-title" id="sectionLabel">Tavolo 1</div>
+  <div class="table-name" id="tableName">Li voglio tutti</div>
+
+  <div class="play-card">
+    <button class="play-btn" id="playBtn">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <span id="playLabel">Ascolta</span>
+    </button>
+  </div>
+
+  <div id="itemsList"></div>
+
+  <div class="footer-note">
+    Avvicina il telefono al tag per ascoltare<br>questa sezione, in 9 lingue.<br>
+    <a href="https://guscio.ai" target="_blank">guscio.ai</a>
+  </div>
+
+</div>
+
+<script>
+// ---- DATA: 4 sections x 4 languages, drawn from the real Doppio Malto menu ----
+const SECTIONS = {
+  antipasti: {
+    title: { it:"Li voglio tutti", en:"I want them all", de:"Ich will alles", fr:"Je les veux tous", pl:"Chcę ich wszystkich", cs:"Chci je všechny", zh:"我都想要", ja:"全部欲しい", ar:"أريدها كلها" },
+    label: { it:"Tavolo 1 · Antipasti", en:"Table 1 · Starters", de:"Tisch 1 · Vorspeisen", fr:"Table 1 · Entrées", pl:"Stół 1 · Przystawki", cs:"Stůl 1 · Předkrmy", zh:"1号桌 · 开胃菜", ja:"1番テーブル・前菜", ar:"طاولة 1 · المقبلات" },
+    items: [
+      { it:["Mozzarelle in carrozza","Mozzarella fritta in pastella, calda e filante","7,8"], en:["Fried mozzarella sandwich","Battered fried mozzarella, hot and stringy","7.8"], de:["Frittierte Mozzarella","In Teig frittierte Mozzarella, heiß und zerfließend","7,8"], fr:["Mozzarelle frite","Mozzarella frite en pâte, chaude et filante","7,8"], pl:["Smażona mozzarella w cieście","Mozzarella w cieście, gorąca i ciągnąca się","7,8"], cs:["Smažená mozzarella v těstíčku","Mozzarella v těstíčku, horká a tažná","7,8"], zh:["炸马苏里拉芝士","裹粉炸马苏里拉，热腾腾拉丝","7.8"], ja:["フライドモッツァレラ","衣をつけて揚げたモッツァレラ、熱々でとろける","7.8"], ar:["موزاريلا مقلية","موزاريلا مقلية بالعجين، ساخنة وقابلة للتمدد","7.8"] },
+      { it:["Tagliata di pollo panato","Petto di pollo impanato e tagliato a listarelle","8,2"], en:["Breaded chicken strips","Breaded chicken breast, sliced into strips","8.2"], de:["Paniertes Hühnchen","Paniertes Hühnerbrustfilet, in Streifen geschnitten","8,2"], fr:["Poulet pané en lamelles","Blanc de poulet pané, coupé en lamelles","8,2"], pl:["Panierowany kurczak w plastrach","Panierowana pierś z kurczaka, pokrojona w paski","8,2"], cs:["Smažené kuřecí nudličky","Kuřecí prsa v trojobalu, nakrájená na proužky","8,2"], zh:["香炸鸡排条","裹粉炸鸡胸肉，切成条状","8.2"], ja:["パン粉チキンストリップ","パン粉をつけた鶏胸肉を細切りに","8.2"], ar:["شرائح دجاج مقرمشة","صدر دجاج مقرمش مقطع إلى شرائح","8.2"] },
+      { it:["Antipasto tricolore","Salumi e formaggi misti, il grande classico da condividere","16,8"], en:["Tricolore sharing board","Mixed cured meats and cheeses, the classic to share","16.8"], de:["Tricolore-Vorspeisenplatte","Gemischte Aufschnitte und Käse, der Klassiker zum Teilen","16,8"], fr:["Planche tricolore","Charcuterie et fromages mélangés, le grand classique à partager","16,8"], pl:["Talerz tricolore","Mieszane wędliny i sery, klasyk do dzielenia się","16,8"], cs:["Talíř tricolore","Smíchané uzeniny a sýry, klasika ke společnému sdílení","16,8"], zh:["三色拼盘","各式熏肉和奶酪，适合分享的经典拼盘","16.8"], ja:["トリコローレ・シェアプレート","盛り合わせの肉と チーズ、定番のシェアプレート","16.8"], ar:["مقبلات ثلاثية الألوان","لحوم مقددة وأجبان مشكلة، الكلاسيكية للمشاركة","16.8"] }
+    ],
+    voice: {
+      it:"Benvenuti a Li voglio tutti. Piattini da assaggiare, combinare, moltiplicare. Tra i preferiti: le mozzarelle in carrozza, calde e filanti; la tagliata di pollo panato; e l'antipasto tricolore, il grande classico da condividere in compagnia.",
+      en:"Welcome to I want them all. Small plates to taste, combine, and multiply. Among the favorites: the fried mozzarella sandwich, hot and stringy; the breaded chicken strips; and the tricolore sharing board, the classic to enjoy together.",
+      de:"Willkommen bei Ich will alles. Kleine Gerichte zum Probieren, Kombinieren und Vermehren. Zu den Favoriten zählen: die frittierte Mozzarella, heiß und zerfließend; das panierte Hühnchen in Streifen; und die Tricolore-Vorspeisenplatte, der Klassiker zum gemeinsamen Genießen.",
+      fr:"Bienvenue chez Je les veux tous. Des petits plats à déguster, combiner et multiplier. Parmi les favoris : la mozzarelle frite, chaude et filante ; le poulet pané en lamelles ; et la planche tricolore, le grand classique à partager entre amis.",
+      pl:"Witamy w Chcę ich wszystkich. Małe dania do degustacji, łączenia i powielania. Wśród ulubionych: smażona mozzarella w cieście, gorąca i ciągnąca się; panierowany kurczak w plastrach; oraz talerz tricolore, klasyk do wspólnego dzielenia się.",
+      cs:"Vítejte u Chci je všechny. Malé pokrmy k ochutnání, kombinování a množení. Mezi oblíbené patří: smažená mozzarella v těstíčku, horká a tažná; smažené kuřecí nudličky; a talíř tricolore, klasika ke společnému sdílení.",
+      zh:"欢迎来到我都想要。可以品尝、搭配、多样选择的小盘菜。其中的热门选择包括：热腾腾拉丝的炸马苏里拉芝士；香炸鸡排条；以及适合大家分享的经典三色拼盘。",
+      ja:"全部欲しいへようこそ。味わい、組み合わせ、増やして楽しむ小皿料理です。人気メニューには、熱々でとろけるフライドモッツァレラ、パン粉チキンストリップ、そして皆でシェアする定番のトリコローレ・プレートがあります。",
+      ar:"مرحباً بكم في أريدها كلها. أطباق صغيرة للتذوق والمزج والتعدد. من بين الأطباق المفضلة: الموزاريلا المقلية، ساخنة وقابلة للتمدد؛ شرائح الدجاج المقرمشة؛ ومقبلات ثلاثية الألوان، الكلاسيكية للمشاركة مع الأصدقاء."
+    }
+  },
+  pizze: {
+    title: { it:"Cose Pizze", en:"Pizza Things", de:"Pizza-Sachen", fr:"Trucs Pizza" },
+    label: { it:"Tavolo 2 · Pizze", en:"Table 2 · Pizza", de:"Tisch 2 · Pizza", fr:"Table 2 · Pizza", pl:"Stół 2 · Pizza", cs:"Stůl 2 · Pizza", zh:"2号桌 · 比萨", ja:"2番テーブル・ピザ", ar:"طاولة 2 · بيتزا" },
+    items: [
+      { it:["Mortadella e Bella Lodi","Pizza con mortadella e formaggio Bella Lodi","13,6"], en:["Mortadella and Bella Lodi","Pizza with mortadella and Bella Lodi cheese","13.6"], de:["Mortadella und Bella Lodi","Pizza mit Mortadella und Bella-Lodi-Käse","13,6"], fr:["Mortadelle et Bella Lodi","Pizza à la mortadelle et au fromage Bella Lodi","13,6"], pl:["Mortadela i Bella Lodi","Pizza z mortadelą i serem Bella Lodi","13,6"], cs:["Mortadella a Bella Lodi","Pizza s mortadellou a sýrem Bella Lodi","13,6"], zh:["摩泰台拉香肠与贝拉洛迪芝士","配摩泰台拉香肠和贝拉洛迪芝士的比萨","13.6"], ja:["モルタデッラとベッラ・ロディ","モルタデッラとベッラ・ロディチーズのピザ","13.6"], ar:["مرتديلا وبيلا لودي","بيتزا بالمرتديلا وجبن بيلا لودي","13.6"] },
+      { it:["Crudo e Piccadilly","Prosciutto crudo e pomodorini piccadilly","15,8"], en:["Cured ham and Piccadilly tomatoes","Italian cured ham with Piccadilly cherry tomatoes","15.8"], de:["Rohschinken und Piccadilly-Tomaten","Italienischer Rohschinken mit Piccadilly-Kirschtomaten","15,8"], fr:["Jambon cru et tomates Piccadilly","Jambon cru italien et tomates cerises Piccadilly","15,8"], pl:["Szynka parmeńska i pomidorki piccadilly","Włoska szynka parmeńska z pomidorkami piccadilly","15,8"], cs:["Šunka prosciutto a rajčátka piccadilly","Italská šunka prosciutto s rajčátky piccadilly","15,8"], zh:["生火腿与皮卡迪利番茄","意式生火腿配皮卡迪利小番茄","15.8"], ja:["生ハムとピカデリートマト","イタリア産生ハムとピカデリーチェリートマト","15.8"], ar:["لحم خنزير مقدد وطماطم بيكاديلي","لحم خنزير إيطالي مقدد مع طماطم بيكاديلي الكرزية","15.8"] },
+      { it:["Che Trancio","La pizza al trancio, rossa o margherita, da personalizzare con ingredienti extra","da 7,8"], en:["Che Trancio","Pizza by the slice, red or margherita, customizable with extra toppings","from 7.8"], de:["Che Trancio","Pizzaschnitte, rot oder Margherita, mit Extra-Belag individuell anpassbar","ab 7,8"], fr:["Che Trancio","Pizza à la tranche, rouge ou margherita, personnalisable avec des suppléments","dès 7,8"], pl:["Che Trancio","Pizza na kawałki, czerwona lub margherita, do personalizacji z dodatkami","od 7,8"], cs:["Che Trancio","Pizza na plátky, červená nebo margherita, lze upravit extra přílohami","od 7,8"], zh:["切片比萨","红酱或玛格丽特切片比萨，可加配料定制","起价7.8"], ja:["チェ・トランチョ","切り売りピザ、レッドまたはマルゲリータ、トッピング追加可","7.8〜"], ar:["تشي ترانشو","بيتزا بالقطعة، حمراء أو مارغريتا، قابلة للتخصيص بإضافات","من 7.8"] }
+    ],
+    voice: {
+      it:"Benvenuti a Cose Pizze. Tra le proposte: mortadella e Bella Lodi; crudo e piccadilly, con prosciutto crudo e pomodorini; e Che Trancio, la pizza al trancio rossa o margherita, che si può personalizzare aggiungendo ingredienti extra.",
+      en:"Welcome to Pizza Things. Among the choices: mortadella and Bella Lodi; cured ham with Piccadilly tomatoes; and Che Trancio, pizza by the slice in red or margherita style, customizable with extra toppings.",
+      de:"Willkommen bei Pizza-Sachen. Zur Auswahl stehen: Mortadella und Bella Lodi; Rohschinken mit Piccadilly-Kirschtomaten; und Che Trancio, die Pizzaschnitte in rot oder Margherita, die mit Extra-Belag individuell angepasst werden kann.",
+      fr:"Bienvenue chez Trucs Pizza. Parmi les choix : mortadelle et Bella Lodi ; jambon cru et tomates Piccadilly ; et Che Trancio, la pizza à la tranche rouge ou margherita, personnalisable avec des suppléments.",
+      pl:"Witamy w Cose Pizze. Wśród propozycji: mortadela i Bella Lodi; szynka parmeńska z pomidorkami piccadilly; oraz Che Trancio, pizza na kawałki czerwona lub margherita, którą można personalizować dodając dodatkowe składniki.",
+      cs:"Vítejte u Cose Pizze. Mezi nabídkami: mortadella a Bella Lodi; šunka prosciutto s rajčátky piccadilly; a Che Trancio, pizza na plátky červená nebo margherita, kterou lze upravit přidáním extra přísad.",
+      zh:"欢迎来到比萨天地。我们的精选包括：摩泰台拉香肠与贝拉洛迪芝士比萨；生火腿配皮卡迪利番茄比萨；以及切片比萨，红酱或玛格丽特口味，可加配料定制。",
+      ja:"コーゼ・ピッツェへようこそ。おすすめには、モルタデッラとベッラ・ロディのピザ、生ハムとピカデリートマトのピザ、そしてトッピングを追加してカスタマイズできる、レッドまたはマルゲリータの切り売りピザ「チェ・トランチョ」があります。",
+      ar:"مرحباً بكم في عالم البيتزا. من بين الخيارات: المرتديلا وبيلا لودي؛ لحم الخنزير المقدد مع طماطم بيكاديلي؛ وتشي ترانشو، بيتزا بالقطعة حمراء أو مارغريتا يمكن تخصيصها بإضافة مكونات إضافية."
+    }
+  },
+  burger: {
+    title: { it:"Hip, hip, Burger!", en:"Hip, hip, Burger!", de:"Hip, hip, Burger!", fr:"Hip, hip, Burger !", pl:"Hip, hip, Burger!", cs:"Hip, hip, Burger!", zh:"嗨皮汉堡！", ja:"ヒップヒップ・バーガー！", ar:"هيب هيب برجر!" },
+    label: { it:"Tavolo 3 · Burger", en:"Table 3 · Burgers", de:"Tisch 3 · Burger", fr:"Table 3 · Burgers", pl:"Stół 3 · Burgery", cs:"Stůl 3 · Burgery", zh:"3号桌 · 汉堡", ja:"3番テーブル・バーガー", ar:"طاولة 3 · برجر" },
+    items: [
+      { it:["Doppio Smash Burger – Bacon e Cheddar","Doppia carne smashata, bacon e cheddar fuso","15,8 / 20,6"], en:["Double Smash Burger – Bacon and Cheddar","Double smashed beef patty, bacon and melted cheddar","15.8 / 20.6"], de:["Doppel-Smash-Burger – Bacon und Cheddar","Doppeltes Smash-Patty, Bacon und geschmolzener Cheddar","15,8 / 20,6"], fr:["Double Smash Burger – Bacon et Cheddar","Double steak smashé, bacon et cheddar fondu","15,8 / 20,6"], pl:["Podwójny Smash Burger – Bacon i Cheddar","Podwójny smażony kotlet, bekon i roztopiony cheddar","15,8 / 20,6"], cs:["Dvojitý Smash Burger – Bacon a Cheddar","Dvojitý smash placička, slanina a rozpuštěný cheddar","15,8 / 20,6"], zh:["双层重击汉堡 – 培根芝士","双层重击牛肉饼，培根配融化切达芝士","15.8 / 20.6"], ja:["ダブルスマッシュバーガー – ベーコン＆チェダー","ダブルのスマッシュパティ、ベーコンと溶けたチェダーチーズ","15.8 / 20.6"], ar:["دبل سماش برجر – بيكون وتشيدر","قطعتان من اللحم المسحوق، بيكون وجبن تشيدر مذاب","15.8 / 20.6"] },
+      { it:["Carbonara Olè","Burger ispirato alla carbonara, con guanciale e pecorino","15,8 / 20,6"], en:["Carbonara Olè","Burger inspired by carbonara, with guanciale and pecorino","15.8 / 20.6"], de:["Carbonara Olè","An Carbonara inspirierter Burger mit Guanciale und Pecorino","15,8 / 20,6"], fr:["Carbonara Olè","Burger inspiré de la carbonara, avec guanciale et pecorino","15,8 / 20,6"], pl:["Carbonara Olè","Burger inspirowany carbonarą, z guanciale i pecorino","15,8 / 20,6"], cs:["Carbonara Olè","Burger inspirovaný carbonarou, s guanciale a pecorinem","15,8 / 20,6"], zh:["卡邦拉风味汉堡","灵感来自卡邦拉意面的汉堡，配猪颊肉和佩科里诺芝士","15.8 / 20.6"], ja:["カルボナーラ・オレ","カルボナーラ風バーガー、グァンチャーレとペコリーノチーズ添え","15.8 / 20.6"], ar:["كاربونارا أوليه","برجر مستوحى من الكاربونارا، مع لحم الخد وجبن البيكورينو","15.8 / 20.6"] },
+      { it:["Pulled Pork all'Italiana","Maiale sfilacciato cotto a lungo, versione italiana del classico americano","16,6"], en:["Italian-style Pulled Pork","Slow-cooked shredded pork, an Italian take on the American classic","16.6"], de:["Pulled Pork auf italienische Art","Lange gegartes Pulled Pork, italienische Version des amerikanischen Klassikers","16,6"], fr:["Pulled Pork à l'italienne","Porc effiloché cuit longuement, version italienne du classique américain","16,6"], pl:["Pulled Pork po włosku","Długo gotowana, rwana wieprzowina, włoska wersja amerykańskiego klasyka","16,6"], cs:["Pulled Pork italským způsobem","Dlouho vařené trhané vepřové, italská verze amerického klasiku","16,6"], zh:["意式手撕猪肉","慢炖手撕猪肉，意式风味演绎美式经典","16.6"], ja:["イタリア風プルドポーク","じっくり煮込んだほぐし豚肉、アメリカの定番をイタリア風に","16.6"], ar:["بولد بورك على الطريقة الإيطالية","لحم خنزير مطهو ببطء ومفروم، نسخة إيطالية من الكلاسيكية الأمريكية","16.6"] }
+    ],
+    voice: {
+      it:"Benvenuti a Hip, hip, Burger! Da provare: il doppio smash burger con bacon e cheddar fuso; il Carbonara Olè, ispirato al grande classico romano con guanciale e pecorino; e il pulled pork all'italiana, cotto a lungo e sfilacciato.",
+      en:"Welcome to Hip, hip, Burger! Worth trying: the double smash burger with bacon and melted cheddar; the Carbonara Olè, inspired by the great Roman classic with guanciale and pecorino; and the Italian-style pulled pork, slow-cooked and shredded.",
+      de:"Willkommen bei Hip, hip, Burger! Empfehlenswert: der Doppel-Smash-Burger mit Bacon und geschmolzenem Cheddar; der Carbonara Olè, inspiriert vom großen römischen Klassiker mit Guanciale und Pecorino; und das Pulled Pork auf italienische Art, lange gegart und zerzupft.",
+      fr:"Bienvenue chez Hip, hip, Burger ! À essayer : le double smash burger avec bacon et cheddar fondu ; le Carbonara Olè, inspiré du grand classique romain au guanciale et pecorino ; et le pulled pork à l'italienne, cuit longuement et effiloché.",
+      pl:"Witamy w Hip, hip, Burger! Warto wypróbować: podwójny smash burger z bekonem i roztopionym cheddarem; Carbonara Olè, inspirowany wielkim rzymskim klasykiem z guanciale i pecorino; oraz pulled pork po włosku, długo gotowany i rwany.",
+      cs:"Vítejte u Hip, hip, Burger! Stojí za vyzkoušení: dvojitý smash burger se slaninou a rozpuštěným cheddarem; Carbonara Olè, inspirovaný velkým římským klasikem s guanciale a pecorinem; a pulled pork italským způsobem, dlouho vařený a trhaný.",
+      zh:"欢迎来到嗨皮汉堡！值得尝试的有：双层重击汉堡，配培根和融化切达芝士；卡邦拉风味汉堡，灵感来自经典罗马菜肴，搭配猪颊肉和佩科里诺芝士；以及慢炖手撕的意式手撕猪肉。",
+      ja:"ヒップヒップ・バーガーへようこそ！おすすめは、ベーコンと溶けたチェダーのダブルスマッシュバーガー、ローマの定番料理にインスパイアされたグァンチャーレとペコリーノのカルボナーラ・オレ、そしてじっくり煮込んでほぐしたイタリア風プルドポークです。",
+      ar:"مرحباً بكم في هيب هيب برجر! يستحق التجربة: دبل سماش برجر بالبيكون والتشيدر المذاب؛ كاربونارا أوليه، المستوحى من الكلاسيكية الرومانية الكبرى بلحم الخد وجبن البيكورينو؛ وبولد بورك على الطريقة الإيطالية، المطهو ببطء والمفروم."
+    }
+  },
+  birre: {
+    title: { it:"Facciamo le birre pensando a voi", en:"We brew thinking of you", de:"Wir brauen für euch", fr:"Nous brassons en pensant à vous", pl:"Warzymy piwo, myśląc o was", cs:"Vaříme pivo s myšlenkou na vás", zh:"为您精心酿造的啤酒", ja:"あなたのために醸造したビール", ar:"نخمّر الجعة ونحن نفكر فيكم" },
+    label: { it:"Tavolo 4 · Birre", en:"Table 4 · Beers", de:"Tisch 4 · Biere", fr:"Table 4 · Bières", pl:"Stół 4 · Piwa", cs:"Stůl 4 · Piva", zh:"4号桌 · 啤酒", ja:"4番テーブル・ビール", ar:"طاولة 4 · الجعة" },
+    items: [
+      { it:["Bella Rossa","Complessa e affascinante · 6,5% vol.","3,8 / 6,6"], en:["Bella Rossa","Complex and captivating · 6.5% vol.","3.8 / 6.6"], de:["Bella Rossa","Komplex und faszinierend · 6,5% vol.","3,8 / 6,6"], fr:["Bella Rossa","Complexe et envoûtante · 6,5% vol.","3,8 / 6,6"], pl:["Bella Rossa","Złożona i ujmująca · 6,5% obj.","3,8 / 6,6"], cs:["Bella Rossa","Komplexní a okouzlující · 6,5 % obj.","3,8 / 6,6"], zh:["贝拉罗萨","层次丰富，迷人魅力 · 酒精度6.5%","3.8 / 6.6"], ja:["ベッラ・ロッサ","複雑で魅惑的 ・アルコール度数6.5%","3.8 / 6.6"], ar:["بيلا روسا","معقدة وساحرة · 6.5% كحول","3.8 / 6.6"] },
+      { it:["Iper Weiss","Nostalgica e naturalista · 5% vol.","4 / 7"], en:["Iper Weiss","Nostalgic and natural · 5% vol.","4 / 7"], de:["Iper Weiss","Nostalgisch und naturnah · 5% vol.","4 / 7"], fr:["Iper Weiss","Nostalgique et naturelle · 5% vol.","4 / 7"], pl:["Iper Weiss","Nostalgiczna i naturalna · 5% obj.","4 / 7"], cs:["Iper Weiss","Nostalgická a přírodní · 5 % obj.","4 / 7"], zh:["超级小麦啤","怀旧自然风味 · 酒精度5%","4 / 7"], ja:["イーパー・ヴァイス","ノスタルジックで自然な味わい・アルコール度数5%","4 / 7"], ar:["إيبر فايس","حنينية وطبيعية · 5% كحول","4 / 7"] },
+      { it:["Honey Ipa","Fragrante e romantica · 7,5% vol.","4 / 7"], en:["Honey Ipa","Fragrant and romantic · 7.5% vol.","4 / 7"], de:["Honey Ipa","Duftend und romantisch · 7,5% vol.","4 / 7"], fr:["Honey Ipa","Parfumée et romantique · 7,5% vol.","4 / 7"], pl:["Honey Ipa","Aromatyczna i romantyczna · 7,5% obj.","4 / 7"], cs:["Honey Ipa","Aromatická a romantická · 7,5 % obj.","4 / 7"], zh:["蜂蜜IPA","芬芳浪漫 · 酒精度7.5%","4 / 7"], ja:["ハニーIPA","香り豊かでロマンチック・アルコール度数7.5%","4 / 7"], ar:["هوني آيبا","عطرية ورومانسية · 7.5% كحول","4 / 7"] }
+    ],
+    voice: {
+      it:"Benvenuti alla nostra selezione di birre, fatte pensando a voi. Tra le proposte: la Bella Rossa, complessa e affascinante; la Iper Weiss, nostalgica e naturalista; e la Honey Ipa, fragrante e romantica. Chiedete al nostro staff il Beer Tour, per scoprirne tre in un solo giro.",
+      en:"Welcome to our beer selection, brewed thinking of you. Among the choices: the Bella Rossa, complex and captivating; the Iper Weiss, nostalgic and natural; and the Honey Ipa, fragrant and romantic. Ask our staff about the Beer Tour, to discover three in one round.",
+      de:"Willkommen zu unserer Bierauswahl, gebraut für euch. Zur Wahl stehen: die Bella Rossa, komplex und faszinierend; die Iper Weiss, nostalgisch und naturnah; und die Honey Ipa, duftend und romantisch. Fragt unser Personal nach der Beer Tour, um drei Sorten in einer Runde zu entdecken.",
+      fr:"Bienvenue dans notre sélection de bières, brassées en pensant à vous. Parmi les choix : la Bella Rossa, complexe et envoûtante ; la Iper Weiss, nostalgique et naturelle ; et la Honey Ipa, parfumée et romantique. Demandez à notre personnel le Beer Tour, pour en découvrir trois en une seule tournée.",
+      pl:"Witamy w naszej selekcji piw, warzonych z myślą o was. Wśród propozycji: Bella Rossa, złożona i ujmująca; Iper Weiss, nostalgiczna i naturalna; oraz Honey Ipa, aromatyczna i romantyczna. Zapytajcie nasz personel o Beer Tour, aby odkryć trzy piwa w jednej rundzie.",
+      cs:"Vítejte u naší výběru piv, uvařených s myšlenkou na vás. Mezi nabídkami: Bella Rossa, komplexní a okouzlující; Iper Weiss, nostalgická a přírodní; a Honey Ipa, aromatická a romantická. Zeptejte se našeho personálu na Beer Tour, abyste objevili tři piva v jednom kole.",
+      zh:"欢迎来到我们为您精心酿造的啤酒精选。其中包括：层次丰富迷人的贝拉罗萨；怀旧自然风味的超级小麦啤；以及芬芳浪漫的蜂蜜IPA。向我们的工作人员咨询啤酒之旅，一次品尝三款。",
+      ja:"あなたのために醸造したビールセレクションへようこそ。おすすめには、複雑で魅惑的なベッラ・ロッサ、ノスタルジックで自然な味わいのイーパー・ヴァイス、香り豊かでロマンチックなハニーIPAがあります。一度に3種類楽しめるビアツアーについては、スタッフにお尋ねください。",
+      ar:"مرحباً بكم في تشكيلتنا من الجعة، المخمّرة ونحن نفكر فيكم. من بين الخيارات: بيلا روسا، معقدة وساحرة؛ إيبر فايس، حنينية وطبيعية؛ وهوني آيبا، عطرية ورومانسية. اسألوا فريقنا عن جولة الجعة لاكتشاف ثلاثة أنواع في جولة واحدة."
+    }
+  }
+};
+
+const LANG_NAMES = { it:"IT", en:"EN", de:"DE", fr:"FR", pl:"PL", cs:"CZ", zh:"中文", ja:"日本語", ar:"عربي" };
+const VOICE_LOCALE = { it:"it-IT", en:"en-US", de:"de-DE", fr:"fr-FR", pl:"pl-PL", cs:"cs-CZ", zh:"zh-CN", ja:"ja-JP", ar:"ar-SA" };
+const TAGLINE = { it:"il menu che si racconta", en:"the menu that tells its story", de:"die Speisekarte, die sich erzählt", fr:"le menu qui se raconte", pl:"menu, które się rozmawia", cs:"menu, které vypráví", zh:"会说话的菜单", ja:"語りかけるメニュー", ar:"القائمة التي تتحدث" };
+const PLAY_LABEL = { it:"Ascolta", en:"Listen", de:"Anhören", fr:"Écouter", pl:"Słuchaj", cs:"Poslechnout", zh:"收听", ja:"聞く", ar:"استمع" };
+const STOP_LABEL = { it:"Interrompi", en:"Stop", de:"Stoppen", fr:"Arrêter", pl:"Zatrzymaj", cs:"Zastavit", zh:"停止", ja:"停止", ar:"إيقاف" };
+const RTL_LANGS = ["ar"];
+
+// Determine which section this tag/table points to via ?table= param (1-4), default 1
+const params = new URLSearchParams(window.location.search);
+const tableMap = { "1":"antipasti", "2":"pizze", "3":"burger", "4":"birre" };
+let currentSection = tableMap[params.get('table')] || "antipasti";
+let currentLang = "it";
+let utterance = null;
+
+function render(){
+  document.documentElement.dir = RTL_LANGS.includes(currentLang) ? 'rtl' : 'ltr';
+  const sec = SECTIONS[currentSection];
+  document.getElementById('sectionLabel').textContent = sec.label[currentLang];
+  document.getElementById('tableName').textContent = sec.title[currentLang];
+  document.getElementById('tagline').textContent = TAGLINE[currentLang];
+  document.getElementById('playLabel').textContent = PLAY_LABEL[currentLang];
+
+  const list = document.getElementById('itemsList');
+  list.innerHTML = '';
+  sec.items.forEach(item => {
+    const data = item[currentLang];
+    const div = document.createElement('div');
+    div.className = 'item';
+    div.innerHTML = `<span class="item-price">€ ${data[2]}</span>
+                      <div class="item-name">${data[0]}</div>
+                      <div class="item-desc">${data[1]}</div>`;
+    list.appendChild(div);
+  });
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentLang = btn.dataset.lang;
+    stopSpeaking();
+    render();
+  });
+});
+
+function stopSpeaking(){
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+  const btn = document.getElementById('playBtn');
+  btn.classList.remove('speaking');
+  document.getElementById('playLabel').textContent = PLAY_LABEL[currentLang];
+}
+
+document.getElementById('playBtn').addEventListener('click', () => {
+  const btn = document.getElementById('playBtn');
+  if(btn.classList.contains('speaking')){
+    stopSpeaking();
+    return;
+  }
+  if(!window.speechSynthesis){
+    alert('Sintesi vocale non disponibile su questo browser.');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const sec = SECTIONS[currentSection];
+  utterance = new SpeechSynthesisUtterance(sec.voice[currentLang]);
+  utterance.lang = VOICE_LOCALE[currentLang];
+  utterance.rate = 0.98;
+  utterance.onend = stopSpeaking;
+  utterance.onerror = stopSpeaking;
+  btn.classList.add('speaking');
+  document.getElementById('playLabel').textContent = STOP_LABEL[currentLang];
+  window.speechSynthesis.speak(utterance);
+});
+
+render();
+</script>
+</body>
+</html>
