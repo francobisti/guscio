@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO — Ferrovia Trento-Malè-Mezzana</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
+
+  :root {
+    --verde: #2D5016;
+    --ocra: #C4860A;
+    --crema: #F7F4EE;
+    --testo: #1A1A1A;
+    --grigio: #6B6B6B;
+    --bordo: #E2DDD4;
+    --blu: #1B4D6B;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--crema);
+    color: var(--testo);
+    line-height: 1.6;
+  }
+
+  .hero {
+    position: relative;
+    height: 34vh;
+    min-height: 230px;
+    background: linear-gradient(180deg, rgba(27,77,107,0.25) 0%, rgba(15,40,55,0.85) 100%),
+                linear-gradient(135deg, #2d6680 0%, #1B4D6B 60%, #0f2837 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 24px 24px 20px;
+  }
+
+  .guscio-logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 20px;
+    color: #fff;
+    letter-spacing: 0.08em;
+    position: absolute;
+    top: 20px;
+    left: 24px;
+  }
+  .guscio-logo span { color: var(--ocra); }
+
+  .lang-switcher {
+    position: absolute;
+    top: 18px;
+    right: 24px;
+    display: flex;
+    gap: 6px;
+  }
+  .lang-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+  }
+  .lang-btn.active { background: var(--ocra); border-color: var(--ocra); }
+
+  .luogo-badge {
+    display: inline-block;
+    background: var(--ocra);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    letter-spacing: 0.04em;
+  }
+
+  .luogo-nome {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 26px;
+    color: #fff;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  }
+  .luogo-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    margin-top: 4px;
+  }
+
+  .ascolta-bar {
+    background: var(--ocra);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+  }
+  .play-icon {
+    width: 46px; height: 46px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .ascolta-testo strong { display: block; color: #fff; font-size: 16px; font-weight: 600; }
+  .ascolta-testo span { color: rgba(255,255,255,0.85); font-size: 12px; }
+
+  .tabs {
+    display: flex;
+    background: #fff;
+    border-bottom: 2px solid var(--bordo);
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 13px 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--grigio);
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+  }
+  .tab-btn.active { color: var(--blu); border-bottom-color: var(--blu); }
+
+  .pannello { display: none; padding: 24px; }
+  .pannello.attivo { display: block; }
+
+  .testo-narrativo {
+    font-family: 'Fraunces', serif;
+    font-size: 16.5px;
+    line-height: 1.85;
+    color: var(--testo);
+  }
+  .testo-narrativo p { margin-bottom: 16px; }
+  .testo-narrativo p:first-of-type { font-size: 18px; color: var(--blu); font-weight: 600; }
+
+  .fermate-lista {
+    list-style: none;
+  }
+  .fermate-lista li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--bordo);
+    font-size: 14.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .fermata-puntino {
+    width: 8px; height: 8px;
+    background: var(--blu);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .fermata-richiesta {
+    font-size: 11px;
+    color: var(--ocra);
+    margin-left: auto;
+  }
+
+  .info-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-top: 14px;
+    border-left: 4px solid var(--verde);
+  }
+  .info-box strong {
+    display: block;
+    color: var(--verde);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .info-box p { font-size: 14px; color: var(--grigio); line-height: 1.6; }
+
+  .footer-guscio {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--crema);
+    border-top: 1px solid var(--bordo);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--grigio);
+  }
+  .footer-guscio a { color: var(--verde); text-decoration: none; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="guscio-logo">GUSC<span>I</span>O</div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('it')">IT</button>
+    <button class="lang-btn" onclick="setLang('de')">DE</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('pl')">PL</button>
+    <button class="lang-btn" onclick="setLang('cs')">CZ</button>
+  </div>
+  <div class="luogo-badge" id="luogo-badge">LA "VACA NONESA"</div>
+  <div class="luogo-nome" id="luogo-nome">Ferrovia Trento–Malè–Mezzana</div>
+  <div class="luogo-sub" id="luogo-sub">65 km tra Val di Non e Val di Sole, dal 1909</div>
+</div>
+
+<div class="ascolta-bar" onclick="ascolta()" id="ascolta-bar">
+  <div class="play-icon">
+    <svg width="16" height="18" viewBox="0 0 16 18" fill="none"><path d="M1 1L15 9L1 17V1Z" fill="#1B4D6B"/></svg>
+  </div>
+  <div class="ascolta-testo">
+    <strong id="ascolta-label">Ascolta la storia della ferrovia</strong>
+    <span id="ascolta-sub">Voce narrativa · circa 1 minuto</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="mostraPannello('storia', this)" id="tab-storia">Storia</button>
+  <button class="tab-btn" onclick="mostraPannello('fermate', this)" id="tab-fermate">Fermate</button>
+  <button class="tab-btn" onclick="mostraPannello('orari', this)" id="tab-orari">Orari</button>
+  <button class="tab-btn" onclick="mostraPannello('info', this)" id="tab-info">Info utili</button>
+</div>
+
+<div class="pannello attivo" id="storia">
+  <div class="testo-narrativo" id="testo-narrativo">
+    <p>Benvenuti sulla "Vaca Nonesa" — così la chiamano da sempre in dialetto trentino e noneso.</p>
+    <p>Questa ferrovia nasce nel 1909, quando l'Impero Austro-Ungarico inaugura una tranvia per collegare Trento alle valli del Noce. Da allora attraversa la Piana Rotaliana, si inerpica nella Val di Non tra boschi e meleti, e raggiunge la Val di Sole, fino ai 900 metri di Mezzana, alle porte del Parco Naturale Adamello Brenta.</p>
+    <p>Lungo il tragitto, a Daolasa e Marilleva, il treno si integra con gli impianti di risalita — un sistema unico in Italia che unisce rotaia e funivia per raggiungere le piste da sci della Val di Sole.</p>
+    <p>Buon viaggio attraverso più di cento anni di storia trentina.</p>
+  </div>
+</div>
+
+<div class="pannello" id="fermate">
+  <ul class="fermate-lista" id="fermate-lista">
+    <li><div class="fermata-puntino"></div> Trento</li>
+    <li><div class="fermata-puntino"></div> Lavis</li>
+    <li><div class="fermata-puntino"></div> Mezzocorona</li>
+    <li><div class="fermata-puntino"></div> Mezzolombardo</li>
+    <li><div class="fermata-puntino"></div> Cles</li>
+    <li><div class="fermata-puntino"></div> Mostizzolo <span class="fermata-richiesta">a richiesta</span></li>
+    <li><div class="fermata-puntino"></div> Malè</li>
+    <li><div class="fermata-puntino"></div> Daolasa <span class="fermata-richiesta">interscambio funivia</span></li>
+    <li><div class="fermata-puntino"></div> Marilleva <span class="fermata-richiesta">interscambio funivia</span></li>
+    <li><div class="fermata-puntino"></div> Mezzana</li>
+  </ul>
+</div>
+
+<div class="pannello" id="orari">
+  <div class="info-box" style="border-left-color: var(--blu); margin-top:0;">
+    <strong>Da Mezzana verso Trento</strong>
+    <p>Partenze (giorni feriali): 6.00 · 6.57 · 9.33 · 10.36 · 11.37 · 12.30 · 13.46 · 14.25 · 16.19 · 17.15 · 18.06 · 19.21</p>
+  </div>
+  <div class="info-box" style="border-left-color: var(--blu);">
+    <strong>Da Mezzana verso Trento — festivi</strong>
+    <p>Partenze: 8.42 · 10.42 · 12.42 · 14.42 · 16.42 · 18.42</p>
+  </div>
+  <div class="info-box">
+    <strong>Orario aggiornato al sito ufficiale</strong>
+    <p>Per gli orari da Trento verso Mezzana e per eventuali variazioni, consulti trentinotrasporti.it o chieda in biglietteria — gli orari possono cambiare per lavori o stagionalità.</p>
+  </div>
+</div>
+
+<div class="pannello" id="info">
+  <div class="info-box">
+    <strong>Dolomiti Express</strong>
+    <p>In inverno collega direttamente con le piste della Val di Sole — l'unico sistema in Italia che integra treno e funivia per raggiungere la neve.</p>
+  </div>
+  <div class="info-box">
+    <strong>Trasporto bici</strong>
+    <p>Disponibile su tutta la linea. Il viaggiatore provvede autonomamente al carico e scarico.</p>
+  </div>
+  <div class="info-box">
+    <strong>Informazioni e orari aggiornati</strong>
+    <p>trentinotrasporti.it · Tel. 0461 821000</p>
+  </div>
+</div>
+
+<div class="footer-guscio">
+  <span>Powered by <a href="#">GUSCIO</a> · guscio.ai</span>
+  <span>la sicurezza è un atto d'amore</span>
+</div>
+
+<script>
+  let lingua = 'it';
+
+  const testi = {
+    it: {
+      badge: "LA \"VACA NONESA\"",
+      nome: "Ferrovia Trento–Malè–Mezzana",
+      sub: "65 km tra Val di Non e Val di Sole, dal 1909",
+      ascolta: "Ascolta la storia della ferrovia",
+      ascoltaSub: "Voce narrativa · circa 1 minuto",
+      tabs: ["Storia", "Fermate", "Orari", "Info utili"],
+      paragrafi: [
+        "Benvenuti sulla \"Vaca Nonesa\" — così la chiamano da sempre in dialetto trentino e noneso.",
+        "Questa ferrovia nasce nel 1909, quando l'Impero Austro-Ungarico inaugura una tranvia per collegare Trento alle valli del Noce. Da allora attraversa la Piana Rotaliana, si inerpica nella Val di Non tra boschi e meleti, e raggiunge la Val di Sole, fino ai 900 metri di Mezzana, alle porte del Parco Naturale Adamello Brenta.",
+        "Lungo il tragitto, a Daolasa e Marilleva, il treno si integra con gli impianti di risalita — un sistema unico in Italia che unisce rotaia e funivia per raggiungere le piste da sci della Val di Sole.",
+        "Buon viaggio attraverso più di cento anni di storia trentina."
+      ]
+    },
+    de: {
+      badge: "DIE \"VACA NONESA\"",
+      nome: "Bahn Trento–Malè–Mezzana",
+      sub: "65 km zwischen Val di Non und Val di Sole, seit 1909",
+      ascolta: "Hören Sie die Geschichte der Bahn",
+      ascoltaSub: "Erzählstimme · etwa 1 Minute",
+      tabs: ["Geschichte", "Haltestellen", "Fahrzeiten", "Nützliche Infos"],
+      paragrafi: [
+        "Willkommen an Bord der \"Vaca Nonesa\" — so wird sie seit jeher im Trentiner Dialekt genannt.",
+        "Diese Bahn entstand 1909, als das österreichisch-ungarische Kaiserreich eine Straßenbahn zur Verbindung von Trento mit den Noce-Tälern einweihte. Seitdem durchquert sie die Rotaliana-Ebene, schlängelt sich durch das Nonstal zwischen Wäldern und Apfelgärten und erreicht das Soltal bis auf 900 Meter Höhe in Mezzana, am Rande des Naturparks Adamello Brenta.",
+        "Entlang der Strecke verbindet sich der Zug in Daolasa und Marilleva mit den Aufstiegsanlagen — ein in Italien einzigartiges System, das Schiene und Seilbahn verbindet.",
+        "Gute Reise durch mehr als hundert Jahre Trentiner Geschichte."
+      ]
+    },
+    en: {
+      badge: "THE \"VACA NONESA\"",
+      nome: "Trento–Malè–Mezzana Railway",
+      sub: "65 km between Val di Non and Val di Sole, since 1909",
+      ascolta: "Listen to the railway's story",
+      ascoltaSub: "Narrative voice · about 1 minute",
+      tabs: ["History", "Stops", "Schedule", "Useful info"],
+      paragrafi: [
+        "Welcome aboard the \"Vaca Nonesa\" — as it has always been called in Trentino dialect.",
+        "This railway was born in 1909, when the Austro-Hungarian Empire inaugurated a tramway connecting Trento to the Noce valleys. Since then it crosses the Rotaliana Plain, climbs through Val di Non among woods and apple orchards, and reaches Val di Sole, up to 900 metres in Mezzana, at the gates of the Adamello Brenta Natural Park.",
+        "Along the way, at Daolasa and Marilleva, the train connects with ski lifts — a system unique in Italy combining rail and cable car to reach the slopes of Val di Sole.",
+        "Enjoy your journey through more than a hundred years of Trentino history."
+      ]
+    },
+    pl: {
+      badge: "\"VACA NONESA\"",
+      nome: "Kolej Trento–Malè–Mezzana",
+      sub: "65 km między Val di Non i Val di Sole, od 1909 roku",
+      ascolta: "Posłuchaj historii tej kolei",
+      ascoltaSub: "Głos narracyjny · około 1 minuty",
+      tabs: ["Historia", "Przystanki", "Rozkład", "Informacje"],
+      paragrafi: [
+        "Witamy na pokładzie \"Vaca Nonesa\" — tak od zawsze nazywana jest ta kolej w dialekcie trydenckim.",
+        "Ta linia kolejowa powstała w 1909 roku, kiedy Cesarstwo Austro-Węgierskie otworzyło tramwaj łączący Trento z dolinami rzeki Noce. Od tego czasu przebiega przez Równinę Rotaliana, wspina się przez Val di Non pośród lasów i sadów jabłoniowych, i dociera do Val di Sole, na wysokość 900 metrów w Mezzanie, u wrót Parku Naturalnego Adamello Brenta.",
+        "Na trasie, w Daolasa i Marilleva, pociąg łączy się z wyciągami narciarskimi — system unikalny w Italii, łączący kolej i kolej linową.",
+        "Życzymy przyjemnej podróży przez ponad sto lat historii Trentino."
+      ]
+    },
+    cs: {
+      badge: "\"VACA NONESA\"",
+      nome: "Železnice Trento–Malè–Mezzana",
+      sub: "65 km mezi Val di Non a Val di Sole, od roku 1909",
+      ascolta: "Poslechněte si příběh této železnice",
+      ascoltaSub: "Vyprávěcí hlas · přibližně 1 minuta",
+      tabs: ["Historie", "Zastávky", "Jízdní řád", "Užitečné informace"],
+      paragrafi: [
+        "Vítejte na palubě \"Vaca Nonesa\" — tak se tato železnice odjakživa nazývá v trentinském nářečí.",
+        "Tato železnice vznikla v roce 1909, kdy Rakousko-Uherská říše zahájila provoz tramvaje spojující Trento s údolími řeky Noce. Od té doby projíždí Rotalskou planinou, stoupá údolím Val di Non mezi lesy a jabloňovými sady a dosahuje Val di Sole až do výšky 900 metrů v Mezzaně, u bran přírodního parku Adamello Brenta.",
+        "Na trase se vlak v Daolase a Marillevě spojuje s lanovkami — systém jedinečný v Itálii, který kombinuje železnici a lanovou dráhu.",
+        "Přejeme příjemnou cestu více než sto lety historie Trentina."
+      ]
+    }
+  };
+
+  function setLang(l) {
+    lingua = l;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    const t = testi[l];
+    document.getElementById('luogo-badge').textContent = t.badge;
+    document.getElementById('luogo-nome').textContent = t.nome;
+    document.getElementById('luogo-sub').textContent = t.sub;
+    document.getElementById('ascolta-label').textContent = t.ascolta;
+    document.getElementById('ascolta-sub').textContent = t.ascoltaSub;
+    document.getElementById('testo-narrativo').innerHTML = t.paragrafi.map(p => `<p>${p}</p>`).join('');
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach((btn, i) => { btn.textContent = t.tabs[i]; });
+  }
+
+  function mostraPannello(id, btn) {
+    document.querySelectorAll('.pannello').forEach(p => p.classList.remove('attivo'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('attivo');
+    btn.classList.add('active');
+  }
+
+  function ascolta() {
+    const testo = document.getElementById('testo-narrativo').innerText;
+    const btn = document.getElementById('ascolta-bar');
+
+    if (window.currentAudio && !window.currentAudio.paused) {
+      window.currentAudio.pause();
+      return;
+    }
+
+    const messaggiAttesa = {
+      it: "Un istante, sto preparando la voce...",
+      de: "Einen Moment, die Stimme wird vorbereitet...",
+      en: "Please wait one moment for the voice...",
+      pl: "Chwileczkę, przygotowuję głos...",
+      cs: "Okamžik, připravuji hlas..."
+    };
+    document.getElementById('ascolta-label').textContent = messaggiAttesa[lingua];
+
+    const voiceId = "RXoaSpLaWTEckJgPUBG3"; // Tiziana
+    const apiKey = "sk_f79f535b5c5055a35e8a8f2ab66bbe30ea782aeaa19f6b58";
+
+    fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+      method: "POST",
+      headers: {
+        "xi-api-key": apiKey,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        text: testo,
+        model_id: "eleven_multilingual_v2",
+        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+      })
+    })
+    .then(res => res.blob())
+    .then(blob => {
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      window.currentAudio = audio;
+      document.getElementById('ascolta-label').textContent = testi[lingua].ascolta;
+      audio.play();
+    })
+    .catch(err => {
+      console.error("Errore ElevenLabs, uso voce di sistema:", err);
+      document.getElementById('ascolta-label').textContent = testi[lingua].ascolta;
+      const utterance = new SpeechSynthesisUtterance(testo);
+      utterance.lang = lingua === 'it' ? 'it-IT' : lingua === 'de' ? 'de-DE' : 'en-GB';
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
+    });
+  }
+</script>
+</body>
+</html>
