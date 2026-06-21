@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO — 3Tre Canalone Miramonti</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
+
+  :root {
+    --verde: #2D5016;
+    --ocra: #C4860A;
+    --crema: #F7F4EE;
+    --testo: #1A1A1A;
+    --grigio: #6B6B6B;
+    --bordo: #E2DDD4;
+    --notte: #14213D;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--crema);
+    color: var(--testo);
+    line-height: 1.6;
+  }
+
+  .hero {
+    position: relative;
+    height: 38vh;
+    min-height: 260px;
+    background: linear-gradient(180deg, rgba(20,33,61,0.3) 0%, rgba(10,16,30,0.85) 100%),
+                linear-gradient(135deg, #2a3f5f 0%, #14213D 60%, #0a0f1a 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 24px 24px 20px;
+    overflow: hidden;
+  }
+
+  .piste-deco {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 60%;
+    background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.08) 100%);
+    clip-path: polygon(0% 100%, 15% 40%, 35% 70%, 55% 20%, 75% 55%, 100% 10%, 100% 100%);
+  }
+
+  .guscio-logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 20px;
+    color: #fff;
+    letter-spacing: 0.08em;
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    z-index: 2;
+  }
+  .guscio-logo span { color: var(--ocra); }
+
+  .lang-switcher {
+    position: absolute;
+    top: 18px;
+    right: 24px;
+    display: flex;
+    gap: 6px;
+    z-index: 2;
+  }
+  .lang-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+  }
+  .lang-btn.active { background: var(--ocra); border-color: var(--ocra); }
+
+  .evento-badge {
+    display: inline-block;
+    background: var(--ocra);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    z-index: 2;
+    letter-spacing: 0.04em;
+  }
+
+  .luogo-nome {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 28px;
+    color: #fff;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    z-index: 2;
+  }
+  .luogo-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    margin-top: 4px;
+    z-index: 2;
+  }
+
+  .ascolta-bar {
+    background: var(--ocra);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+  }
+  .play-icon {
+    width: 46px; height: 46px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .ascolta-testo strong { display: block; color: #fff; font-size: 16px; font-weight: 600; }
+  .ascolta-testo span { color: rgba(255,255,255,0.85); font-size: 12px; }
+
+  .contenuto { padding: 28px 24px 60px; }
+
+  .testo-narrativo {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    line-height: 1.85;
+    color: var(--testo);
+  }
+  .testo-narrativo p { margin-bottom: 18px; }
+  .testo-narrativo p:first-of-type { font-size: 19px; color: var(--notte); font-weight: 600; }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 24px 0;
+  }
+  .stat-box {
+    background: #fff;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+    border-top: 3px solid var(--ocra);
+  }
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--notte);
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--grigio);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+  }
+
+  .info-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-top: 12px;
+    border-left: 4px solid var(--verde);
+  }
+  .info-box strong {
+    display: block;
+    color: var(--verde);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  .info-box p { font-size: 14px; color: var(--grigio); line-height: 1.6; }
+
+  .footer-guscio {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--crema);
+    border-top: 1px solid var(--bordo);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--grigio);
+  }
+  .footer-guscio a { color: var(--verde); text-decoration: none; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="piste-deco"></div>
+  <div class="guscio-logo">GUSC<span>I</span>O</div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('it')">IT</button>
+    <button class="lang-btn" onclick="setLang('de')">DE</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
+  <div class="evento-badge" id="evento-badge">AUDI FIS SKI WORLD CUP</div>
+  <div class="luogo-nome" id="luogo-nome">3Tre — Canalone Miramonti</div>
+  <div class="luogo-sub" id="luogo-sub">Madonna di Campiglio · Slalom Speciale</div>
+</div>
+
+<div class="ascolta-bar" onclick="ascolta()" id="ascolta-bar">
+  <div class="play-icon">
+    <svg width="16" height="18" viewBox="0 0 16 18" fill="none"><path d="M1 1L15 9L1 17V1Z" fill="#2D5016"/></svg>
+  </div>
+  <div class="ascolta-testo">
+    <strong id="ascolta-label">Ascolta la storia della 3Tre</strong>
+    <span id="ascolta-sub">Voce narrativa · circa 1 minuto</span>
+  </div>
+</div>
+
+<div class="contenuto">
+  <div class="testo-narrativo" id="testo-narrativo">
+    <p>Lei si trova sul Canalone Miramonti, teatro della 3Tre — la competizione di sci alpino più antica d'Italia.</p>
+    <p>Seicentodieci metri di pista, centoottanta di dislivello, una pendenza che in alcuni punti supera il sessanta per cento. Qui, ogni anno, i migliori slalomisti del mondo si sfidano tra i pali stretti, in notturna, sotto gli occhi di migliaia di spettatori.</p>
+    <p>Nel 2022 questo canalone ha scritto una pagina unica nella storia della Coppa del Mondo: per la prima volta, un atleta paralimpico è stato scelto come apripista — il campione trentino Giacomo Bertagnolli, portavoce di un movimento che ogni anno conquista nuovo spazio e nuovo rispetto.</p>
+    <p>Resti un istante a guardare questo pendio. Tra poco, in mezzo a questa neve, si scriverà un'altra pagina di storia.</p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="stat-num">610 m</div>
+      <div class="stat-label">Lunghezza pista</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">180 m</div>
+      <div class="stat-label">Dislivello</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">60%</div>
+      <div class="stat-label">Pendenza massima</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">73ª</div>
+      <div class="stat-label">Edizione 2026</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>23 Dicembre 2026</strong>
+    <p>Due manche in notturna, alle 17:45 e alle 20:45. La 3Tre torna a illuminare il Canalone Miramonti.</p>
+  </div>
+</div>
+
+<div class="footer-guscio">
+  <span>Powered by <a href="#">GUSCIO</a> · guscio.ai</span>
+  <span>la sicurezza è un atto d'amore</span>
+</div>
+
+<script>
+  let lingua = 'it';
+
+  const testi = {
+    it: {
+      badge: "AUDI FIS SKI WORLD CUP",
+      nome: "3Tre — Canalone Miramonti",
+      sub: "Madonna di Campiglio · Slalom Speciale",
+      ascolta: "Ascolta la storia della 3Tre",
+      ascoltaSub: "Voce narrativa · circa 1 minuto",
+      paragrafi: [
+        "Lei si trova sul Canalone Miramonti, teatro della 3Tre — la competizione di sci alpino più antica d'Italia.",
+        "Seicentodieci metri di pista, centoottanta di dislivello, una pendenza che in alcuni punti supera il sessanta per cento. Qui, ogni anno, i migliori slalomisti del mondo si sfidano tra i pali stretti, in notturna, sotto gli occhi di migliaia di spettatori.",
+        "Nel 2022 questo canalone ha scritto una pagina unica nella storia della Coppa del Mondo: per la prima volta, un atleta paralimpico è stato scelto come apripista — il campione trentino Giacomo Bertagnolli, portavoce di un movimento che ogni anno conquista nuovo spazio e nuovo rispetto.",
+        "Resti un istante a guardare questo pendio. Tra poco, in mezzo a questa neve, si scriverà un'altra pagina di storia."
+      ]
+    },
+    de: {
+      badge: "AUDI FIS SKI WORLD CUP",
+      nome: "3Tre — Canalone Miramonti",
+      sub: "Madonna di Campiglio · Slalom",
+      ascolta: "Hören Sie die Geschichte der 3Tre",
+      ascoltaSub: "Erzählstimme · etwa 1 Minute",
+      paragrafi: [
+        "Sie befinden sich am Canalone Miramonti, Schauplatz der 3Tre — dem ältesten alpinen Skirennen Italiens.",
+        "Sechshundertzehn Meter Strecke, hundertachtzig Höhenmeter, an manchen Stellen über sechzig Prozent Gefälle. Hier messen sich jedes Jahr die besten Slalomfahrer der Welt, abends unter Flutlicht, vor tausenden Zuschauern.",
+        "2022 schrieb dieser Hang ein einzigartiges Kapitel der Weltcup-Geschichte: Erstmals eröffnete ein paralympischer Athlet das Rennen — der Trentiner Champion Giacomo Bertagnolli.",
+        "Bleiben Sie einen Moment und betrachten Sie diesen Hang. Bald wird hier wieder Geschichte geschrieben."
+      ]
+    },
+    en: {
+      badge: "AUDI FIS SKI WORLD CUP",
+      nome: "3Tre — Canalone Miramonti",
+      sub: "Madonna di Campiglio · Slalom",
+      ascolta: "Listen to the story of the 3Tre",
+      ascoltaSub: "Narrative voice · about 1 minute",
+      paragrafi: [
+        "You are standing on the Canalone Miramonti, home of the 3Tre — Italy's oldest alpine ski competition.",
+        "Six hundred ten metres of track, one hundred eighty metres of vertical drop, with gradients exceeding sixty percent in places. Here, every year, the world's best slalom skiers compete under floodlights before thousands of spectators.",
+        "In 2022 this slope wrote a unique chapter in World Cup history: for the first time, a Paralympic athlete opened the race — Trentino champion Giacomo Bertagnolli.",
+        "Stay a moment and look at this slope. Soon, history will be written here again."
+      ]
+    }
+  };
+
+  function setLang(l) {
+    lingua = l;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    const t = testi[l];
+    document.getElementById('evento-badge').textContent = t.badge;
+    document.getElementById('luogo-nome').textContent = t.nome;
+    document.getElementById('luogo-sub').textContent = t.sub;
+    document.getElementById('ascolta-label').textContent = t.ascolta;
+    document.getElementById('ascolta-sub').textContent = t.ascoltaSub;
+    document.getElementById('testo-narrativo').innerHTML = t.paragrafi.map(p => `<p>${p}</p>`).join('');
+  }
+
+  function ascolta() {
+    const testo = document.getElementById('testo-narrativo').innerText;
+    const btn = document.getElementById('ascolta-bar');
+
+    if (window.currentAudio && !window.currentAudio.paused) {
+      window.currentAudio.pause();
+      return;
+    }
+
+    document.getElementById('ascolta-label').textContent = "Generazione voce...";
+
+    const voiceId = "RXoaSpLaWTEckJgPUBG3"; // Tiziana
+    const apiKey = "sk_f79f535b5c5055a35e8a8f2ab66bbe30ea782aeaa19f6b58";
+
+    fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+      method: "POST",
+      headers: {
+        "xi-api-key": apiKey,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        text: testo,
+        model_id: "eleven_multilingual_v2",
+        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+      })
+    })
+    .then(res => res.blob())
+    .then(blob => {
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      window.currentAudio = audio;
+      document.getElementById('ascolta-label').textContent = testi[lingua].ascolta;
+      audio.play();
+    })
+    .catch(err => {
+      console.error("Errore ElevenLabs, uso voce di sistema:", err);
+      document.getElementById('ascolta-label').textContent = testi[lingua].ascolta;
+      const utterance = new SpeechSynthesisUtterance(testo);
+      utterance.lang = lingua === 'it' ? 'it-IT' : lingua === 'de' ? 'de-DE' : 'en-GB';
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
+    });
+  }
+</script>
+</body>
+</html>
