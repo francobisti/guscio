@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO — Sentiero delle Cascate, Val Genova</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
+
+  :root {
+    --verde: #2D5016;
+    --ocra: #C4860A;
+    --crema: #F7F4EE;
+    --testo: #1A1A1A;
+    --grigio: #6B6B6B;
+    --bordo: #E2DDD4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: var(--crema); color: var(--testo); line-height: 1.6; }
+
+  .hero-foto { position: relative; height: 42vh; min-height: 300px; overflow: hidden; }
+  .hero-foto svg { width: 100%; height: 100%; display: block; }
+  .hero-overlay {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.65) 100%);
+    display: flex; flex-direction: column; justify-content: flex-end; padding: 24px;
+  }
+
+  .guscio-logo {
+    font-family: 'Fraunces', serif; font-weight: 300; font-size: 20px; color: #fff;
+    letter-spacing: 0.08em; position: absolute; top: 20px; left: 24px; z-index: 2;
+  }
+  .guscio-logo span { color: var(--ocra); }
+
+  .lang-switcher { position: absolute; top: 18px; right: 24px; display: flex; gap: 6px; z-index: 2; }
+  .lang-btn {
+    background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff;
+    padding: 4px 10px; border-radius: 20px; font-size: 12px; cursor: pointer; font-family: 'Inter', sans-serif;
+  }
+  .lang-btn.active { background: var(--ocra); border-color: var(--ocra); }
+
+  .luogo-badge {
+    display: inline-block; background: var(--ocra); color: #fff; font-size: 11px; font-weight: 600;
+    padding: 3px 10px; border-radius: 12px; margin-bottom: 10px; letter-spacing: 0.04em;
+  }
+  .luogo-nome { font-family: 'Fraunces', serif; font-weight: 600; font-size: 27px; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+  .luogo-sub { font-size: 13px; color: rgba(255,255,255,0.9); margin-top: 4px; }
+
+  .galleria { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; background: var(--crema); }
+  .galleria-item { aspect-ratio: 1; overflow: hidden; }
+  .galleria-item svg { width: 100%; height: 100%; display: block; }
+
+  .ascolta-bar { background: var(--ocra); padding: 16px 24px; display: flex; align-items: center; gap: 14px; cursor: pointer; }
+  .play-icon { width: 46px; height: 46px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .ascolta-testo strong { display: block; color: #fff; font-size: 16px; font-weight: 600; }
+  .ascolta-testo span { color: rgba(255,255,255,0.85); font-size: 12px; }
+
+  .tabs { display: flex; background: #fff; border-bottom: 2px solid var(--bordo); }
+  .tab-btn { flex: 1; padding: 13px 6px; font-size: 12.5px; font-weight: 500; color: var(--grigio); border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+  .tab-btn.active { color: var(--verde); border-bottom-color: var(--verde); }
+
+  .pannello { display: none; padding: 24px; }
+  .pannello.attivo { display: block; }
+
+  .testo-narrativo { font-family: 'Fraunces', serif; font-size: 16.5px; line-height: 1.85; color: var(--testo); }
+  .testo-narrativo p { margin-bottom: 16px; }
+  .testo-narrativo p:first-of-type { font-size: 18px; color: var(--verde); font-weight: 600; }
+
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .stat-box { background: #fff; border-radius: 10px; padding: 14px; text-align: center; border-top: 3px solid var(--ocra); }
+  .stat-num { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; color: var(--verde); }
+  .stat-label { font-size: 11px; color: var(--grigio); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+
+  .tappa-foto { display: flex; gap: 14px; background: #fff; border-radius: 12px; padding: 12px; margin-bottom: 10px; align-items: center; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .tappa-thumb { width: 56px; height: 56px; border-radius: 8px; flex-shrink: 0; overflow: hidden; }
+  .tappa-thumb svg { width: 100%; height: 100%; }
+  .tappa-info strong { display: block; font-size: 14px; color: var(--testo); }
+  .tappa-info span { font-size: 12px; color: var(--ocra); }
+
+  .info-box { background: #fff; border-radius: 12px; padding: 16px 18px; margin-top: 12px; border-left: 4px solid var(--verde); }
+  .info-box strong { display: block; color: var(--verde); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .info-box p { font-size: 14px; color: var(--grigio); line-height: 1.6; }
+
+  .footer-guscio { position: fixed; bottom: 0; left: 0; right: 0; background: var(--crema); border-top: 1px solid var(--bordo); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--grigio); }
+  .footer-guscio a { color: var(--verde); text-decoration: none; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="hero-foto">
+  <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#B8D4DE"/><stop offset="100%" stop-color="#D8E8EC"/>
+      </linearGradient>
+      <linearGradient id="rock" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#8a8678"/><stop offset="100%" stop-color="#5e5a4d"/>
+      </linearGradient>
+      <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#cfe6ec"/>
+      </linearGradient>
+    </defs>
+    <rect width="800" height="600" fill="url(#sky)"/>
+    <polygon points="0,420 150,280 280,360 420,250 600,340 800,260 800,600 0,600" fill="url(#rock)"/>
+    <polygon points="280,600 320,180 360,600" fill="url(#water)" opacity="0.92"/>
+    <polygon points="300,600 330,250 355,600" fill="#ffffff" opacity="0.5"/>
+    <ellipse cx="330" cy="560" rx="90" ry="22" fill="#ffffff" opacity="0.4"/>
+    <g fill="#2d4a2d">
+      <polygon points="60,600 80,470 100,600"/>
+      <polygon points="100,600 125,440 150,600"/>
+      <polygon points="500,600 525,460 550,600"/>
+      <polygon points="550,600 575,430 600,600"/>
+      <polygon points="650,600 675,450 700,600"/>
+      <polygon points="700,600 720,480 745,600"/>
+    </g>
+  </svg>
+  <div class="hero-overlay">
+    <div class="luogo-badge" id="luogo-badge">LA VIA DELLE VALLI</div>
+    <div class="luogo-nome" id="luogo-nome">Sentiero delle Cascate — Val Genova</div>
+    <div class="luogo-sub" id="luogo-sub">Parco Naturale Adamello Brenta</div>
+  </div>
+  <div class="guscio-logo">GUSC<span>I</span>O</div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('it')">IT</button>
+    <button class="lang-btn" onclick="setLang('de')">DE</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<div class="galleria">
+  <div class="galleria-item">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+      <rect width="100" height="100" fill="#cfe6ec"/>
+      <polygon points="35,0 45,100 55,100 65,0" fill="#ffffff"/>
+      <polygon points="0,80 100,80 100,100 0,100" fill="#3a5a4a"/>
+    </svg>
+  </div>
+  <div class="galleria-item">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+      <rect width="100" height="100" fill="#e8e4d8"/>
+      <rect x="20" y="45" width="60" height="6" fill="#7a5c32"/>
+      <rect x="22" y="51" width="4" height="20" fill="#7a5c32"/>
+      <rect x="74" y="51" width="4" height="20" fill="#7a5c32"/>
+      <polygon points="0,75 100,75 100,100 0,100" fill="#4a7a8a" opacity="0.6"/>
+    </svg>
+  </div>
+  <div class="galleria-item">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+      <rect width="100" height="100" fill="#cde0d8"/>
+      <polygon points="10,90 25,40 40,90" fill="#3a5a3a"/>
+      <polygon points="35,90 55,25 75,90" fill="#2d4a2d"/>
+      <polygon points="65,90 80,50 95,90" fill="#3a5a3a"/>
+    </svg>
+  </div>
+</div>
+
+<div class="ascolta-bar" onclick="ascolta()" id="ascolta-bar">
+  <div class="play-icon">
+    <svg width="16" height="18" viewBox="0 0 16 18" fill="none"><path d="M1 1L15 9L1 17V1Z" fill="#2D5016"/></svg>
+  </div>
+  <div class="ascolta-testo">
+    <strong id="ascolta-label">Ascolta la storia della valle</strong>
+    <span id="ascolta-sub">Voce narrativa · circa 1 minuto</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="mostraPannello('storia', this)" id="tab-storia">Storia</button>
+  <button class="tab-btn" onclick="mostraPannello('tappe', this)" id="tab-tappe">Tappe</button>
+  <button class="tab-btn" onclick="mostraPannello('info', this)" id="tab-info">Info utili</button>
+</div>
+
+<div class="pannello attivo" id="storia">
+  <div class="testo-narrativo" id="testo-narrativo">
+    <p>Lei è entrato nella Val Genova, la valle delle acque.</p>
+    <p>Nel 1800 la chiamavano "la Versailles dell'Italia settentrionale", per la ricchezza dei suoi salti d'acqua. Da qui, seguendo il fiume Sarca, raggiungerà la Cascata di Nardis: un salto di oltre cento metri, alimentato dal ghiacciaio della Presanella, la cima più alta del Trentino.</p>
+    <p>In inverno, quella stessa cascata si trasforma in una scultura di ghiaccio — e fu proprio qui, nel 1977, che due alpinisti del luogo, Cesare Maestri ed Ezio Alimonta, scalarono per la prima volta una cascata completamente ghiacciata, dando origine all'ice climbing.</p>
+    <p>Questo sentiero fa parte de "La Via delle Valli": cinquanta itinerari che, da Madonna di Campiglio al Lago d'Idro, raccontano le valli del Trentino occidentale. Buon cammino.</p>
+  </div>
+  <div class="stat-grid">
+    <div class="stat-box"><div class="stat-num">100 m</div><div class="stat-label">Salto Cascata Nardis</div></div>
+    <div class="stat-box"><div class="stat-num">10-15'</div><div class="stat-label">Da Ponte Verde</div></div>
+  </div>
+</div>
+
+<div class="pannello" id="tappe">
+  <div class="tappa-foto">
+    <div class="tappa-thumb"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#cde0d8"/><rect x="20" y="50" width="60" height="6" fill="#7a5c32"/></svg></div>
+    <div class="tappa-info"><strong>Ponte Verde</strong><span>partenza, parcheggio</span></div>
+  </div>
+  <div class="tappa-foto">
+    <div class="tappa-thumb"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#cfe6ec"/><polygon points="35,0 45,100 55,100 65,0" fill="#ffffff"/></svg></div>
+    <div class="tappa-info"><strong>Cascata Nardis</strong><span>10-15 minuti</span></div>
+  </div>
+  <div class="tappa-foto">
+    <div class="tappa-thumb"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#e0ece0"/><polygon points="20,90 40,30 60,90" fill="#3a5a3a"/></svg></div>
+    <div class="tappa-info"><strong>Cascata del Casöl</strong></div>
+  </div>
+  <div class="tappa-foto">
+    <div class="tappa-thumb"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#d8e4ea"/><rect x="10" y="55" width="80" height="5" fill="#9a7b4f"/></svg></div>
+    <div class="tappa-info"><strong>Ponte Rosso</strong><span>navetta disponibile</span></div>
+  </div>
+  <div class="tappa-foto">
+    <div class="tappa-thumb"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#cfe6ec"/><polygon points="30,0 50,100 70,0" fill="#ffffff" opacity="0.9"/></svg></div>
+    <div class="tappa-info"><strong>Cascata di Lares</strong></div>
+  </div>
+  <div class="tappa-foto">
+    <div class="tappa-thumb"><svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#cde0d8"/><rect x="15" y="40" width="70" height="35" fill="#8a8678"/></svg></div>
+    <div class="tappa-info"><strong>Malga Bedole</strong><span>1.580 m, fine percorso</span></div>
+  </div>
+</div>
+
+<div class="pannello" id="info">
+  <div class="info-box" style="margin-top:0;">
+    <strong>Come arrivare</strong>
+    <p>Da Carisolo, imboccare la strada della Val Genova fino a Ponte Verde. L'accesso è regolamentato in alta stagione, con servizio di navetta.</p>
+  </div>
+  <div class="info-box">
+    <strong>Lunghezza del percorso</strong>
+    <p>Il sentiero completo misura circa 15 km con 970 metri di dislivello fino a Malga Bedole. Il tratto fino alle Cascate di Nardis è breve e accessibile a tutti.</p>
+  </div>
+  <div class="info-box">
+    <strong>La Via delle Valli</strong>
+    <p>Raggiunto il punto di validazione, può registrare la tappa sulla propria credenziale — cartacea o digitale — del progetto "La Via delle Valli" dell'APT Madonna di Campiglio.</p>
+  </div>
+</div>
+
+<div class="footer-guscio">
+  <span>Powered by <a href="#">GUSCIO</a> · guscio.ai</span>
+  <span>la sicurezza è un atto d'amore</span>
+</div>
+
+<script>
+  let lingua = 'it';
+  const testi = {
+    it: { badge: "LA VIA DELLE VALLI", nome: "Sentiero delle Cascate — Val Genova", sub: "Parco Naturale Adamello Brenta", ascolta: "Ascolta la storia della valle", ascoltaSub: "Voce narrativa · circa 1 minuto", tabs: ["Storia", "Tappe", "Info utili"],
+      paragrafi: [
+        "Lei è entrato nella Val Genova, la valle delle acque.",
+        "Nel 1800 la chiamavano \"la Versailles dell'Italia settentrionale\", per la ricchezza dei suoi salti d'acqua. Da qui, seguendo il fiume Sarca, raggiungerà la Cascata di Nardis: un salto di oltre cento metri, alimentato dal ghiacciaio della Presanella, la cima più alta del Trentino.",
+        "In inverno, quella stessa cascata si trasforma in una scultura di ghiaccio — e fu proprio qui, nel 1977, che due alpinisti del luogo, Cesare Maestri ed Ezio Alimonta, scalarono per la prima volta una cascata completamente ghiacciata, dando origine all'ice climbing.",
+        "Questo sentiero fa parte de \"La Via delle Valli\": cinquanta itinerari che, da Madonna di Campiglio al Lago d'Idro, raccontano le valli del Trentino occidentale. Buon cammino."
+      ]},
+    de: { badge: "LA VIA DELLE VALLI", nome: "Wasserfälleweg — Val Genova", sub: "Naturpark Adamello Brenta", ascolta: "Hören Sie die Geschichte des Tals", ascoltaSub: "Erzählstimme · etwa 1 Minute", tabs: ["Geschichte", "Etappen", "Nützliche Infos"],
+      paragrafi: ["Sie sind in das Val Genova eingetreten, das Tal der Gewässer.", "Im 19. Jahrhundert nannte man es \"das Versailles Norditaliens\".", "Im Winter verwandelt sich dieser Wasserfall in eine Eisskulptur.", "Dieser Weg ist Teil von \"La Via delle Valli\"."]},
+    en: { badge: "LA VIA DELLE VALLI", nome: "Waterfall Trail — Val Genova", sub: "Adamello Brenta Natural Park", ascolta: "Listen to the story of the valley", ascoltaSub: "Narrative voice · about 1 minute", tabs: ["History", "Stops", "Useful info"],
+      paragrafi: ["You have entered Val Genova, the valley of waters.", "In the 1800s it was called \"the Versailles of Northern Italy\".", "In winter, that same waterfall transforms into an ice sculpture.", "This trail is part of \"La Via delle Valli\"."]}
+  };
+
+  function setLang(l) {
+    lingua = l;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    const t = testi[l];
+    document.getElementById('luogo-badge').textContent = t.badge;
+    document.getElementById('luogo-nome').textContent = t.nome;
+    document.getElementById('luogo-sub').textContent = t.sub;
+    document.getElementById('ascolta-label').textContent = t.ascolta;
+    document.getElementById('ascolta-sub').textContent = t.ascoltaSub;
+    document.getElementById('testo-narrativo').innerHTML = t.paragrafi.map(p => `<p>${p}</p>`).join('');
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => { btn.textContent = t.tabs[i]; });
+  }
+
+  function mostraPannello(id, btn) {
+    document.querySelectorAll('.pannello').forEach(p => p.classList.remove('attivo'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('attivo');
+    btn.classList.add('active');
+  }
+
+  function ascolta() {
+    const testo = document.getElementById('testo-narrativo').innerText;
+    const btn = document.getElementById('ascolta-bar');
+    if (window.currentAudio && !window.currentAudio.paused) { window.currentAudio.pause(); return; }
+    const messaggiAttesa = { it: "Un istante, sto preparando la voce...", de: "Einen Moment, die Stimme wird vorbereitet...", en: "Please wait one moment for the voice..." };
+    document.getElementById('ascolta-label').textContent = messaggiAttesa[lingua];
+    const voiceId = "RXoaSpLaWTEckJgPUBG3";
+    const apiKey = "sk_f79f535b5c5055a35e8a8f2ab66bbe30ea782aeaa19f6b58";
+    fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+      method: "POST", headers: { "xi-api-key": apiKey, "Content-Type": "application/json" },
+      body: JSON.stringify({ text: testo, model_id: "eleven_multilingual_v2", voice_settings: { stability: 0.5, similarity_boost: 0.75 } })
+    })
+    .then(res => res.blob())
+    .then(blob => {
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      window.currentAudio = audio;
+      document.getElementById('ascolta-label').textContent = testi[lingua].ascolta;
+      audio.play();
+    })
+    .catch(err => {
+      console.error("Errore ElevenLabs, uso voce di sistema:", err);
+      document.getElementById('ascolta-label').textContent = testi[lingua].ascolta;
+      const utterance = new SpeechSynthesisUtterance(testo);
+      utterance.lang = lingua === 'it' ? 'it-IT' : lingua === 'de' ? 'de-DE' : 'en-GB';
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
+    });
+  }
+</script>
+</body>
+</html>
