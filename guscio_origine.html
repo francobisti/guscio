@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO — Come è nata l'idea</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
+
+  :root {
+    --verde: #2D5016;
+    --ocra: #C4860A;
+    --crema: #F7F4EE;
+    --testo: #1A1A1A;
+    --grigio: #6B6B6B;
+    --bordo: #E2DDD4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--crema);
+    color: var(--testo);
+    line-height: 1.6;
+  }
+
+  .hero {
+    background: linear-gradient(160deg, var(--verde) 0%, #1f3a0f 100%);
+    padding: 40px 24px 30px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 180px; height: 180px;
+    background: rgba(196,134,10,0.12);
+    border-radius: 50%;
+  }
+
+  .guscio-logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 22px;
+    color: #fff;
+    letter-spacing: 0.08em;
+    z-index: 1;
+  }
+  .guscio-logo span { color: var(--ocra); font-weight: 700; }
+
+  .lang-switcher {
+    position: absolute;
+    top: 18px;
+    right: 24px;
+    display: flex;
+    gap: 6px;
+    z-index: 2;
+  }
+  .lang-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+  }
+  .lang-btn.active { background: var(--ocra); border-color: var(--ocra); }
+
+  .luogo-nome {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 25px;
+    color: #fff;
+    margin-top: 18px;
+    z-index: 1;
+    position: relative;
+    line-height: 1.3;
+  }
+  .luogo-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+    margin-top: 6px;
+    font-style: italic;
+    z-index: 1;
+    position: relative;
+  }
+
+  .ascolta-bar {
+    background: var(--ocra);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+  }
+  .play-icon {
+    width: 46px; height: 46px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .ascolta-testo strong { display: block; color: #fff; font-size: 16px; font-weight: 600; }
+  .ascolta-testo span { color: rgba(255,255,255,0.85); font-size: 12px; }
+
+  .contenuto { padding: 28px 24px 60px; }
+
+  .testo-narrativo {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    line-height: 1.9;
+    color: var(--testo);
+  }
+  .testo-narrativo p { margin-bottom: 18px; }
+  .testo-narrativo p:first-of-type { font-size: 19px; color: var(--verde); font-weight: 600; }
+  .testo-narrativo strong { color: var(--ocra); }
+
+  .ip-box {
+    background: #fff;
+    border-radius: 14px;
+    padding: 22px 20px;
+    margin-top: 30px;
+    border: 1px solid var(--bordo);
+  }
+  .ip-titolo {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    color: var(--verde);
+    margin-bottom: 14px;
+  }
+  .ip-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    align-items: flex-start;
+  }
+  .ip-item:last-child { margin-bottom: 0; }
+  .ip-icon {
+    width: 30px; height: 30px;
+    background: var(--crema);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    color: var(--ocra);
+    font-weight: 700;
+  }
+  .ip-testo strong { display: block; font-size: 14px; color: var(--testo); }
+  .ip-testo span { font-size: 12.5px; color: var(--grigio); line-height: 1.5; }
+
+  .footer-guscio {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--crema);
+    border-top: 1px solid var(--bordo);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--grigio);
+  }
+  .footer-guscio a { color: var(--verde); text-decoration: none; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="guscio-logo">GUSC<span>I</span>O</div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('it')">IT</button>
+    <button class="lang-btn" onclick="setLang('de')">DE</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
+  <div class="luogo-nome" id="luogo-nome">Come è nata l'idea</div>
+  <div class="luogo-sub" id="luogo-sub">e cosa la protegge</div>
+</div>
+
+<div class="ascolta-bar" onclick="ascolta()" id="ascolta-bar">
+  <div class="play-icon">
+    <svg width="16" height="18" viewBox="0 0 16 18" fill="none"><path d="M1 1L15 9L1 17V1Z" fill="#2D5016"/></svg>
+  </div>
+  <div class="ascolta-testo">
+    <strong id="ascolta-label">Ascolta la storia</strong>
+    <span id="ascolta-sub">Voce narrativa · circa 2 minuti</span>
+  </div>
+</div>
+
+<div class="contenuto">
+  <div class="testo-narrativo" id="testo-narrativo">
+    <p>Ogni idea ha una radice, anche quando sembra nascere all'improvviso.</p>
+    <p>Quella di GUSCIO viene da lontano — da anni passati come <strong>Comandante dei Vigili del Fuoco Volontari</strong>, dove ho imparato che in un'emergenza l'informazione deve arrivare a tutti, subito, senza filtri: non importa l'età, la lingua, la dimestichezza con la tecnologia. In quei momenti, ogni secondo perso a leggere un cartello o cercare un'app può fare la differenza.</p>
+    <p>Quella stessa urgenza, col tempo, ho cominciato a vederla ovunque — non solo nelle emergenze, ma nei piccoli attriti della vita quotidiana. Un foglietto illustrativo scritto in corpo minuscolo. Un QR code su un cartello, da inquadrare con le mani occupate. Un'app scaricata una volta e mai più riaperta.</p>
+    <p>Da queste due radici — il bisogno urgente di chi vive un'emergenza, e la frustrazione quieta di chi vive ogni giorno piccole barriere — è nato GUSCIO: un modo per eliminare ogni soglia tra una persona e l'informazione di cui ha bisogno.</p>
+  </div>
+
+  <div class="ip-box">
+    <div class="ip-titolo">Cosa protegge GUSCIO</div>
+
+    <div class="ip-item">
+      <div class="ip-icon">1</div>
+      <div class="ip-testo">
+        <strong>Primo brevetto italiano</strong>
+        <span>Copre il sistema di lettura tramite smartphone, senza infrastruttura locale dedicata — il principio di accesso a soglia zero.</span>
+      </div>
+    </div>
+
+    <div class="ip-item">
+      <div class="ip-icon">2</div>
+      <div class="ip-testo">
+        <strong>Secondo brevetto italiano — GUSCIO LIVELLI</strong>
+        <span>Copre l'architettura di autenticazione multilivello, l'arbitraggio multi-motore per l'intelligenza artificiale, e il funzionamento in modalità degradata.</span>
+      </div>
+    </div>
+
+    <div class="ip-item">
+      <div class="ip-icon">©</div>
+      <div class="ip-testo">
+        <strong>Marchio GUSCIO</strong>
+        <span>Il nome e l'identità visiva sono in fase di tutela come marchio, a protezione dell'identità commerciale del progetto.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-guscio">
+  <span>Powered by <a href="#">GUSCIO</a> · guscio.ai</span>
+  <span>la sicurezza è un atto d'amore</span>
+</div>
+
+<script>
+  let lingua = 'it';
+
+  const testi = {
+    it: {
+      nome: "Come è nata l'idea",
+      sub: "e cosa la protegge",
+      ascolta: "Ascolta la storia",
+      ascoltaSub: "Voce narrativa · circa 2 minuti",
+      paragrafi: [
+        "Ogni idea ha una radice, anche quando sembra nascere all'improvviso.",
+        "Quella di GUSCIO viene da lontano — da anni passati come Comandante dei Vigili del Fuoco Volontari, dove ho imparato che in un'emergenza l'informazione deve arrivare a tutti, subito, senza filtri: non importa l'età, la lingua, la dimestichezza con la tecnologia. In quei momenti, ogni secondo perso a leggere un cartello o cercare un'app può fare la differenza.",
+        "Quella stessa urgenza, col tempo, ho cominciato a vederla ovunque — non solo nelle emergenze, ma nei piccoli attriti della vita quotidiana. Un foglietto illustrativo scritto in corpo minuscolo. Un QR code su un cartello, da inquadrare con le mani occupate. Un'app scaricata una volta e mai più riaperta.",
+        "Da queste due radici — il bisogno urgente di chi vive un'emergenza, e la frustrazione quieta di chi vive ogni giorno piccole barriere — è nato GUSCIO: un modo per eliminare ogni soglia tra una persona e l'informazione di cui ha bisogno."
+      ]
+    },
+    de: {
+      nome: "Wie die Idee entstand",
+      sub: "und was sie schützt",
+      ascolta: "Hören Sie die Geschichte",
+      ascoltaSub: "Erzählstimme · etwa 2 Minuten",
+      paragrafi: [
+        "Jede Idee hat eine Wurzel, auch wenn sie plötzlich zu entstehen scheint.",
+        "Die von GUSCIO kommt von weit her — aus Jahren als Kommandant der freiwilligen Feuerwehr, wo ich lernte, dass in einem Notfall die Information alle erreichen muss, sofort, ohne Filter.",
+        "Diese gleiche Dringlichkeit begann ich mit der Zeit überall zu sehen — nicht nur in Notfällen, sondern in den kleinen Reibungen des Alltags.",
+        "Aus diesen beiden Wurzeln ist GUSCIO entstanden: ein Weg, jede Schwelle zwischen einer Person und der Information, die sie braucht, zu beseitigen."
+      ]
+    },
+    en: {
+      nome: "How the idea was born",
+      sub: "and what protects it",
+      ascolta: "Listen to the story",
+      ascoltaSub: "Narrative voice · about 2 minutes",
+      paragrafi: [
+        "Every idea has a root, even when it seems to appear suddenly.",
+        "GUSCIO's comes from far away — from years spent as Commander of the Volunteer Fire Brigade, where I learned that in an emergency, information must reach everyone, immediately, without filters: regardless of age, language, or familiarity with technology.",
+        "That same urgency, over time, I began to see everywhere — not only in emergencies, but in the small frictions of everyday life. A leaflet written in tiny print. A QR code on a sign, to be framed with busy hands. An app downloaded once and never opened again.",
+        "From these two roots — the urgent need of those living an emergency, and the quiet frustration of those facing small barriers every day — GUSCIO was born: a way to eliminate every threshold between a person and the information they need."
+      ]
+    }
+  };
+
+  function setLang(l) {
+    lingua = l;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    const t = testi[l];
+    document.getElementById('luogo-nome').textContent = t.nome;
+    document.getElementById('luogo-sub').textContent = t.sub;
+    document.getElementById('ascolta-label').textContent = t.ascolta;
+    document.getElementById('ascolta-sub').textContent = t.ascoltaSub;
+    document.getElementById('testo-narrativo').innerHTML = t.paragrafi.map(p => `<p>${p}</p>`).join('');
+  }
+
+  function ascolta() {
+    const testo = document.getElementById('testo-narrativo').innerText;
+    const btn = document.getElementById('ascolta-bar');
+
+    if (window.currentAudio && !window.currentAudio.paused) {
+      window.currentAudio.pause();
+      return;
+    }
+
+    const messaggiAttesa = {
+      it: "Un istante, sto preparando la voce...",
+      de: "Einen Moment, die Stimme wird vorbereitet...",
+      en: "Please wait one moment for the voice..."
+    };
+    document.getElementById('ascolta-label').textContent = messaggiAttesa[lingua];
+
+    const voiceId = "RXoaSpLaWTEckJgPUBG3"; // Tiziana
+    const apiKey = "sk_f79f535b5c5055a35e8a8f2ab66bbe30ea782aeaa19f6b58";
+
+    fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+      method: "POST",
+      headers: {
+        "xi-api-key": apiKey,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        text: testo,
+        model_id: "eleven_multilingual_v2",
+        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+      })
+    })
+    .then(res => res.blob())
+    .then(blob => {
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      window.currentAudio = audio;
+      document.getElementById('ascolta-label').textContent = testi[lingua].ascolta;
+      audio.play();
+    })
+    .catch(err => {
+      console.error("Errore ElevenLabs, uso voce di sistema:", err);
+      document.getElementById('ascolta-label').textContent = testi[lingua].ascolta;
+      const utterance = new SpeechSynthesisUtterance(testo);
+      utterance.lang = lingua === 'it' ? 'it-IT' : lingua === 'de' ? 'de-DE' : 'en-GB';
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
+    });
+  }
+</script>
+</body>
+</html>
