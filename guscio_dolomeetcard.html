@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO — DoloMeet Guest Card, tutti i servizi</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
+  :root { --verde: #2D5016; --ocra: #C4860A; --crema: #F7F4EE; --testo: #1A1A1A; --grigio: #6B6B6B; --bordo: #E2DDD4; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: var(--crema); color: var(--testo); line-height: 1.6; }
+  .header { background: var(--verde); padding: 20px 24px 16px; position: sticky; top: 0; z-index: 100; }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .guscio-logo { font-family: 'Fraunces', serif; font-weight: 300; font-size: 19px; color: #fff; letter-spacing: 0.06em; }
+  .guscio-logo span { color: var(--ocra); }
+  .lang-switcher { display: flex; gap: 5px; }
+  .lang-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 3px 8px; border-radius: 20px; font-size: 11px; cursor: pointer; font-family: 'Inter', sans-serif; }
+  .lang-btn.active { background: var(--ocra); border-color: var(--ocra); }
+  .titolo-nome { font-family: 'Fraunces', serif; font-weight: 600; font-size: 19px; color: #fff; }
+  .titolo-sub { font-size: 12px; color: rgba(255,255,255,0.75); margin-top: 2px; }
+  .ascolta-bar { background: var(--ocra); padding: 14px 24px; display: flex; align-items: center; gap: 14px; cursor: pointer; }
+  .play-icon { width: 44px; height: 44px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .ascolta-testo strong { display: block; color: #fff; font-size: 15px; font-weight: 600; }
+  .ascolta-testo span { color: rgba(255,255,255,0.85); font-size: 12px; }
+  .intro-box { background: #fff; margin: 16px 20px; border-radius: 12px; padding: 16px 18px; border-left: 4px solid var(--ocra); }
+  .intro-box p { font-size: 14px; color: var(--grigio); line-height: 1.6; }
+  .intro-box strong { color: var(--verde); }
+  .domanda-bar { margin: 0 20px 16px; background: #fff; border-radius: 10px; padding: 14px 16px; font-size: 13px; color: var(--grigio); text-align: center; font-style: italic; }
+  .servizi-grid { padding: 0 20px 80px; }
+  .servizio-card { background: #fff; border-radius: 12px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .servizio-header { padding: 14px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+  .servizio-icona { width: 38px; height: 38px; background: var(--crema); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .servizio-titolo { flex: 1; }
+  .servizio-titolo strong { display: block; font-size: 14.5px; color: var(--testo); }
+  .servizio-titolo span { font-size: 11.5px; color: var(--ocra); }
+  .servizio-freccia { color: var(--grigio); transition: transform 0.2s; }
+  .servizio-card.aperto .servizio-freccia { transform: rotate(180deg); }
+  .servizio-dettaglio { display: none; padding: 0 16px 16px; font-size: 13.5px; color: var(--grigio); line-height: 1.6; }
+  .servizio-card.aperto .servizio-dettaglio { display: block; }
+  .servizio-dettaglio ul { list-style: none; padding-left: 0; margin-top: 6px; }
+  .servizio-dettaglio li { padding: 4px 0 4px 16px; position: relative; }
+  .servizio-dettaglio li::before { content: "–"; position: absolute; left: 0; color: var(--ocra); }
+  .footer-guscio { position: fixed; bottom: 0; left: 0; right: 0; background: var(--crema); border-top: 1px solid var(--bordo); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--grigio); }
+  .footer-guscio a { color: var(--verde); text-decoration: none; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="guscio-logo">GUSC<span>I</span>O</div>
+    <div class="lang-switcher">
+      <button class="lang-btn active" onclick="setLang('it')">IT</button>
+      <button class="lang-btn" onclick="setLang('de')">DE</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+  <div class="titolo-nome" id="titolo-nome">DoloMeet Guest Card</div>
+  <div class="titolo-sub" id="titolo-sub">Tutti i servizi della vostra vacanza, in un unico posto</div>
+</div>
+
+<div class="ascolta-bar" onclick="ascolta()" id="ascolta-bar">
+  <div class="play-icon">
+    <svg width="16" height="18" viewBox="0 0 16 18" fill="none"><path d="M1 1L15 9L1 17V1Z" fill="#2D5016"/></svg>
+  </div>
+  <div class="ascolta-testo">
+    <strong id="ascolta-label">Ascolta come funziona la card</strong>
+    <span id="ascolta-sub">Voce narrativa · circa 1 minuto</span>
+  </div>
+</div>
+
+<div class="intro-box" id="intro-box">
+  <p id="intro-text">La vostra Guest Card comprende dieci servizi diversi — funivie, trenino, lago, bus, mobilità nel Parco. <strong>Non serve più scansionare un QR diverso per ognuno.</strong> Tocchi qui sotto il servizio che le interessa, oppure ascolti la voce per essere guidato.</p>
+</div>
+
+<div class="domanda-bar" id="domanda-bar">"Vuoi sapere come arrivare in Val di Sole? O preferisci il trenino per Pinzolo?"</div>
+
+<div class="servizi-grid" id="servizi-grid">
+
+  <div class="servizio-card">
+    <div class="servizio-header" onclick="toggleCard(this)">
+      <div class="servizio-icona">🎫</div>
+      <div class="servizio-titolo"><strong>DoloMeet Guest Card</strong><span>3 · 6 · 9 · 20 giorni</span></div>
+      <div class="servizio-freccia">▾</div>
+    </div>
+    <div class="servizio-dettaglio">
+      <ul>
+        <li>3 GG: 2 corse A/R al giorno per 3 giorni consecutivi</li>
+        <li>6 GG: 2 corse A/R al giorno per 6 giorni consecutivi</li>
+        <li>9 GG: 2 corse A/R al giorno per 9 giorni consecutivi</li>
+        <li>20 GG: 2 corse A/R al giorno in totale, nei 14 giorni consecutivi dal primo utilizzo</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="servizio-card">
+    <div class="servizio-header" onclick="toggleCard(this)">
+      <div class="servizio-icona">🚡</div>
+      <div class="servizio-titolo"><strong>Funivie Val di Sole</strong><span>Sconto 25% sugli impianti</span></div>
+      <div class="servizio-freccia">▾</div>
+    </div>
+    <div class="servizio-dettaglio">
+      <ul>
+        <li>Sconto del 25% sugli impianti di Folgarida Marilleva, Pejo e Tonale</li>
+        <li>Valido su tutte le tipologie di biglietto bi-stagionali</li>
+        <li>Escluse stagionali e 25% di sconto sui giornalieri Folgarida Marilleva e Tonale (passi non inclusi)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="servizio-card">
+    <div class="servizio-header" onclick="toggleCard(this)">
+      <div class="servizio-icona">🚂</div>
+      <div class="servizio-titolo"><strong>Trenino</strong><span>1 corsa gratuita al giorno</span></div>
+      <div class="servizio-freccia">▾</div>
+    </div>
+    <div class="servizio-dettaglio">
+      <p>1 corsa gratuita al giorno sul trenino che collega Pinzolo, Carisolo e Giustino.</p>
+    </div>
+  </div>
+
+  <div class="servizio-card">
+    <div class="servizio-header" onclick="toggleCard(this)">
+      <div class="servizio-icona">⛵</div>
+      <div class="servizio-titolo"><strong>Navigazione Lago d'Idro</strong><span>1 giro in battello gratuito</span></div>
+      <div class="servizio-freccia">▾</div>
+    </div>
+    <div class="servizio-dettaglio">
+      <p>1 giro gratuito del lago in battello, durata circa 1 ora e 45 minuti.</p>
+    </div>
+  </div>
+
+  <div class="servizio-card">
+    <div class="servizio-header" onclick="toggleCard(this)">
+      <div class="servizio-icona">🌲</div>
+      <div class="servizio-titolo"><strong>Mobilità nel Parco</strong><span>Trasporti e parcheggi PNAB</span></div>
+      <div class="servizio-freccia">▾</div>
+    </div>
+    <div class="servizio-dettaglio">
+      <ul>
+        <li>2 corse gratuite al giorno sui trasporti sostenibili del Parco Naturale Adamello Brenta</li>
+        <li>Accesso gratuito ai parcheggi nelle valli del PNAB (escluso Val di Tovel)</li>
+        <li>Prenotazione tramite sito PNAB e APT, o sito e app PNAB</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="servizio-card">
+    <div class="servizio-header" onclick="toggleCard(this)">
+      <div class="servizio-icona">🚌</div>
+      <div class="servizio-titolo"><strong>Mobilità Pubblica Trentino</strong><span>Bus gratuito con APP MIO</span></div>
+      <div class="servizio-freccia">▾</div>
+    </div>
+    <div class="servizio-dettaglio">
+      <p>Uso gratuito della mobilità pubblica nella provincia di Trento, attivabile tramite l'APP MIO Trentino.</p>
+    </div>
+  </div>
+
+  <div class="servizio-card">
+    <div class="servizio-header" onclick="toggleCard(this)">
+      <div class="servizio-icona">🚲</div>
+      <div class="servizio-titolo"><strong>Bicibus</strong><span>Servizio bici e navetta</span></div>
+      <div class="servizio-freccia">▾</div>
+    </div>
+    <div class="servizio-dettaglio">
+      <ul>
+        <li>Uso gratuito del servizio bici sulla linea Tione - Carisolo - Dimaro</li>
+        <li>Navetta Carisolo - Dimaro gratuita, incluso il trasporto bici</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer-guscio">
+  <span>Powered by <a href="#">GUSCIO</a> · guscio.ai</span>
+  <span>la sicurezza è un atto d'amore</span>
+</div>
+
+<script>
+  let lingua = 'it';
+
+  function toggleCard(header) {
+    const card = header.parentElement;
+    const wasOpen = card.classList.contains('aperto');
+    document.querySelectorAll('.servizio-card').forEach(c => c.classList.remove('aperto'));
+    if (!wasOpen) card.classList.add('aperto');
+  }
+
+  function setLang(l) {
+    lingua = l;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    const testi = {
+      it: { nome: "DoloMeet Guest Card", sub: "Tutti i servizi della vostra vacanza, in un unico posto", ascolta: "Ascolta come funziona la card", intro: "La vostra Guest Card comprende dieci servizi diversi — funivie, trenino, lago, bus, mobilità nel Parco. <strong>Non serve più scansionare un QR diverso per ognuno.</strong> Tocchi qui sotto il servizio che le interessa, oppure ascolti la voce per essere guidato.", domanda: "\"Vuoi sapere come arrivare in Val di Sole? O preferisci il trenino per Pinzolo?\"" },
+      de: { nome: "DoloMeet Guest Card", sub: "Alle Dienstleistungen Ihres Urlaubs an einem Ort", ascolta: "Hören Sie, wie die Karte funktioniert", intro: "Ihre Guest Card umfasst zehn verschiedene Dienstleistungen. <strong>Sie müssen nicht mehr für jede einen anderen QR-Code scannen.</strong>", domanda: "\"Möchten Sie wissen, wie Sie ins Val di Sole kommen?\"" },
+      en: { nome: "DoloMeet Guest Card", sub: "All your holiday services, in one place", ascolta: "Listen to how the card works", intro: "Your Guest Card includes ten different services. <strong>No need to scan a different QR code for each one anymore.</strong>", domanda: "\"Want to know how to get to Val di Sole? Or prefer the little train to Pinzolo?\"" }
+    };
+    const t = testi[l];
+    document.getElementById('titolo-nome').textContent = t.nome;
+    document.getElementById('titolo-sub').textContent = t.sub;
+    document.getElementById('ascolta-label').textContent = t.ascolta;
+    document.getElementById('intro-text').innerHTML = t.intro;
+    document.getElementById('domanda-bar').textContent = t.domanda;
+  }
+
+  function ascolta() {
+    const testo = document.getElementById('intro-text').innerText + " " + document.getElementById('domanda-bar').innerText;
+    const btn = document.getElementById('ascolta-bar');
+
+    if (window.currentAudio && !window.currentAudio.paused) { window.currentAudio.pause(); return; }
+
+    const messaggiAttesa = { it: "Un istante, sto preparando la voce...", de: "Einen Moment, die Stimme wird vorbereitet...", en: "Please wait one moment for the voice..." };
+    document.getElementById('ascolta-label').textContent = messaggiAttesa[lingua];
+
+    const voiceId = "RXoaSpLaWTEckJgPUBG3";
+    const apiKey = "sk_f79f535b5c5055a35e8a8f2ab66bbe30ea782aeaa19f6b58";
+
+    fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+      method: "POST",
+      headers: { "xi-api-key": apiKey, "Content-Type": "application/json" },
+      body: JSON.stringify({ text: testo, model_id: "eleven_multilingual_v2", voice_settings: { stability: 0.5, similarity_boost: 0.75 } })
+    })
+    .then(res => res.blob())
+    .then(blob => {
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      window.currentAudio = audio;
+      const testi = { it: "Ascolta come funziona la card", de: "Hören Sie, wie die Karte funktioniert", en: "Listen to how the card works" };
+      document.getElementById('ascolta-label').textContent = testi[lingua];
+      audio.play();
+    })
+    .catch(err => {
+      console.error("Errore ElevenLabs, uso voce di sistema:", err);
+      const testi = { it: "Ascolta come funziona la card", de: "Hören Sie, wie die Karte funktioniert", en: "Listen to how the card works" };
+      document.getElementById('ascolta-label').textContent = testi[lingua];
+      const utterance = new SpeechSynthesisUtterance(testo);
+      utterance.lang = lingua === 'it' ? 'it-IT' : lingua === 'de' ? 'de-DE' : 'en-GB';
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
+    });
+  }
+</script>
+</body>
+</html>
