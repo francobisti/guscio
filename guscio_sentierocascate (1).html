@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO — Sentiero delle Cascate, Val Genova</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
+
+  :root {
+    --verde: #2D5016;
+    --ocra: #C4860A;
+    --crema: #F7F4EE;
+    --testo: #1A1A1A;
+    --grigio: #6B6B6B;
+    --bordo: #E2DDD4;
+    --acqua: #1B6B8C;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--crema);
+    color: var(--testo);
+    line-height: 1.6;
+  }
+
+  .hero {
+    position: relative;
+    height: 36vh;
+    min-height: 250px;
+    background: linear-gradient(180deg, rgba(27,107,140,0.2) 0%, rgba(10,40,55,0.85) 100%),
+                linear-gradient(135deg, #2d6e50 0%, #1f4a3a 55%, #0f2a20 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 24px 24px 20px;
+  }
+
+  .guscio-logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 20px;
+    color: #fff;
+    letter-spacing: 0.08em;
+    position: absolute;
+    top: 20px;
+    left: 24px;
+  }
+  .guscio-logo span { color: var(--ocra); }
+
+  .lang-switcher {
+    position: absolute;
+    top: 18px;
+    right: 24px;
+    display: flex;
+    gap: 6px;
+  }
+  .lang-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+  }
+  .lang-btn.active { background: var(--ocra); border-color: var(--ocra); }
+
+  .luogo-badge {
+    display: inline-block;
+    background: var(--ocra);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    letter-spacing: 0.04em;
+  }
+
+  .luogo-nome {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 26px;
+    color: #fff;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  }
+  .luogo-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    margin-top: 4px;
+  }
+
+  .ascolta-bar {
+    background: var(--ocra);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+  }
+  .play-icon {
+    width: 46px; height: 46px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .ascolta-testo strong { display: block; color: #fff; font-size: 16px; font-weight: 600; }
+  .ascolta-testo span { color: rgba(255,255,255,0.85); font-size: 12px; }
+
+  .tabs {
+    display: flex;
+    background: #fff;
+    border-bottom: 2px solid var(--bordo);
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 13px 6px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--grigio);
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+  }
+  .tab-btn.active { color: var(--verde); border-bottom-color: var(--verde); }
+
+  .pannello { display: none; padding: 24px; }
+  .pannello.attivo { display: block; }
+
+  .testo-narrativo {
+    font-family: 'Fraunces', serif;
+    font-size: 16.5px;
+    line-height: 1.85;
+    color: var(--testo);
+  }
+  .testo-narrativo p { margin-bottom: 16px; }
+  .testo-narrativo p:first-of-type { font-size: 18px; color: var(--verde); font-weight: 600; }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .stat-box {
+    background: #fff;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+    border-top: 3px solid var(--ocra);
+  }
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--verde);
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--grigio);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-top: 2px;
+  }
+
+  .tappe-lista { list-style: none; }
+  .tappe-lista li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--bordo);
+    font-size: 14.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .tappa-puntino {
+    width: 8px; height: 8px;
+    background: var(--acqua);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tappa-nota {
+    font-size: 11px;
+    color: var(--ocra);
+    margin-left: auto;
+  }
+
+  .info-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-top: 12px;
+    border-left: 4px solid var(--verde);
+  }
+  .info-box strong {
+    display: block;
+    color: var(--verde);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .info-box p { font-size: 14px; color: var(--grigio); line-height: 1.6; }
+
+  .footer-guscio {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--crema);
+    border-top: 1px solid var(--bordo);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--grigio);
+  }
+  .footer-guscio a { color: var(--verde); text-decoration: none; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="guscio-logo">GUSC<span>I</span>O</div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('it')">IT</button>
+    <button class="lang-btn" onclick="setLang('de')">DE</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
+  <div class="luogo-badge" id="luogo-badge">LA VIA DELLE VALLI</div>
+  <div class="luogo-nome" id="luogo-nome">Sentiero delle Cascate — Val Genova</div>
+  <div class="luogo-sub" id="luogo-sub">Parco Naturale Adamello Brenta · da Ponte Verde alle Cascate Nardis</div>
+</div>
+
+<div class="ascolta-bar" onclick="ascolta()" id="ascolta-bar">
+  <div class="play-icon">
+    <svg width="16" height="18" viewBox="0 0 16 18" fill="none"><path d="M1 1L15 9L1 17V1Z" fill="#2D5016"/></svg>
+  </div>
+  <div class="ascolta-testo">
+    <strong id="ascolta-label">Ascolta la storia della valle</strong>
+    <span id="ascolta-sub">Voce narrativa · circa 1 minuto</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="mostraPannello('storia', this)" id="tab-storia">Storia</button>
+  <button class="tab-btn" onclick="mostraPannello('tappe', this)" id="tab-tappe">Tappe</button>
+  <button class="tab-btn" onclick="mostraPannello('info', this)" id="tab-info">Info utili</button>
+</div>
+
+<div class="pannello attivo" id="storia">
+  <div class="testo-narrativo" id="testo-narrativo">
+    <p>Lei è entrato nella Val Genova, la valle delle acque.</p>
+    <p>Nel 1800 la chiamavano "la Versailles dell'Italia settentrionale", per la ricchezza dei suoi salti d'acqua. Da qui, seguendo il fiume Sarca, raggiungerà la Cascata di Nardis: un salto di oltre cento metri, alimentato dal ghiacciaio della Presanella, la cima più alta del Trentino.</p>
+    <p>In inverno, quella stessa cascata si trasforma in una scultura di ghiaccio — e fu proprio qui, nel 1977, che due alpinisti del luogo, Cesare Maestri ed Ezio Alimonta, scalarono per la prima volta una cascata completamente ghiacciata, dando origine all'ice climbing.</p>
+    <p>Questo sentiero fa parte de "La Via delle Valli": cinquanta itinerari che, da Madonna di Campiglio al Lago d'Idro, raccontano le valli del Trentino occidentale. Buon cammino.</p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="stat-num">100 m</div>
+      <div class="stat-label">Salto Cascata Nardis</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">10-15'</div>
+      <div class="stat-label">Da Ponte Verde</div>
+    </div>
+  </div>
+</div>
+
+<div class="pannello" id="tappe">
+  <ul class="tappe-lista" id="tappe-lista">
+    <li><div class="tappa-puntino"></div> Ponte Verde <span class="tappa-nota">partenza, parcheggio</span></li>
+    <li><div class="tappa-puntino"></div> Cascata Nardis <span class="tappa-nota">10-15 min</span></li>
+    <li><div class="tappa-puntino"></div> Cascata del Casöl</li>
+    <li><div class="tappa-puntino"></div> Ponte Rosso <span class="tappa-nota">navetta disponibile</span></li>
+    <li><div class="tappa-puntino"></div> Cascata di Lares</li>
+    <li><div class="tappa-puntino"></div> Sbarramento di Fontanabona</li>
+    <li><div class="tappa-puntino"></div> Cascata Folgorida</li>
+    <li><div class="tappa-puntino"></div> Malga Bedole <span class="tappa-nota">1.580 m, fine percorso</span></li>
+  </ul>
+</div>
+
+<div class="pannello" id="info">
+  <div class="info-box" style="margin-top:0;">
+    <strong>Come arrivare</strong>
+    <p>Da Carisolo, imboccare la strada della Val Genova fino a Ponte Verde. L'accesso è regolamentato in alta stagione, con servizio di navetta.</p>
+  </div>
+  <div class="info-box">
+    <strong>Lunghezza del percorso</strong>
+    <p>Il sentiero completo misura circa 15 km con 970 metri di dislivello fino a Malga Bedole. Il tratto fino alle Cascate di Nardis è breve e accessibile a tutti.</p>
+  </div>
+  <div class="info-box">
+    <strong>La Via delle Valli</strong>
+    <p>Raggiunto il punto di validazione, può registrare la tappa sulla propria credenziale — cartacea o digitale — del progetto "La Via delle Valli" dell'APT Madonna di Campiglio.</p>
+  </div>
+</div>
+
+<div class="footer-guscio">
+  <span>Powered by <a href="#">GUSCIO</a> · guscio.ai</span>
+  <span>la sicurezza è un atto d'amore</span>
+</div>
+
+<script>
+  let lingua = 'it';
+
+  const testi = {
+    it: {
+      badge: "LA VIA DELLE VALLI",
+      nome: "Sentiero delle Cascate — Val Genova",
+      sub: "Parco Naturale Adamello Brenta · da Ponte Verde alle Cascate Nardis",
+      ascolta: "Ascolta la storia della valle",
+      ascoltaSub: "Voce narrativa · circa 1 minuto",
+      tabs: ["Storia", "Tappe", "Info utili"],
+      paragrafi: [
+        "Lei è entrato nella Val Genova, la valle delle acque.",
+        "Nel 1800 la chiamavano \"la Versailles dell'Italia settentrionale\", per la ricchezza dei suoi salti d'acqua. Da qui, seguendo il fiume Sarca, raggiungerà la Cascata di Nardis: un salto di oltre cento metri, alimentato dal ghiacciaio della Presanella, la cima più alta del Trentino.",
+        "In inverno, quella stessa cascata si trasforma in una scultura di ghiaccio — e fu proprio qui, nel 1977, che due alpinisti del luogo, Cesare Maestri ed Ezio Alimonta, scalarono per la prima volta una cascata completamente ghiacciata, dando origine all'ice climbing.",
+        "Questo sentiero fa parte de \"La Via delle Valli\": cinquanta itinerari che, da Madonna di Campiglio al Lago d'Idro, raccontano le valli del Trentino occidentale. Buon cammino."
+      ]
+    },
+    de: {
+      badge: "LA VIA DELLE VALLI",
+      nome: "Wasserfälleweg — Val Genova",
+      sub: "Naturpark Adamello Brenta · von Ponte Verde zu den Nardis-Wasserfällen",
+      ascolta: "Hören Sie die Geschichte des Tals",
+      ascoltaSub: "Erzählstimme · etwa 1 Minute",
+      tabs: ["Geschichte", "Etappen", "Nützliche Infos"],
+      paragrafi: [
+        "Sie sind in das Val Genova eingetreten, das Tal der Gewässer.",
+        "Im 19. Jahrhundert nannte man es \"das Versailles Norditaliens\", wegen seines Wasserreichtums. Von hier aus, dem Fluss Sarca folgend, erreichen Sie den Nardis-Wasserfall: ein über hundert Meter hoher Fall, gespeist vom Presanella-Gletscher.",
+        "Im Winter verwandelt sich dieser Wasserfall in eine Eisskulptur — und genau hier gelang 1977 zwei einheimischen Alpinisten die erste Besteigung eines vollständig gefrorenen Wasserfalls.",
+        "Dieser Weg ist Teil von \"La Via delle Valli\": fünfzig Routen von Madonna di Campiglio bis zum Idrosee. Gute Wanderung."
+      ]
+    },
+    en: {
+      badge: "LA VIA DELLE VALLI",
+      nome: "Waterfall Trail — Val Genova",
+      sub: "Adamello Brenta Natural Park · from Ponte Verde to the Nardis Falls",
+      ascolta: "Listen to the story of the valley",
+      ascoltaSub: "Narrative voice · about 1 minute",
+      tabs: ["History", "Stops", "Useful info"],
+      paragrafi: [
+        "You have entered Val Genova, the valley of waters.",
+        "In the 1800s it was called \"the Versailles of Northern Italy\", for its wealth of waterfalls. From here, following the Sarca river, you'll reach the Nardis Falls: a drop of over a hundred metres, fed by the Presanella glacier, Trentino's highest peak.",
+        "In winter, that same waterfall transforms into an ice sculpture — and it was right here, in 1977, that two local climbers made the first ascent of a fully frozen waterfall, giving birth to ice climbing.",
+        "This trail is part of \"La Via delle Valli\": fifty routes that tell the story of western Trentino's valleys, from Madonna di Campiglio to Lake Idro. Enjoy your walk."
+      ]
+    }
+  };
+
+  function setLang(l) {
+    lingua = l;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    const t = testi[l];
+    document.getElementById('luogo-badge').textContent = t.badge;
+    document.getElementById('luogo-nome').textContent = t.nome;
+    document.getElementById('luogo-sub').textContent = t.sub;
+    document.getElementById('ascolta-label').textContent = t.ascolta;
+    document.getElementById('ascolta-sub').textContent = t.ascoltaSub;
+    document.getElementById('testo-narrativo').innerHTML = t.paragrafi.map(p => `<p>${p}</p>`).join('');
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach((btn, i) => { btn.textContent = t.tabs[i]; });
+  }
+
+  function mostraPannello(id, btn) {
+    document.querySelectorAll('.pannello').forEach(p => p.classList.remove('attivo'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('attivo');
+    btn.classList.add('active');
+  }
+
+  function ascolta() {
+    const testo = document.getElementById('testo-narrativo').innerText;
+    const btn = document.getElementById('ascolta-bar');
+
+    if (window.currentAudio && !window.currentAudio.paused) {
+      window.currentAudio.pause();
+      return;
+    }
+
+    const messaggiAttesa = {
+      it: "Un istante, sto preparando la voce...",
+      de: "Einen Moment, die Stimme wird vorbereitet...",
+      en: "Please wait one moment for the voice..."
+    };
+    document.getElementById('ascolta-label').textContent = messaggiAttesa[lingua];
+
+    const voiceId = "RXoaSpLaWTEckJgPUBG3"; // Tiziana
+    const apiKey = "sk_f79f535b5c5055a35e8a8f2ab66bbe30ea782aeaa19f6b58";
+
+    fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+      method: "POST",
+      headers: {
+        "xi-api-key": apiKey,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        text: testo,
+        model_id: "eleven_multilingual_v2",
+        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+      })
+    })
+    .then(res => res.blob())
+    .then(blob => {
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      window.currentAudio = audio;
+      document.getElementById('ascolta-label').textContent = testi[lingua].ascolta;
+      audio.play();
+    })
+    .catch(err => {
+      console.error("Errore ElevenLabs, uso voce di sistema:", err);
+      document.getElementById('ascolta-label').textContent = testi[lingua].ascolta;
+      const utterance = new SpeechSynthesisUtterance(testo);
+      utterance.lang = lingua === 'it' ? 'it-IT' : lingua === 'de' ? 'de-DE' : 'en-GB';
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
+    });
+  }
+</script>
+</body>
+</html>
