@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO — Parco Naturale Adamello Brenta</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
+  :root { --verde: #2D5016; --ocra: #C4860A; --crema: #F7F4EE; --testo: #1A1A1A; --grigio: #6B6B6B; --bordo: #E2DDD4; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: var(--crema); color: var(--testo); line-height: 1.6; }
+
+  .hero { position: relative; height: 38vh; min-height: 260px; overflow: hidden; }
+  .hero svg { width: 100%; height: 100%; display: block; }
+  .hero-overlay { position: absolute; top:0; left:0; right:0; bottom:0; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; }
+  .guscio-logo { font-family: 'Fraunces', serif; font-weight: 300; font-size: 20px; color: #fff; letter-spacing: 0.08em; position: absolute; top: 20px; left: 24px; z-index: 2; }
+  .guscio-logo span { color: var(--ocra); }
+  .lang-switcher { position: absolute; top: 18px; right: 24px; display: flex; gap: 6px; z-index: 2; }
+  .lang-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 12px; cursor: pointer; font-family: 'Inter', sans-serif; }
+  .lang-btn.active { background: var(--ocra); border-color: var(--ocra); }
+  .luogo-badge { display: inline-block; background: var(--ocra); color: #fff; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; margin-bottom: 10px; letter-spacing: 0.04em; }
+  .luogo-nome { font-family: 'Fraunces', serif; font-weight: 600; font-size: 26px; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+  .luogo-sub { font-size: 13px; color: rgba(255,255,255,0.9); margin-top: 4px; }
+
+  .ascolta-bar { background: var(--ocra); padding: 16px 24px; display: flex; align-items: center; gap: 14px; cursor: pointer; }
+  .play-icon { width: 46px; height: 46px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .ascolta-testo strong { display: block; color: #fff; font-size: 16px; font-weight: 600; }
+  .ascolta-testo span { color: rgba(255,255,255,0.85); font-size: 12px; }
+
+  .tabs { display: flex; background: #fff; border-bottom: 2px solid var(--bordo); }
+  .tab-btn { flex: 1; padding: 13px 6px; font-size: 12.5px; font-weight: 500; color: var(--grigio); border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+  .tab-btn.active { color: var(--verde); border-bottom-color: var(--verde); }
+
+  .pannello { display: none; padding: 24px; }
+  .pannello.attivo { display: block; }
+
+  .testo-narrativo { font-family: 'Fraunces', serif; font-size: 16.5px; line-height: 1.85; color: var(--testo); }
+  .testo-narrativo p { margin-bottom: 16px; }
+  .testo-narrativo p:first-of-type { font-size: 18px; color: var(--verde); font-weight: 600; }
+
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .stat-box { background: #fff; border-radius: 10px; padding: 14px; text-align: center; border-top: 3px solid var(--ocra); }
+  .stat-num { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 600; color: var(--verde); }
+  .stat-label { font-size: 11px; color: var(--grigio); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+
+  .luoghi-lista { list-style: none; }
+  .luoghi-lista li { padding: 10px 0; border-bottom: 1px solid var(--bordo); font-size: 14.5px; display: flex; align-items: center; gap: 10px; }
+  .luogo-puntino { width: 8px; height: 8px; background: var(--ocra); border-radius: 50%; flex-shrink: 0; }
+
+  .info-box { background: #fff; border-radius: 12px; padding: 16px 18px; margin-top: 12px; border-left: 4px solid var(--verde); }
+  .info-box strong { display: block; color: var(--verde); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .info-box p { font-size: 14px; color: var(--grigio); line-height: 1.6; }
+
+  .footer-guscio { position: fixed; bottom: 0; left: 0; right: 0; background: var(--crema); border-top: 1px solid var(--bordo); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--grigio); }
+  .footer-guscio a { color: var(--verde); text-decoration: none; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#A8C8D8"/><stop offset="100%" stop-color="#D8E8EC"/></linearGradient>
+      <linearGradient id="rock2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#9a9486"/><stop offset="100%" stop-color="#6e6a5d"/></linearGradient>
+    </defs>
+    <rect width="800" height="500" fill="url(#sky2)"/>
+    <polygon points="0,300 100,150 200,260 320,120 450,240 580,140 700,250 800,180 800,500 0,500" fill="url(#rock2)"/>
+    <polygon points="50,420 90,300 130,420" fill="#fff" opacity="0.85"/>
+    <polygon points="280,380 330,200 380,380" fill="#fff" opacity="0.85"/>
+    <polygon points="500,400 540,260 580,400" fill="#fff" opacity="0.7"/>
+    <g fill="#2d4a2d">
+      <polygon points="600,500 625,400 650,500"/><polygon points="650,500 675,380 700,500"/>
+      <polygon points="700,500 720,420 745,500"/><polygon points="20,500 45,410 70,500"/>
+    </g>
+  </svg>
+  <div class="hero-overlay">
+    <div class="luogo-badge" id="luogo-badge">GEOPARCO UNESCO</div>
+    <div class="luogo-nome" id="luogo-nome">Parco Naturale Adamello Brenta</div>
+    <div class="luogo-sub" id="luogo-sub">Il primo parco naturale d'Italia</div>
+  </div>
+  <div class="guscio-logo">GUSC<span>I</span>O</div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('it')">IT</button>
+    <button class="lang-btn" onclick="setLang('de')">DE</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<div class="ascolta-bar" onclick="ascolta()" id="ascolta-bar">
+  <div class="play-icon"><svg width="16" height="18" viewBox="0 0 16 18" fill="none"><path d="M1 1L15 9L1 17V1Z" fill="#2D5016"/></svg></div>
+  <div class="ascolta-testo">
+    <strong id="ascolta-label">Ascolta la storia del Parco</strong>
+    <span id="ascolta-sub">Voce narrativa · circa 1 minuto</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="mostraPannello('storia', this)" id="tab-storia">Storia</button>
+  <button class="tab-btn" onclick="mostraPannello('luoghi', this)" id="tab-luoghi">Luoghi</button>
+  <button class="tab-btn" onclick="mostraPannello('info', this)" id="tab-info">Info utili</button>
+</div>
+
+<div class="pannello attivo" id="storia">
+  <div class="testo-narrativo" id="testo-narrativo">
+    <p>Lei si trova nel Parco Naturale Adamello Brenta, la più vasta area protetta del Trentino.</p>
+    <p>L'idea nasce nei primi anni del Novecento, quando naturalisti e alpinisti iniziarono a immaginare un'area protetta per salvare l'ultima popolazione di orso bruno delle Alpi e i suoi territori. Dopo decenni di proposte, il Parco nasce ufficialmente nel 1967: il primo parco naturale d'Italia.</p>
+    <p>Qui convivono due mondi geologicamente opposti: a ovest il massiccio granitico dell'Adamello-Presanella, regno di ghiacciai e torrenti; a est le guglie dolomitiche del Gruppo di Brenta, Patrimonio Mondiale dell'UNESCO dal 2009.</p>
+    <p>Dal 2008 il Parco è riconosciuto Geoparco UNESCO. Buona scoperta di questo territorio.</p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-box"><div class="stat-num">620 km²</div><div class="stat-label">Superficie protetta</div></div>
+    <div class="stat-box"><div class="stat-num">1967</div><div class="stat-label">Anno di fondazione</div></div>
+    <div class="stat-box"><div class="stat-num">700 km</div><div class="stat-label">Sentieri segnalati</div></div>
+    <div class="stat-box"><div class="stat-num">25 mln</div><div class="stat-label">Alberi nel Parco</div></div>
+  </div>
+</div>
+
+<div class="pannello" id="luoghi">
+  <ul class="luoghi-lista" id="luoghi-lista">
+    <li><div class="luogo-puntino"></div> Lago di Tovel — Val di Non</li>
+    <li><div class="luogo-puntino"></div> Val Genova — la valle delle cascate</li>
+    <li><div class="luogo-puntino"></div> Vallesinella — cascate vicino a Campiglio</li>
+    <li><div class="luogo-puntino"></div> Lago di Molveno — ai piedi del Brenta</li>
+    <li><div class="luogo-puntino"></div> Casa del Parco Geopark — Carisolo</li>
+    <li><div class="luogo-puntino"></div> Casa del Parco Orso — Spormaggiore</li>
+    <li><div class="luogo-puntino"></div> Val d'Algone e Rifugio XII Apostoli</li>
+  </ul>
+</div>
+
+<div class="pannello" id="info">
+  <div class="info-box" style="margin-top:0;">
+    <strong>L'orso, simbolo del Parco</strong>
+    <p>L'orso bruno delle Alpi, quasi estinto, oggi vive di nuovo qui grazie al progetto Life Ursus. Camosci, aquile, stambecchi e marmotte popolano questi territori.</p>
+  </div>
+  <div class="info-box">
+    <strong>Geoparco UNESCO</strong>
+    <p>Riconosciuto dal 2008, racconta una storia geologica di milioni di anni, dai fondali marini alle vette dolomitiche di oggi.</p>
+  </div>
+  <div class="info-box">
+    <strong>Per informazioni</strong>
+    <p>Via Nazionale 24, Strembo (TN) · Tel. 0465 806666 · info@pnab.it</p>
+  </div>
+</div>
+
+<div class="footer-guscio">
+  <span>Powered by <a href="#">GUSCIO</a> · guscio.ai</span>
+  <span>la sicurezza è un atto d'amore</span>
+</div>
+
+<script>
+  let lingua = 'it';
+  const testi = {
+    it: { badge: "GEOPARCO UNESCO", nome: "Parco Naturale Adamello Brenta", sub: "Il primo parco naturale d'Italia", ascolta: "Ascolta la storia del Parco", tabs: ["Storia", "Luoghi", "Info utili"],
+      paragrafi: [
+        "Lei si trova nel Parco Naturale Adamello Brenta, la più vasta area protetta del Trentino.",
+        "L'idea nasce nei primi anni del Novecento, quando naturalisti e alpinisti iniziarono a immaginare un'area protetta per salvare l'ultima popolazione di orso bruno delle Alpi e i suoi territori. Dopo decenni di proposte, il Parco nasce ufficialmente nel 1967: il primo parco naturale d'Italia.",
+        "Qui convivono due mondi geologicamente opposti: a ovest il massiccio granitico dell'Adamello-Presanella, regno di ghiacciai e torrenti; a est le guglie dolomitiche del Gruppo di Brenta, Patrimonio Mondiale dell'UNESCO dal 2009.",
+        "Dal 2008 il Parco è riconosciuto Geoparco UNESCO. Buona scoperta di questo territorio."
+      ]},
+    de: { badge: "UNESCO GEOPARK", nome: "Naturpark Adamello Brenta", sub: "Italiens erster Naturpark", ascolta: "Hören Sie die Geschichte des Parks", tabs: ["Geschichte", "Orte", "Nützliche Infos"],
+      paragrafi: ["Sie befinden sich im Naturpark Adamello Brenta, dem größten Schutzgebiet Trentinos.", "Die Idee entstand zu Beginn des 20. Jahrhunderts. Der Park wurde 1967 offiziell gegründet — Italiens erster Naturpark.", "Hier treffen zwei geologisch verschiedene Welten aufeinander: im Westen das Adamello-Presanella-Massiv, im Osten die Brenta-Dolomiten, UNESCO-Welterbe seit 2009.", "Seit 2008 ist der Park UNESCO-Geopark."]},
+    en: { badge: "UNESCO GEOPARK", nome: "Adamello Brenta Natural Park", sub: "Italy's first natural park", ascolta: "Listen to the Park's story", tabs: ["History", "Places", "Useful info"],
+      paragrafi: ["You are in the Adamello Brenta Natural Park, Trentino's largest protected area.", "The idea was born in the early 1900s. The Park was officially established in 1967 — Italy's first natural park.", "Here two geologically different worlds meet: to the west the Adamello-Presanella massif, to the east the Brenta Dolomites, UNESCO World Heritage since 2009.", "Since 2008 the Park has been recognized as a UNESCO Geopark."]}
+  };
+
+  function setLang(l) {
+    lingua = l;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    const t = testi[l];
+    document.getElementById('luogo-badge').textContent = t.badge;
+    document.getElementById('luogo-nome').textContent = t.nome;
+    document.getElementById('luogo-sub').textContent = t.sub;
+    document.getElementById('ascolta-label').textContent = t.ascolta;
+    document.getElementById('testo-narrativo').innerHTML = t.paragrafi.map(p => `<p>${p}</p>`).join('');
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => { btn.textContent = t.tabs[i]; });
+  }
+
+  function mostraPannello(id, btn) {
+    document.querySelectorAll('.pannello').forEach(p => p.classList.remove('attivo'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('attivo');
+    btn.classList.add('active');
+  }
+
+  function ascolta() {
+    const testo = document.getElementById('testo-narrativo').innerText;
+    if (window.currentAudio && !window.currentAudio.paused) { window.currentAudio.pause(); return; }
+    const messaggiAttesa = { it: "Un istante, sto preparando la voce...", de: "Einen Moment, die Stimme wird vorbereitet...", en: "Please wait one moment for the voice..." };
+    document.getElementById('ascolta-label').textContent = messaggiAttesa[lingua];
+    const voiceId = "RXoaSpLaWTEckJgPUBG3";
+    const apiKey = "sk_f79f535b5c5055a35e8a8f2ab66bbe30ea782aeaa19f6b58";
+    fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+      method: "POST", headers: { "xi-api-key": apiKey, "Content-Type": "application/json" },
+      body: JSON.stringify({ text: testo, model_id: "eleven_multilingual_v2", voice_settings: { stability: 0.5, similarity_boost: 0.75 } })
+    })
+    .then(res => res.blob())
+    .then(blob => {
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      window.currentAudio = audio;
+      document.getElementById('ascolta-label').textContent = testi[lingua].ascolta;
+      audio.play();
+    })
+    .catch(err => {
+      console.error("Errore ElevenLabs, uso voce di sistema:", err);
+      document.getElementById('ascolta-label').textContent = testi[lingua].ascolta;
+      const utterance = new SpeechSynthesisUtterance(testo);
+      utterance.lang = lingua === 'it' ? 'it-IT' : lingua === 'de' ? 'de-DE' : 'en-GB';
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
+    });
+  }
+</script>
+</body>
+</html>
