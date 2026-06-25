@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO — La Panchina del Bruno e del Cesare</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap');
+  :root { --legno: #6B4F32; --ocra: #C4860A; --crema: #F7F4EE; --testo: #1A1A1A; --grigio: #6B6B6B; --bordo: #E2DDD4; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: var(--crema); color: var(--testo); line-height: 1.6; }
+
+  .hero { position: relative; height: 36vh; min-height: 250px; overflow: hidden; }
+  .hero svg { width: 100%; height: 100%; display: block; }
+  .hero-overlay { position: absolute; top:0; left:0; right:0; bottom:0; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.72) 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; }
+  .guscio-logo { font-family: 'Fraunces', serif; font-weight: 300; font-size: 20px; color: #fff; letter-spacing: 0.08em; position: absolute; top: 20px; left: 24px; z-index: 2; }
+  .guscio-logo span { color: var(--ocra); }
+  .lang-switcher { position: absolute; top: 18px; right: 24px; display: flex; gap: 6px; z-index: 2; }
+  .lang-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 12px; cursor: pointer; font-family: 'Inter', sans-serif; }
+  .lang-btn.active { background: var(--ocra); border-color: var(--ocra); }
+  .luogo-badge { display: inline-block; background: var(--ocra); color: #fff; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; margin-bottom: 10px; letter-spacing: 0.04em; }
+  .luogo-nome { font-family: 'Fraunces', serif; font-weight: 600; font-size: 25px; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+  .luogo-sub { font-size: 13px; color: rgba(255,255,255,0.9); margin-top: 4px; }
+
+  .ascolta-bar { background: var(--ocra); padding: 16px 24px; display: flex; align-items: center; gap: 14px; cursor: pointer; }
+  .play-icon { width: 46px; height: 46px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .ascolta-testo strong { display: block; color: #fff; font-size: 16px; font-weight: 600; }
+  .ascolta-testo span { color: rgba(255,255,255,0.85); font-size: 12px; }
+
+  .contenuto { padding: 28px 24px 60px; }
+  .testo-narrativo { font-family: 'Fraunces', serif; font-size: 17px; line-height: 1.9; color: var(--testo); }
+  .testo-narrativo p { margin-bottom: 18px; }
+  .testo-narrativo p:first-of-type { font-size: 19px; color: var(--legno); font-weight: 600; }
+  .testo-narrativo strong { color: var(--ocra); }
+
+  .ritratti-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 0; }
+  .ritratto-card { background: #fff; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.05); border-top: 3px solid var(--legno); }
+  .ritratto-card strong { display: block; font-size: 14px; color: var(--testo); margin-bottom: 4px; }
+  .ritratto-card span { font-size: 11.5px; color: var(--ocra); }
+
+  .info-box { background: #fff; border-radius: 12px; padding: 16px 18px; margin-top: 12px; border-left: 4px solid var(--legno); }
+  .info-box strong { display: block; color: var(--legno); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .info-box p { font-size: 14px; color: var(--grigio); line-height: 1.6; }
+
+  .footer-guscio { position: fixed; bottom: 0; left: 0; right: 0; background: var(--crema); border-top: 1px solid var(--bordo); padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--grigio); }
+  .footer-guscio a { color: var(--legno); text-decoration: none; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="sky4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#B8C8D0"/><stop offset="100%" stop-color="#E0E8EC"/></linearGradient>
+    </defs>
+    <rect width="800" height="500" fill="url(#sky4)"/>
+    <polygon points="0,300 120,160 240,270 380,130 520,260 660,150 800,270 800,500 0,500" fill="#8a8678"/>
+    <rect x="280" y="380" width="240" height="14" rx="4" fill="#6B4F32"/>
+    <rect x="290" y="390" width="10" height="60" fill="#6B4F32"/>
+    <rect x="500" y="390" width="10" height="60" fill="#6B4F32"/>
+    <rect x="330" y="350" width="50" height="40" rx="6" fill="#7a5c3e"/>
+    <rect x="430" y="320" width="40" height="70" rx="6" fill="#7a5c3e"/>
+  </svg>
+  <div class="hero-overlay">
+    <div class="luogo-badge" id="luogo-badge">FUORI DALL'UFFICIO APT</div>
+    <div class="luogo-nome" id="luogo-nome">La Panchina del Bruno e del Cesare</div>
+    <div class="luogo-sub" id="luogo-sub">Madonna di Campiglio</div>
+  </div>
+  <div class="guscio-logo">GUSC<span>I</span>O</div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('it')">IT</button>
+    <button class="lang-btn" onclick="setLang('de')">DE</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<div class="ascolta-bar" onclick="ascolta()" id="ascolta-bar">
+  <div class="play-icon"><svg width="16" height="18" viewBox="0 0 16 18" fill="none"><path d="M1 1L15 9L1 17V1Z" fill="#6B4F32"/></svg></div>
+  <div class="ascolta-testo">
+    <strong id="ascolta-label">Ascolta la storia della panchina</strong>
+    <span id="ascolta-sub">Voce narrativa · circa 1 minuto</span>
+  </div>
+</div>
+
+<div class="contenuto">
+  <div class="testo-narrativo" id="testo-narrativo">
+    <p>Si sieda un momento accanto a loro. Sono Bruno e Cesare.</p>
+    <p>Bruno Detassis, "il Re del Brenta", guida alpina e per quarant'anni custode del Rifugio Brentei. Cesare Maestri, "il Ragno delle Dolomiti", capace di oltre tremila salite, molte in solitaria, su queste stesse guglie che vede oggi all'orizzonte.</p>
+    <p>Questa scultura in legno di cirmolo, a grandezza naturale, è nata in un inverno di lockdown, voluta dalla Pro Loco di Madonna di Campiglio. Pochi giorni dopo la sua inaugurazione, nel gennaio 2021, Cesare se ne andò. Bruno lo aveva preceduto nel 2008, a novantotto anni.</p>
+    <p>Oggi sono di nuovo insieme, come tante volte fuori dal rifugio Brentei: Bruno seduto con la sua pipa, Cesare in piedi al suo fianco, il mento proteso verso la prossima ascensione. Due amici che hanno fatto della montagna la loro intera vita, e che la montagna ha voluto ricordare per sempre, qui, nel cuore di Campiglio.</p>
+  </div>
+
+  <div class="ritratti-grid">
+    <div class="ritratto-card">
+      <strong>Bruno Detassis</strong>
+      <span>1910–2008 · "Il Re del Brenta"</span>
+    </div>
+    <div class="ritratto-card">
+      <strong>Cesare Maestri</strong>
+      <span>1929–2021 · "Il Ragno delle Dolomiti"</span>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>La scultura</strong>
+    <p>Realizzata dalla Scuola di Legno e di Intaglio di Praso, su commissione della Pro Loco Madonna di Campiglio. Sei mesi di lavoro per due figure a grandezza naturale.</p>
+  </div>
+</div>
+
+<div class="footer-guscio">
+  <span>Powered by <a href="#">GUSCIO</a> · guscio.ai</span>
+  <span>la sicurezza è un atto d'amore</span>
+</div>
+
+<script>
+  let lingua = 'it';
+  const testi = {
+    it: { badge: "FUORI DALL'UFFICIO APT", nome: "La Panchina del Bruno e del Cesare", sub: "Madonna di Campiglio", ascolta: "Ascolta la storia della panchina",
+      paragrafi: [
+        "Si sieda un momento accanto a loro. Sono Bruno e Cesare.",
+        "Bruno Detassis, \"il Re del Brenta\", guida alpina e per quarant'anni custode del Rifugio Brentei. Cesare Maestri, \"il Ragno delle Dolomiti\", capace di oltre tremila salite, molte in solitaria, su queste stesse guglie che vede oggi all'orizzonte.",
+        "Questa scultura in legno di cirmolo, a grandezza naturale, è nata in un inverno di lockdown, voluta dalla Pro Loco di Madonna di Campiglio. Pochi giorni dopo la sua inaugurazione, nel gennaio 2021, Cesare se ne andò. Bruno lo aveva preceduto nel 2008, a novantotto anni.",
+        "Oggi sono di nuovo insieme, come tante volte fuori dal rifugio Brentei: Bruno seduto con la sua pipa, Cesare in piedi al suo fianco, il mento proteso verso la prossima ascensione. Due amici che hanno fatto della montagna la loro intera vita, e che la montagna ha voluto ricordare per sempre, qui, nel cuore di Campiglio."
+      ]},
+    de: { badge: "VOR DEM APT-BÜRO", nome: "Die Bank von Bruno und Cesare", sub: "Madonna di Campiglio", ascolta: "Hören Sie die Geschichte der Bank",
+      paragrafi: ["Setzen Sie sich einen Moment zu ihnen. Das sind Bruno und Cesare.", "Bruno Detassis, der \"König des Brenta\", und Cesare Maestri, die \"Spinne der Dolomiten\".", "Diese lebensgroße Holzskulptur entstand 2021, kurz bevor Cesare verstarb.", "Heute sind sie wieder vereint, wie so oft vor der Brentei-Hütte."]},
+    en: { badge: "OUTSIDE THE APT OFFICE", nome: "The Bench of Bruno and Cesare", sub: "Madonna di Campiglio", ascolta: "Listen to the story of the bench",
+      paragrafi: ["Sit for a moment beside them. This is Bruno and Cesare.", "Bruno Detassis, the \"King of Brenta\", and Cesare Maestri, the \"Spider of the Dolomites\".", "This life-size wooden sculpture was created in 2021, just days before Cesare passed away.", "Today they are together again, as they so often were outside the Brentei refuge."]}
+  };
+
+  function setLang(l) {
+    lingua = l;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    const t = testi[l];
+    document.getElementById('luogo-badge').textContent = t.badge;
+    document.getElementById('luogo-nome').textContent = t.nome;
+    document.getElementById('luogo-sub').textContent = t.sub;
+    document.getElementById('ascolta-label').textContent = t.ascolta;
+    document.getElementById('testo-narrativo').innerHTML = t.paragrafi.map(p => `<p>${p}</p>`).join('');
+  }
+
+  function ascolta() {
+    const btn = document.getElementById('ascolta-bar');
+
+    if (window.currentAudio && !window.currentAudio.paused) {
+      window.currentAudio.pause();
+      return;
+    }
+
+    const audio = new Audio('ElevenLabs_Audio_project.mp3');
+    window.currentAudio = audio;
+    audio.play();
+  }
+</script>
+</body>
+</html>
