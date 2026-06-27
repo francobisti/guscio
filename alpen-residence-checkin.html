@@ -1,1 +1,188 @@
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alpen Residence Pinzolo · Benvenuto</title>
+<style>
+  :root{--legno:#6b4f3b;--crema:#f7f3ec;--verde:#3f5d4a;--testo:#2b2420;--accento:#c08a4e;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Helvetica Neue', Arial, sans-serif;background:var(--crema);color:var(--testo);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+  .card{max-width:480px;width:100%;background:#fff;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,0.12);overflow:hidden;}
+  .header{background:linear-gradient(135deg, var(--verde), var(--legno));color:#fff;padding:28px 24px;text-align:center;}
+  .header h1{font-size:1.4rem;font-weight:600;letter-spacing:0.5px;}
+  .header p{margin-top:6px;font-size:0.85rem;opacity:0.85;}
+  .lang-switch{display:flex;justify-content:center;gap:8px;padding:16px 24px 0;}
+  .lang-btn{border:1px solid var(--accento);background:transparent;color:var(--accento);padding:6px 14px;border-radius:20px;font-size:0.8rem;cursor:pointer;transition:all 0.2s;}
+  .lang-btn.active{background:var(--accento);color:#fff;}
+  .play-section{text-align:center;padding:24px;}
+  .play-btn{width:72px;height:72px;border-radius:50%;background:var(--verde);border:none;color:#fff;font-size:1.8rem;cursor:pointer;box-shadow:0 6px 16px rgba(63,93,74,0.35);transition:transform 0.15s;}
+  .play-btn:active{transform:scale(0.95);}
+  .play-label{margin-top:10px;font-size:0.85rem;color:#777;}
+  .content{padding:0 24px 28px;}
+  .section{margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #eee;}
+  .section:last-child{border-bottom:none;}
+  .section h2{font-size:0.95rem;color:var(--verde);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+  .section p, .section li{font-size:0.9rem;line-height:1.5;color:#444;}
+  .section ul{padding-left:18px;}
+  .footer{text-align:center;padding:14px;font-size:0.7rem;color:#aaa;background:#fafafa;}
+  .icon{font-size:1.1rem;}
+</style>
+</head>
+<body>
 
+<div class="card">
+  <div class="header">
+    <h1>🏔️ Alpen Residence Pinzolo</h1>
+    <p data-i18n="subtitle">Benvenuto / Welcome / Willkommen</p>
+  </div>
+
+  <div class="lang-switch">
+    <button class="lang-btn active" data-lang="it">IT</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="de">DE</button>
+    <button class="lang-btn" data-lang="pl">PL</button>
+    <button class="lang-btn" data-lang="cz">CZ</button>
+  </div>
+
+  <div class="play-section">
+    <button class="play-btn" id="playBtn">▶</button>
+    <div class="play-label" data-i18n="playLabel">Ascolta le informazioni</div>
+  </div>
+
+  <div class="content" id="content"></div>
+
+  <div class="footer">
+    Powered by GUSCIO · guscio.ai · La sicurezza è un atto d'amore
+  </div>
+</div>
+
+<script>
+const TESTI = {
+  it: { subtitle: "Benvenuto al Residence", playLabel: "Ascolta le informazioni",
+    sections: [
+      {icon:"🔑", title:"Check-in / Check-out", body:"Check-in dalle 15:00, check-out entro le 10:00. Le chiavi si trovano nella cassetta di sicurezza all'ingresso; il codice vi è stato inviato via email/SMS."},
+      {icon:"📶", title:"Wi-Fi", body:"Rete: AlpenResidence_Guest — Password: Alpen2020. La connessione è gratuita e disponibile in tutto l'appartamento."},
+      {icon:"🔥", title:"Riscaldamento", body:"Il termostato si trova in corridoio. Temperatura consigliata 20-21°C. Per la caldaia non serve alcuna azione: è centralizzata e gestita automaticamente."},
+      {icon:"📋", title:"Regole della casa", body:"Vietato fumare in appartamento. Silenzio dalle 22:00 alle 7:00. Raccolta differenziata: i bidoni sono nel locale al piano terra."},
+      {icon:"🚨", title:"Emergenze", body:"Per emergenze contattare Valentina (gestione) al numero 327 532 7131, disponibile 24 ore."},
+      {icon:"🔗", title:"Link utili", body:"Sito Alpen Residence: www.alpen.tn.it · APT Campiglio Dolomiti: www.campigliodolomiti.it · Impianti di risalita: www.ski.it · Comune di Pinzolo: www.pinzolo.it · Trasporti/taxi: www.trentinotrasporti.it"}
+    ]},
+  en: { subtitle: "Welcome to the Residence", playLabel: "Listen to the information",
+    sections: [
+      {icon:"🔑", title:"Check-in / Check-out", body:"Check-in from 3:00 PM, check-out by 10:00 AM. Keys are in the lockbox at the entrance; the code was sent to you via email/SMS."},
+      {icon:"📶", title:"Wi-Fi", body:"Network: AlpenResidence_Guest — Password: Alpen2020. Free connection available throughout the apartment."},
+      {icon:"🔥", title:"Heating", body:"The thermostat is in the hallway. Recommended temperature 20-21°C. No action needed for the boiler — it's centralized and automatic."},
+      {icon:"📋", title:"House rules", body:"No smoking inside the apartment. Quiet hours from 10 PM to 7 AM. Waste sorting bins are in the ground floor room."},
+      {icon:"🚨", title:"Emergencies", body:"For emergencies, contact Valentina (management) at 327 532 7131, available 24 hours."},
+      {icon:"🔗", title:"Useful links", body:"Alpen Residence website: www.alpen.tn.it · Tourist office Campiglio Dolomiti: www.campigliodolomiti.it · Ski lifts: www.ski.it · Pinzolo municipality: www.pinzolo.it · Transport/taxi: www.trentinotrasporti.it"}
+    ]},
+  de: { subtitle: "Willkommen im Residence", playLabel: "Informationen anhören",
+    sections: [
+      {icon:"🔑", title:"Check-in / Check-out", body:"Check-in ab 15:00 Uhr, Check-out bis 10:00 Uhr. Die Schlüssel befinden sich im Safe am Eingang; der Code wurde Ihnen per E-Mail/SMS gesendet."},
+      {icon:"📶", title:"Wi-Fi", body:"Netzwerk: AlpenResidence_Guest — Passwort: Alpen2020. Kostenlose Verbindung in der gesamten Wohnung verfügbar."},
+      {icon:"🔥", title:"Heizung", body:"Der Thermostat befindet sich im Flur. Empfohlene Temperatur 20-21°C. Für den Heizkessel ist keine Aktion erforderlich — er ist zentral gesteuert und automatisch."},
+      {icon:"📋", title:"Hausordnung", body:"Rauchen in der Wohnung ist nicht erlaubt. Ruhezeiten von 22:00 bis 7:00 Uhr. Mülltrennung: Behälter befinden sich im Erdgeschoss."},
+      {icon:"🚨", title:"Notfälle", body:"Bei Notfällen wenden Sie sich an Valentina (Verwaltung) unter 327 532 7131, 24 Stunden erreichbar."},
+      {icon:"🔗", title:"Nützliche Links", body:"Alpen Residence Webseite: www.alpen.tn.it · Tourismusbüro Campiglio Dolomiti: www.campigliodolomiti.it · Liftanlagen: www.ski.it · Gemeinde Pinzolo: www.pinzolo.it · Transport/Taxi: www.trentinotrasporti.it"}
+    ]},
+  pl: { subtitle: "Witamy w Residence", playLabel: "Odsłuchaj informacje",
+    sections: [
+      {icon:"🔑", title:"Zameldowanie / Wymeldowanie", body:"Zameldowanie od 15:00, wymeldowanie do 10:00. Klucze znajdują się w skrzynce przy wejściu; kod został wysłany e-mailem/SMS-em."},
+      {icon:"📶", title:"Wi-Fi", body:"Sieć: AlpenResidence_Guest — Hasło: Alpen2020. Bezpłatne połączenie dostępne w całym apartamencie."},
+      {icon:"🔥", title:"Ogrzewanie", body:"Termostat znajduje się w korytarzu. Zalecana temperatura 20-21°C. Kocioł jest centralny i działa automatycznie, nie wymaga żadnych czynności."},
+      {icon:"📋", title:"Regulamin domu", body:"Zakaz palenia w apartamencie. Cisza nocna od 22:00 do 7:00. Segregacja odpadów: pojemniki znajdują się na parterze."},
+      {icon:"🚨", title:"Sytuacje awaryjne", body:"W razie nagłych przypadków skontaktuj się z Valentiną (zarządzanie) pod numerem 327 532 7131, dostępnym 24 godziny."},
+      {icon:"🔗", title:"Przydatne linki", body:"Strona Alpen Residence: www.alpen.tn.it · Biuro turystyczne Campiglio Dolomiti: www.campigliodolomiti.it · Wyciągi: www.ski.it · Gmina Pinzolo: www.pinzolo.it · Transport/taxi: www.trentinotrasporti.it"}
+    ]},
+  cz: { subtitle: "Vítejte v Residence", playLabel: "Poslechněte si informace",
+    sections: [
+      {icon:"🔑", title:"Check-in / Check-out", body:"Check-in od 15:00, check-out do 10:00. Klíče najdete v bezpečnostní schránce u vchodu; kód vám byl zaslán e-mailem/SMS."},
+      {icon:"📶", title:"Wi-Fi", body:"Síť: AlpenResidence_Guest — Heslo: Alpen2020. Bezplatné připojení je k dispozici v celém apartmánu."},
+      {icon:"🔥", title:"Vytápění", body:"Termostat se nachází na chodbě. Doporučená teplota 20-21°C. Kotel je centrální a funguje automaticky, žádný zásah není potřeba."},
+      {icon:"📋", title:"Domovní řád", body:"V apartmánu je zákaz kouření. Noční klid od 22:00 do 7:00. Třídění odpadu: nádoby jsou v přízemí."},
+      {icon:"🚨", title:"Nouzové situace", body:"V případě nouze kontaktujte Valentinu (správa) na čísle 327 532 7131, dostupné 24 hodin."},
+      {icon:"🔗", title:"Užitečné odkazy", body:"Web Alpen Residence: www.alpen.tn.it · Turistická kancelář Campiglio Dolomiti: www.campigliodolomiti.it · Lanovky: www.ski.it · Obec Pinzolo: www.pinzolo.it · Doprava/taxi: www.trentinotrasporti.it"}
+    ]}
+};
+
+let currentLang = "it";
+
+const AUDIO_MAP = {
+  it: "alpen-checkin-it.mp3",
+  en: "alpen-checkin-en.mp3",
+  de: "alpen-checkin-de.mp3",
+  pl: "alpen-checkin-pl.mp3",
+  cz: "alpen-checkin-cz.mp3"
+};
+
+const audioPool = {};
+Object.keys(AUDIO_MAP).forEach(lang => {
+  const a = new Audio(AUDIO_MAP[lang]);
+  a.preload = "auto";
+  audioPool[lang] = a;
+});
+
+let currentAudio = null;
+const playBtn = document.getElementById('playBtn');
+
+function stopAllAudio(){
+  Object.values(audioPool).forEach(a => { a.pause(); a.currentTime = 0; });
+  playBtn.textContent = "▶";
+}
+
+function playCurrentLang(){
+  stopAllAudio();
+  currentAudio = audioPool[currentLang];
+  currentAudio.currentTime = 0;
+  currentAudio.play().catch(()=>{});
+  playBtn.textContent = "⏸";
+}
+
+currentAudio = audioPool[currentLang];
+if (currentAudio){
+  currentAudio.onended = () => { playBtn.textContent = "▶"; };
+}
+
+function render(lang){
+  const data = TESTI[lang];
+  document.querySelector('[data-i18n="subtitle"]').textContent = data.subtitle;
+  document.querySelector('[data-i18n="playLabel"]').textContent = data.playLabel;
+  const content = document.getElementById('content');
+  content.innerHTML = data.sections.map(s => `
+    <div class="section">
+      <h2><span class="icon">${s.icon}</span> ${s.title}</h2>
+      <p>${s.body}</p>
+    </div>
+  `).join('');
+  document.querySelectorAll('.lang-btn').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    currentLang = btn.dataset.lang;
+    render(currentLang);
+    playCurrentLang();
+  });
+});
+
+playBtn.addEventListener('click', function(){
+  const a = audioPool[currentLang];
+  if (a && !a.paused){
+    a.pause();
+    playBtn.textContent = "▶";
+  } else {
+    playCurrentLang();
+  }
+});
+
+render(currentLang);
+
+window.addEventListener('DOMContentLoaded', () => {
+  playCurrentLang();
+});
+</script>
+
+</body>
+</html>
