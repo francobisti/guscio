@@ -235,6 +235,7 @@ currentLang = lang;
 document.querySelectorAll('.lang-switch button').forEach(b => b.classList.remove('active'));
 document.getElementById('btn-' + lang).classList.add('active');
 renderCards();
+  document.documentElement.lang = lang;
 }
 
 function renderCards() {
@@ -249,7 +250,7 @@ container.innerHTML = sections.map((s, i) => `
 </div>
 <div class="card-body">
 <p>${s.body}</p>
-${AUDIO[currentLang] ? `<button class="audio-btn" onclick="event.stopPropagation(); playAudio('${currentLang}')">&#128266; Ascolta</button>` : ''}
+    ${AUDIO[currentLang] ? `<button class="audio-btn" onclick="event.stopPropagation(); playAudio('${currentLang}')">🔊 ${{'it':'Ascolta','en':'Listen','de':'Hören','pl':'Słuchaj'}[currentLang]||'Listen'}</button>` : ''}
 </div>
 </div>
 `).join('');
