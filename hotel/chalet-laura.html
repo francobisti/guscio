@@ -144,7 +144,7 @@ border-radius:20px;
 font-size:13px;
 cursor:pointer;
 }
-.audio-btn:active { opacity:0.8; }
+.audio-btn:active { opacity:0.8; }.audio-btn.playing { background: var(--dark); }
 footer {
 text-align:center;
 padding:24px 16px;
@@ -171,22 +171,44 @@ color:#888;
 <footer>Powered by GUSCIO &middot; guscio.ai</footer>
 
 <script>
-const AUDIO = {
-it: null,
-en: null,
-de: new Audio('ElevenLabs_2026-06-28T12_41_57_Tiziana - Smart, Balanced and Credible_pvc_sp82_s51_sb46_se48_b_m2 (2).mp3'),
-pl: new Audio('ElevenLabs_2026-06-28T12_49_00_Tiziana - Smart, Balanced and Credible_pvc_sp82_s51_sb46_se48_b_m2.mp3')
-};
+const AUDIO_BASE = 'https://francobisti.github.io/guscio/hotel/audio/chalet-laura-';
+const AUDIO_SLUGS = ['benvenuto','camera','colazione','spa','piste','escursioni','servizi'];
 
-// Preload audio
-Object.values(AUDIO).forEach(a => { if(a) { a.preload = 'auto'; a.load(); } });
+const AUDIO = {};
+['it','en'].forEach(lang => {
+  AUDIO[lang] = {};
+  AUDIO_SLUGS.forEach(slug => {
+    AUDIO[lang][slug] = new Audio(AUDIO_BASE + slug + '-' + lang + '.mp3');
+  });
+});
 
-let currentAudio = null;
 
-function playAudio(lang) {
-if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
-const a = AUDIO[lang];
-if (a) { currentAudio = a; a.play(); }
+let currentAudio = null;let currentBtn = null;
+
+function playAudio(lang, slug, btn) {
+    if (currentAudio) {
+          currentAudio.pause();
+          currentAudio.currentTime = 0;
+          if (currentBtn) {
+                  currentBtn.textContent = currentBtn.dataset.label;
+                  currentBtn.classList.remove('playing');
+          }
+          if (currentAudio === AUDIO[lang][slug]) {
+                  currentAudio = null; currentBtn = null; return;
+          }
+    }
+    var a = (AUDIO[lang] && AUDIO[lang][slug]) ? AUDIO[lang][slug] : null;
+    if (!a) return;
+    currentAudio = a; currentBtn = btn;
+    btn.dataset.label = btn.textContent;
+    btn.textContent = '&#9209; Stop';
+    btn.classList.add('playing');
+    a.play();
+    a.onended = function() {
+          btn.textContent = btn.dataset.label;
+          btn.classList.remove('playing');
+          currentAudio = null; currentBtn = null;
+    };
 }
 
 const DATA = {
@@ -231,7 +253,7 @@ pl: [
 let currentLang = 'it';
 
 function setLang(lang) {
-currentLang = lang;
+if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null; } if (currentBtn) { currentBtn.textContent = currentBtn.dataset.label; currentBtn.classList.remove('playing'); currentBtn = null; } currentLang = lang;
 document.querySelectorAll('.lang-switch button').forEach(b => b.classList.remove('active'));
 document.getElementById('btn-' + lang).classList.add('active');
 renderCards();
@@ -243,22 +265,17 @@ const sections = DATA[currentLang];
 const container = document.getElementById('main-content');
 container.innerHTML = sections.map((s, i) => `
 <div class="card" id="card-${i}">
-<div class="card-header" onclick="toggleCard(${i})">
+<div class="card-header" onclick="this.closest('.card').classList.toggle('open')">
 <span class="dot"></span>
 <span class="title">${s.title}</span>
 <span class="icon">&#9660;</span>
 </div>
 <div class="card-body">
 <p>${s.body}</p>
-    ${AUDIO[currentLang] ? `<button class="audio-btn" onclick="event.stopPropagation(); playAudio('${currentLang}')">🔊 ${{'it':'Ascolta','en':'Listen','de':'Hören','pl':'Słuchaj'}[currentLang]||'Listen'}</button>` : ''}
+    ${(currentLang==='it'||currentLang==='en') ? `<button class="audio-btn" onclick="event.stopPropagation(); playAudio('${currentLang}','${AUDIO_SLUGS[i]}',this)" data-label="&#9654; ${currentLang==='it'?'Ascolta':'Listen'}">&#9654; ${currentLang==='it'?'Ascolta':'Listen'}</button>` : ''}
 </div>
 </div>
 `).join('');
-}
-
-function toggleCard(i) {
-const card = document.getElementById('card-' + i);
-card.classList.toggle('open');
 }
 
 renderCards();
