@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO · Val di Fiemme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Hanken+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   GUSCIO — Demo territorio · Val di Fiemme
+   Palette: azzurro-dolomia (apertura) · verde abete (corpo)
+            · rosso-dolomia (accenti)
+   Single file. Edit only the CONFIG block in <script> to reuse.
+   ============================================================ */
+
+:root{
+  --glacier:#E7EDEE;     /* fondo freddo, neve/roccia chiara */
+  --paper:#F8FAFA;       /* superficie sezione               */
+  --fir:#26352A;         /* verde abete profondo (testo)     */
+  --fir-soft:#56635A;    /* testo muted                      */
+  --sky:#9DBAC9;         /* azzurro-roccia dolomia           */
+  --sky-deep:#41617A;    /* blu dolomia profondo (LIVE)      */
+  --dolomia:#B14E37;     /* rosso-dolomia del tramonto       */
+  --dolomia-deep:#923D2A;
+  --hair:#CBD5D4;
+  --shadow:28px 28px 60px rgba(38,53,42,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--glacier);color:var(--fir);font-family:"Hanken Grotesk",system-ui,sans-serif;font-weight:400;line-height:1.55;-webkit-font-smoothing:antialiased}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+/* azzurro in prima pagina: lavata di cielo dietro l'header+hero */
+.skywash{
+  position:absolute;top:0;left:0;right:0;height:560px;z-index:-1;
+  background:linear-gradient(180deg,#BcD2DC 0%,#A9C3CF 22%,#cfdce0 60%,var(--glacier) 100%);
+}
+.skywash::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(120% 80% at 50% -10%, rgba(255,255,255,.55), transparent 60%);
+}
+
+.wrap{max-width:660px;margin:0 auto;padding:0 22px;position:relative}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:22px 0 16px;border-bottom:1px solid rgba(65,97,122,.25)}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand .mark{font-family:"Fraunces",serif;font-weight:500;font-size:20px;letter-spacing:.06em;color:var(--fir)}
+.brand .sub{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--sky-deep);font-weight:600}
+.hotelname{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--sky-deep);font-weight:600;text-align:right}
+
+.hero{padding:52px 0 30px;text-align:center}
+.kicker{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--dolomia-deep);font-weight:600;margin-bottom:22px}
+
+/* il VIOLINO-guscio in legno di Paneveggio — sull'azzurro dolomia */
+.violin-wrap{position:relative;width:100%;max-width:230px;margin:6px auto 26px;text-align:center}
+.violin-wrap svg{width:100%;height:auto;display:block;filter:drop-shadow(18px 22px 34px rgba(38,53,42,.22))}
+.violin-cap{margin-top:14px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--sky-deep);font-weight:600}
+.violin-cap b{color:var(--fir);font-family:"Fraunces",serif;font-weight:500;letter-spacing:.04em;text-transform:none;font-size:15px;display:block;margin-bottom:4px}
+.tap-ring{transform-origin:center;animation:tap 2.2s ease-out infinite}
+.tap-ring.r2{animation-delay:.7s}
+@keyframes tap{0%{opacity:.0;transform:scale(.5)}30%{opacity:.7}100%{opacity:0;transform:scale(1.6)}}
+.taphint{font-size:9px;letter-spacing:.16em;text-transform:uppercase;fill:#7a5a36;font-family:"Hanken Grotesk",sans-serif;font-weight:600}
+
+.hero h1{font-family:"Fraunces",serif;font-weight:300;font-size:clamp(28px,7vw,40px);line-height:1.12;letter-spacing:-.01em;margin:0 auto 14px;max-width:15ch;color:var(--fir)}
+.hero p{color:var(--fir-soft);font-size:15px;max-width:34ch;margin:0 auto}
+
+.langband{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:30px 0 4px}
+.langband button{font-family:"Hanken Grotesk";font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:9px 14px;border-radius:999px;cursor:pointer;background:rgba(248,250,250,.6);border:1px solid var(--hair);color:var(--fir-soft);transition:all .2s ease}
+.langband button:hover{border-color:var(--sky-deep);color:var(--fir)}
+.langband button.on{background:var(--fir);border-color:var(--fir);color:#EAF1F4}
+.langband button:focus-visible{outline:2px solid var(--dolomia);outline-offset:2px}
+
+main{padding:18px 0 10px}
+.sec{background:var(--paper);border:1px solid var(--hair);border-radius:16px;padding:24px 24px 22px;margin-bottom:14px;position:relative}
+.sec-head{display:flex;align-items:flex-start;gap:16px}
+.sec-meta{flex:1;min-width:0}
+.sec .idx{font-family:"Fraunces",serif;font-size:13px;color:var(--sky-deep);font-weight:500;display:block;margin-bottom:6px}
+.sec h2{font-family:"Fraunces",serif;font-weight:400;font-size:21px;line-height:1.2;letter-spacing:-.01em;margin-bottom:4px;color:var(--fir)}
+.sec .body{color:var(--fir-soft);font-size:14.5px;margin-top:10px}
+
+.chip{display:inline-flex;align-items:center;gap:7px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;padding:5px 10px;border-radius:999px;margin-top:12px}
+.chip.static{background:rgba(177,78,55,.12);color:var(--dolomia-deep)}
+.chip.static::before{content:"";width:6px;height:6px;border-radius:1px;background:var(--dolomia)}
+.chip.live{background:rgba(65,97,122,.13);color:var(--sky-deep)}
+.chip.live i{width:7px;height:7px;border-radius:50%;background:var(--sky-deep);animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
+
+.livelink{display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-size:13px;font-weight:600;color:var(--sky-deep);text-decoration:none;border-bottom:1px solid rgba(65,97,122,.35);padding-bottom:2px}
+.livelink:hover{border-color:var(--sky-deep)}
+.livelink svg{width:13px;height:13px}
+
+.listen{flex-shrink:0;width:46px;height:46px;border-radius:50%;border:1.5px solid var(--dolomia);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--dolomia-deep);transition:all .2s ease;position:relative}
+.listen:hover{background:var(--dolomia);color:#fff}
+.listen:focus-visible{outline:2px solid var(--dolomia);outline-offset:3px}
+.listen svg{width:17px;height:17px}
+.listen.playing{background:var(--fir);border-color:var(--fir);color:#EAF1F4}
+.listen.playing svg{display:none}
+.listen.playing .eq{display:flex}
+.listen .eq{display:none;gap:2px;align-items:flex-end;height:15px}
+.listen .eq span{width:2.5px;background:currentColor;border-radius:2px;animation:eq .9s ease-in-out infinite}
+.listen .eq span:nth-child(1){height:6px;animation-delay:0s}
+.listen .eq span:nth-child(2){height:13px;animation-delay:.15s}
+.listen .eq span:nth-child(3){height:8px;animation-delay:.3s}
+@keyframes eq{0%,100%{transform:scaleY(.5)}50%{transform:scaleY(1)}}
+
+footer{border-top:1px solid var(--hair);margin-top:34px;padding:30px 0 60px;text-align:center}
+.powered{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--fir-soft);font-weight:600}
+.powered b{color:var(--fir);font-family:"Fraunces",serif;font-weight:500;letter-spacing:.06em}
+.legal{font-size:11px;color:var(--fir-soft);margin-top:12px;max-width:48ch;margin-left:auto;margin-right:auto;line-height:1.6}
+.note{font-size:11px;color:var(--fir-soft);margin-top:8px}
+.audiohint{text-align:center;font-size:11px;color:var(--fir-soft);background:rgba(65,97,122,.08);border:1px dashed var(--hair);border-radius:10px;padding:10px 14px;margin:6px 0 22px}
+</style>
+</head>
+<body>
+<div class="skywash" aria-hidden="true"></div>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand"><span class="mark">GUSCIO</span><span class="sub">la valle che parla</span></div>
+    <div class="hotelname" id="hotelLabel"></div>
+  </div>
+
+  <section class="hero">
+    <div class="kicker" id="kicker"></div>
+    <div class="violin-wrap">
+      <svg viewBox="0 0 200 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Violino in legno di Paneveggio">
+        <defs>
+          <linearGradient id="wood" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#E7CFA3"/>
+            <stop offset=".45" stop-color="#D9B985"/>
+            <stop offset="1" stop-color="#C29A63"/>
+          </linearGradient>
+          <linearGradient id="woodEdge" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#8a6233"/>
+            <stop offset="1" stop-color="#6e4d27"/>
+          </linearGradient>
+        </defs>
+
+        <!-- manico + chiocciola -->
+        <rect x="94" y="22" width="12" height="120" rx="5" fill="url(#woodEdge)"/>
+        <path d="M100 14c-9 0-15 7-15 15 0 7 5 12 11 12 5 0 8-3 8-7 0-3-2-6-5-6-2 0-4 1-4 3"
+              fill="none" stroke="url(#woodEdge)" stroke-width="5" stroke-linecap="round"/>
+        <!-- corde -->
+        <g stroke="#3a2c18" stroke-width=".8" opacity=".55">
+          <line x1="97" y1="30" x2="97" y2="250"/><line x1="100" y1="30" x2="100" y2="252"/><line x1="103" y1="30" x2="103" y2="250"/>
+        </g>
+
+        <!-- cassa del violino -->
+        <path d="M100 132
+                 C 70 130, 58 150, 60 172
+                 C 61 186, 72 192, 70 200
+                 C 60 206, 50 220, 50 244
+                 C 50 280, 74 304, 100 304
+                 C 126 304, 150 280, 150 244
+                 C 150 220, 140 206, 130 200
+                 C 128 192, 139 186, 140 172
+                 C 142 150, 130 130, 100 132 Z"
+              fill="url(#wood)" stroke="url(#woodEdge)" stroke-width="3"/>
+        <!-- venatura del legno -->
+        <g stroke="#b98f54" stroke-width=".7" opacity=".5" fill="none">
+          <path d="M88 150 C84 200,84 250,90 296"/>
+          <path d="M100 146 C97 200,97 252,100 300"/>
+          <path d="M112 150 C116 200,116 250,110 296"/>
+        </g>
+        <!-- effe -->
+        <path d="M82 214c-3 0-5 3-5 7 0 5 4 7 4 12 0 4-3 6-6 5" fill="none" stroke="#5b4225" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M118 214c3 0 5 3 5 7 0 5-4 7-4 12 0 4 3 6 6 5" fill="none" stroke="#5b4225" stroke-width="2.4" stroke-linecap="round"/>
+
+        <!-- punto NFC: tocca qui (rosetta) -->
+        <g transform="translate(100,232)">
+          <circle class="tap-ring" r="16" fill="none" stroke="#8a6233" stroke-width="1.6"/>
+          <circle class="tap-ring r2" r="16" fill="none" stroke="#8a6233" stroke-width="1.6"/>
+          <circle r="8" fill="#6e4d27"/>
+          <circle r="3.2" fill="#E7CFA3"/>
+        </g>
+        <text x="100" y="324" text-anchor="middle" class="taphint">Tocca qui · Tap</text>
+      </svg>
+      <div class="violin-cap"><b id="coName"></b><span id="coPlace"></span> · by GUSCIO</div>
+    </div>
+    <h1 id="heroTitle"></h1>
+    <p id="heroSub"></p>
+    <div class="langband" id="langband" role="tablist" aria-label="Lingua"></div>
+  </section>
+
+  <div class="audiohint" id="audiohint"></div>
+  <main id="sections"></main>
+
+  <footer>
+    <div class="powered">Powered by <b>GUSCIO</b></div>
+    <p class="legal" id="legal">Architettura LIVELLI · brevetto in corso di concessione (patent pending). Segnaletica con NFC integrato prodotta da AlpCover. Modello in co-marketing con il territorio.</p>
+    <p class="note" id="note">Demo dimostrativa — contenuti di esempio da validare con APT Val di Fiemme.</p>
+  </footer>
+
+</div>
+
+<script>
+/* ================================================================
+   CONFIG — Val di Fiemme (versione territorio)
+   tipo "static"  = verità che non scade → incisa nell'audio
+   tipo "dynamic" = dato volatile → NON recitato, link alla fonte
+   audio:{} vuoto → la demo usa la voce del browser (fallback)
+   ================================================================ */
+const CONFIG = {
+  hotel: "Val di Fiemme · Dolomiti",
+  place: "La Valle dell'Armonia",
+  coName: "Val di Fiemme",
+  defaultLang: "it",
+
+  LANGS: [
+    { code:"it", label:"IT", speech:"it-IT" },
+    { code:"en", label:"EN", speech:"en-GB" },
+    { code:"de", label:"DE", speech:"de-DE" },
+    { code:"pl", label:"PL", speech:"pl-PL" },
+    { code:"fr", label:"FR", speech:"fr-FR" }
+  ],
+
+  ui: {
+    it:{ kicker:"Avvicina il telefono · Tocca per ascoltare", title:"La Valle dell'Armonia, ora ha voce.", sub:"Boschi, cime e tradizioni raccontati da una voce, nella tua lingua. Nessuna app, nessun accesso.", listen:"Ascolta", live:"In tempo reale", staticLbl:"Voce · sempre valida", hint:"Modalità demo: la voce è generata dal browser. In produzione: file ElevenLabs (voce Tiziana)." },
+    en:{ kicker:"Hold your phone close · Tap to listen", title:"The Valley of Harmony now has a voice.", sub:"Forests, peaks and traditions told by a voice, in your language. No app, no login.", listen:"Listen", live:"Live", staticLbl:"Voice · always valid", hint:"Demo mode: voice generated by the browser. In production: ElevenLabs files." },
+    de:{ kicker:"Telefon annähern · Zum Hören tippen", title:"Das Tal der Harmonie hat jetzt eine Stimme.", sub:"Wälder, Gipfel und Traditionen — von einer Stimme erzählt, in Ihrer Sprache. Keine App, kein Login.", listen:"Anhören", live:"Live", staticLbl:"Stimme · immer gültig", hint:"Demomodus: Stimme vom Browser erzeugt. Produktiv: ElevenLabs-Dateien." },
+    pl:{ kicker:"Zbliż telefon · Dotknij, aby odsłuchać", title:"Dolina Harmonii ma teraz głos.", sub:"Lasy, szczyty i tradycje opowiedziane głosem, w Twoim języku. Bez aplikacji, bez logowania.", listen:"Słuchaj", live:"Na żywo", staticLbl:"Głos · zawsze aktualny", hint:"Tryb demo: głos generowany przez przeglądarkę. W produkcji: pliki ElevenLabs." },
+    fr:{ kicker:"Approchez le téléphone · Touchez pour écouter", title:"La Vallée de l'Harmonie a désormais une voix.", sub:"Forêts, sommets et traditions racontés par une voix, dans votre langue. Sans appli, sans compte.", listen:"Écouter", live:"En direct", staticLbl:"Voix · toujours valable", hint:"Mode démo : voix générée par le navigateur. En production : fichiers ElevenLabs." }
+  },
+
+  sections: [
+    {
+      id:"welcome", tipo:"static", idx:"I",
+      title:{ it:"Benvenuti in Val di Fiemme", en:"Welcome to Val di Fiemme", de:"Willkommen im Val di Fiemme", pl:"Witamy w Val di Fiemme", fr:"Bienvenue en Val di Fiemme" },
+      body:{
+        it:"Undici paesi di montagna seguono il torrente Avisio, tra un'immensa foresta di abeti e le cime dolomitiche del Latemar e delle Pale di San Martino, patrimonio dell'umanità. Due parchi naturali fanno da confine alla valle. Tocca una sezione e Fiemme si racconta, nella tua lingua.",
+        en:"Eleven mountain villages follow the Avisio torrent, between a vast spruce forest and the UNESCO Dolomite peaks of the Latemar and Pale di San Martino. Two nature parks mark the valley's edges. Tap a section and Fiemme tells its story, in your language.",
+        de:"Elf Bergdörfer folgen dem Avisio-Bach, zwischen einem weiten Fichtenwald und den UNESCO-Dolomitengipfeln des Latemar und der Pale di San Martino. Zwei Naturparks begrenzen das Tal. Tippen Sie auf einen Abschnitt, und Fiemme erzählt — in Ihrer Sprache.",
+        pl:"Jedenaście górskich wiosek towarzyszy potokowi Avisio, pośród rozległego lasu świerkowego i dolomitowych szczytów Latemar i Pale di San Martino, wpisanych na listę UNESCO. Dwa parki naturalne wyznaczają granice doliny. Dotknij sekcji, a Fiemme opowie swoją historię w Twoim języku.",
+        fr:"Onze villages de montagne suivent le torrent Avisio, entre une vaste forêt d'épicéas et les sommets dolomitiques du Latemar et des Pale di San Martino, patrimoine de l'UNESCO. Deux parcs naturels bordent la vallée. Touchez une section et Fiemme se raconte, dans votre langue."
+      },
+      audio:{}
+    },
+    {
+      id:"violini", tipo:"static", idx:"II",
+      title:{ it:"Le Foreste dei Violini", en:"The Forests of the Violins", de:"Die Geigenwälder", pl:"Lasy Skrzypiec", fr:"Les Forêts des Violons" },
+      body:{
+        it:"È la 'Valle dell'Armonia': qui cresce l'abete di risonanza con cui si costruiscono le tavole armoniche di violini e pianoforti, un legno amato da Stradivari e ancora oggi cercato dai liutai di tutto il mondo. Nelle Foreste dei Violini, a Paneveggio, alcuni alberi vengono adottati da grandi musicisti.",
+        en:"This is the 'Valley of Harmony': here grows the resonance spruce used for the soundboards of violins and pianos — a wood loved by Stradivari and still sought by luthiers worldwide. In the Forests of the Violins, at Paneveggio, some trees are adopted by great musicians.",
+        de:"Dies ist das 'Tal der Harmonie': Hier wächst die Resonanzfichte für die Klangböden von Geigen und Klavieren — ein Holz, das Stradivari liebte und das Geigenbauer weltweit noch heute suchen. In den Geigenwäldern bei Paneveggio werden manche Bäume von großen Musikern adoptiert.",
+        pl:"To „Dolina Harmonii”: tu rośnie świerk rezonansowy, z którego powstają płyty rezonansowe skrzypiec i fortepianów — drewno cenione przez Stradivariego i wciąż poszukiwane przez lutników na całym świecie. W Lasach Skrzypiec w Paneveggio niektóre drzewa adoptują wielcy muzycy.",
+        fr:"C'est la « Vallée de l'Harmonie » : ici pousse l'épicéa de résonance des tables d'harmonie des violons et des pianos — un bois aimé de Stradivari et encore recherché par les luthiers du monde entier. Dans les Forêts des Violons, à Paneveggio, certains arbres sont adoptés par de grands musiciens."
+      },
+      audio:{}
+    },
+    {
+      id:"cime", tipo:"static", idx:"III",
+      title:{ it:"Le cime: Latemar e Pale", en:"The peaks: Latemar & Pale", de:"Die Gipfel: Latemar & Pale", pl:"Szczyty: Latemar i Pale", fr:"Les sommets : Latemar & Pale" },
+      body:{
+        it:"Il Latemar con le sue guglie e le Pale di San Martino, riconosciute dall'Unesco Patrimonio Naturale dell'Umanità, chiudono l'orizzonte. Al tramonto la roccia si accende del celebre 'rosso dolomia'. Sono le montagne che vedi appena arrivi in valle.",
+        en:"The Latemar with its spires and the Pale di San Martino, UNESCO World Natural Heritage, close the horizon. At sunset the rock glows with the famous 'dolomia red'. These are the mountains you see the moment you reach the valley.",
+        de:"Der Latemar mit seinen Türmen und die Pale di San Martino, UNESCO-Weltnaturerbe, schließen den Horizont. Bei Sonnenuntergang leuchtet der Fels im berühmten 'Dolomitenrot'. Es sind die Berge, die Sie bei der Ankunft im Tal sehen.",
+        pl:"Latemar ze swoimi iglicami i Pale di San Martino, światowe dziedzictwo przyrody UNESCO, zamykają horyzont. O zachodzie słońca skała rozbłyska słynną „dolomitową czerwienią”. To góry, które widzisz zaraz po przybyciu do doliny.",
+        fr:"Le Latemar et ses aiguilles et les Pale di San Martino, patrimoine naturel mondial de l'UNESCO, ferment l'horizon. Au coucher du soleil, la roche s'embrase du célèbre « rouge dolomie ». Ce sont les montagnes que l'on voit dès l'arrivée dans la vallée."
+      },
+      audio:{}
+    },
+    {
+      id:"magnifica", tipo:"static", idx:"IV",
+      title:{ it:"La Magnifica Comunità", en:"The Magnifica Comunità", de:"Die Magnifica Comunità", pl:"Magnifica Comunità", fr:"La Magnifica Comunità" },
+      body:{
+        it:"Le foreste di Fiemme sono curate da un ente millenario, la Magnifica Comunità di Fiemme. Nel 2003 la valle è stata la prima al mondo a eco-certificare i suoi boschi e a ospitare Mondiali eco-certificati. Una cura del bosco che dura da secoli.",
+        en:"Fiemme's forests are tended by a thousand-year-old institution, the Magnifica Comunità di Fiemme. In 2003 the valley was the first in the world to eco-certify its woods and to host eco-certified World Championships. Forest care that has lasted centuries.",
+        de:"Die Wälder von Fiemme werden von einer tausendjährigen Institution gepflegt, der Magnifica Comunità di Fiemme. 2003 war das Tal weltweit das erste, das seine Wälder öko-zertifizierte und öko-zertifizierte Weltmeisterschaften ausrichtete. Waldpflege, die seit Jahrhunderten währt.",
+        pl:"Lasami Fiemme opiekuje się tysiącletnia instytucja, Magnifica Comunità di Fiemme. W 2003 roku dolina jako pierwsza na świecie uzyskała ekocertyfikat lasów i zorganizowała ekocertyfikowane mistrzostwa świata. Gospodarka leśna trwająca od wieków.",
+        fr:"Les forêts de Fiemme sont gérées par une institution millénaire, la Magnifica Comunità di Fiemme. En 2003, la vallée fut la première au monde à éco-certifier ses bois et à accueillir des Championnats du monde éco-certifiés. Une gestion forestière séculaire."
+      },
+      audio:{}
+    },
+    {
+      id:"nordico", tipo:"static", idx:"V",
+      title:{ it:"La culla dello sci nordico", en:"The home of nordic skiing", de:"Die Wiege des nordischen Skisports", pl:"Kolebka narciarstwa biegowego", fr:"Le berceau du ski nordique" },
+      body:{
+        it:"Fiemme è la culla dello sci di fondo: ha ospitato tre Campionati del Mondo di sci nordico ed è la valle della Marcialonga, la storica granfondo tra Fiemme e Fassa. Allo stadio di Lago di Tesero si gareggia sulle piste dei Mondiali, e qui si disputano gare dei Giochi Olimpici Milano Cortina 2026.",
+        en:"Fiemme is the cradle of cross-country skiing: it has hosted three Nordic World Championships and is the home of the Marcialonga, the historic long-distance race between Fiemme and Fassa. At the Lago di Tesero stadium you ski on World Championship tracks, and races of the Milano Cortina 2026 Olympic Games are held here.",
+        de:"Fiemme ist die Wiege des Langlaufs: Es war dreimal Austragungsort der Nordischen Skiweltmeisterschaften und ist das Tal der Marcialonga, des historischen Volkslaufs zwischen Fiemme und Fassa. Im Stadion von Lago di Tesero läuft man auf WM-Loipen, und hier finden Wettbewerbe der Olympischen Spiele Milano Cortina 2026 statt.",
+        pl:"Fiemme to kolebka narciarstwa biegowego: trzykrotnie gościła Mistrzostwa Świata w narciarstwie klasycznym i jest doliną Marcialongi, historycznego biegu długodystansowego między Fiemme a Fassą. Na stadionie Lago di Tesero jeździ się po trasach mistrzostw świata, a tu rozgrywane są zawody Igrzysk Olimpijskich Milano Cortina 2026.",
+        fr:"Fiemme est le berceau du ski de fond : elle a accueilli trois Championnats du monde nordiques et c'est la vallée de la Marcialonga, la course de fond historique entre Fiemme et Fassa. Au stade de Lago di Tesero, on skie sur les pistes des Championnats du monde, et des épreuves des Jeux Olympiques Milano Cortina 2026 s'y déroulent."
+      },
+      audio:{}
+    },
+    {
+      id:"move", tipo:"dynamic", idx:"VI",
+      title:{ it:"Muoversi e Guest Card", en:"Getting around & Guest Card", de:"Mobilität & Guest Card", pl:"Transport i Guest Card", fr:"Se déplacer & Guest Card" },
+      body:{
+        it:"La valle ha skibus e navette che collegano i paesi e le aree sciistiche, e la Fiemme Cembra Guest Card per muoversi e accedere ai servizi. Orari e condizioni cambiano con la stagione: li trovi sempre aggiornati alla fonte ufficiale.",
+        en:"The valley has skibus and shuttles linking villages and ski areas, and the Fiemme Cembra Guest Card for getting around and accessing services. Times and terms change with the season: always up to date at the official source.",
+        de:"Das Tal bietet Skibus und Shuttles zwischen Dörfern und Skigebieten sowie die Fiemme Cembra Guest Card für Mobilität und Services. Zeiten und Bedingungen ändern sich je nach Saison: stets aktuell an der offiziellen Quelle.",
+        pl:"Dolina oferuje skibus i transfery łączące wioski i obszary narciarskie oraz Fiemme Cembra Guest Card do poruszania się i korzystania z usług. Godziny i warunki zmieniają się sezonowo: zawsze aktualne w oficjalnym źródle.",
+        fr:"La vallée dispose de skibus et de navettes reliant villages et domaines skiables, et de la Fiemme Cembra Guest Card pour se déplacer et accéder aux services. Horaires et conditions changent selon la saison : toujours à jour à la source officielle."
+      },
+      live:{ label:{ it:"Mobilità e Guest Card", en:"Mobility & Guest Card", de:"Mobilität & Guest Card", pl:"Transport i Guest Card", fr:"Mobilité & Guest Card" }, url:"https://www.visitfiemme.it/" },
+      audio:{}
+    },
+    {
+      id:"now", tipo:"dynamic", idx:"VII",
+      title:{ it:"Cosa succede ora", en:"What's on now", de:"Was läuft gerade", pl:"Co się dzieje", fr:"À l'affiche" },
+      body:{
+        it:"Concerti dei Suoni delle Dolomiti, eventi, gare, mercati: cambiano ogni giorno, quindi non li fissiamo qui. Tocca il collegamento per vedere cosa accade in valle proprio adesso.",
+        en:"Concerts of the Suoni delle Dolomiti, events, races, markets: they change daily, so we don't fix them here. Tap the link to see what's on in the valley right now.",
+        de:"Konzerte der Suoni delle Dolomiti, Veranstaltungen, Rennen, Märkte: ändern sich täglich, deshalb halten wir sie hier nicht fest. Tippen Sie auf den Link für das aktuelle Programm im Tal.",
+        pl:"Koncerty Suoni delle Dolomiti, wydarzenia, zawody, jarmarki: zmieniają się codziennie, więc ich tu nie utrwalamy. Dotknij linku, by zobaczyć, co dzieje się w dolinie teraz.",
+        fr:"Concerts des Suoni delle Dolomiti, événements, courses, marchés : ils changent chaque jour, nous ne les figeons pas ici. Touchez le lien pour voir ce qui se passe dans la vallée en ce moment."
+      },
+      live:{ label:{ it:"Agenda della valle", en:"Valley agenda", de:"Tal-Programm", pl:"Kalendarz doliny", fr:"Agenda de la vallée" }, url:"https://www.visitfiemme.it/" },
+      audio:{}
+    }
+  ]
+};
+
+/* ================================================================
+   ENGINE — non modificare sotto questa riga.
+   ================================================================ */
+let LANG = CONFIG.defaultLang;
+const $ = s => document.querySelector(s);
+const ICON_PLAY = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+const ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg>';
+
+function buildLangs(){
+  const band = $("#langband"); band.innerHTML = "";
+  CONFIG.LANGS.forEach(l=>{
+    const b = document.createElement("button");
+    b.textContent = l.label; b.dataset.code = l.code; b.setAttribute("role","tab");
+    if(l.code===LANG) b.classList.add("on");
+    b.onclick = ()=>{ stopAll(); LANG=l.code; render(); };
+    band.appendChild(b);
+  });
+}
+
+function render(){
+  const t = CONFIG.ui[LANG];
+  document.documentElement.lang = LANG;
+  $("#kicker").textContent = t.kicker;
+  $("#heroTitle").textContent = t.title;
+  $("#heroSub").textContent = t.sub;
+  $("#hotelLabel").textContent = CONFIG.hotel;
+  $("#coName").textContent = CONFIG.coName;
+  $("#coPlace").textContent = CONFIG.place || "";
+  $("#audiohint").textContent = t.hint;
+  buildLangs();
+
+  const wrap = $("#sections"); wrap.innerHTML = "";
+  CONFIG.sections.forEach(sec=>{
+    const el = document.createElement("article"); el.className = "sec";
+    const isLive = sec.tipo === "dynamic";
+    const chip = isLive
+      ? `<span class="chip live"><i></i>${t.live}</span>`
+      : `<span class="chip static">${t.staticLbl}</span>`;
+    let liveLink = "";
+    if(isLive && sec.live){
+      liveLink = `<a class="livelink" href="${sec.live.url}" target="_blank" rel="noopener">${sec.live.label[LANG]} ${ICON_ARROW}</a>`;
+    }
+    el.innerHTML = `
+      <div class="sec-head">
+        <div class="sec-meta"><span class="idx">${sec.idx}</span><h2>${sec.title[LANG]}</h2></div>
+        <button class="listen" aria-label="${t.listen}" data-id="${sec.id}">${ICON_PLAY}<span class="eq"><span></span><span></span><span></span></span></button>
+      </div>
+      <div class="body">${sec.body[LANG]}</div>
+      ${chip}
+      ${liveLink}`;
+    el.querySelector(".listen").onclick = e => togglePlay(e.currentTarget, sec);
+    wrap.appendChild(el);
+  });
+}
+
+/* ---------- violino sintetizzato (Web Audio, zero diritti) ----------
+   Non è una registrazione: il suono è costruito dal codice.
+   Parte al primo tocco (mai in autoplay) e poi non si ripete da solo.
+   Il violino disegnato resta toccabile per rifarlo suonare in demo.
+   In produzione: sostituibile con un campione reale (3s) tuo. */
+let audioCtx = null, violinDone = false;
+function ensureCtx(){
+  if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; } }
+  if(audioCtx.state==="suspended") audioCtx.resume();
+  return audioCtx;
+}
+function playViolin(){
+  const ctx = ensureCtx(); if(!ctx) return;
+  const now = ctx.currentTime, dur = 1.7;
+  const master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
+  const filter = ctx.createBiquadFilter(); filter.type="lowpass"; filter.frequency.value=2500; filter.Q.value=.6; filter.connect(master);
+  const lfo = ctx.createOscillator(); lfo.frequency.value=5.1;          // vibrato
+  const lfoGain = ctx.createGain(); lfoGain.gain.value=2.8; lfo.connect(lfoGain);
+  const partials = [{f:440,g:.5,t:"sawtooth"},{f:660,g:.16,t:"sawtooth"},{f:880,g:.09,t:"triangle"}];
+  const oscs = [];
+  partials.forEach(p=>{
+    const o = ctx.createOscillator(); o.type=p.t; o.frequency.value=p.f; lfoGain.connect(o.frequency);
+    const g = ctx.createGain(); g.gain.value=p.g; o.connect(g); g.connect(filter); o.start(now); oscs.push(o);
+  });
+  lfo.start(now);
+  master.gain.setValueAtTime(0, now);
+  master.gain.linearRampToValueAtTime(.20, now+.20);                    // attacco d'archetto
+  master.gain.setValueAtTime(.20, now+dur-.5);
+  master.gain.linearRampToValueAtTime(0, now+dur);                      // rilascio
+  const stop = now+dur+.05; oscs.forEach(o=>o.stop(stop)); lfo.stop(stop);
+}
+
+let current = null;
+function stopAll(){
+  if(current){ if(current.timer) clearTimeout(current.timer); if(current.audio){current.audio.pause();current.audio.currentTime=0;} current.btn.classList.remove("playing"); current=null; }
+  if(window.speechSynthesis){ window.speechSynthesis.cancel(); }
+}
+function startPlayback(btn, sec){
+  const url = sec.audio && sec.audio[LANG];
+  if(url){
+    const a = new Audio(url); current.audio = a;
+    a.onended = ()=>stopAll();
+    a.onerror = ()=>{ if(current) current.audio=null; speak(btn, sec); };
+    a.play().catch(()=>{ if(current) current.audio=null; speak(btn, sec); });
+  } else { speak(btn, sec); }
+}
+function togglePlay(btn, sec){
+  if(current && current.btn===btn){ stopAll(); return; }
+  stopAll(); btn.classList.add("playing");
+  current = {btn, audio:null, timer:null};
+  if(!violinDone){                       // prima nota di violino, poi la voce
+    violinDone = true; playViolin();
+    current.timer = setTimeout(()=>{ if(current&&current.btn===btn) startPlayback(btn, sec); }, 1250);
+  } else { startPlayback(btn, sec); }
+}
+function speak(btn, sec){
+  if(!window.speechSynthesis) return;
+  const langDef = CONFIG.LANGS.find(l=>l.code===LANG);
+  const u = new SpeechSynthesisUtterance(stripTags(sec.body[LANG]));
+  u.lang = langDef ? langDef.speech : "it-IT"; u.rate=.96; u.pitch=1;
+  const v = pickVoice(u.lang); if(v) u.voice=v;
+  u.onend = ()=>{ if(current&&current.btn===btn) stopAll(); };
+  window.speechSynthesis.speak(u);
+}
+function pickVoice(lang){
+  const vs = window.speechSynthesis.getVoices(); const base = lang.split("-")[0];
+  return vs.find(v=>v.lang===lang) || vs.find(v=>v.lang.startsWith(base)) || null;
+}
+function stripTags(s){ const d=document.createElement("div"); d.innerHTML=s; return d.textContent||""; }
+if(window.speechSynthesis){ window.speechSynthesis.onvoiceschanged = ()=>{}; }
+window.addEventListener("beforeunload", stopAll);
+
+/* il violino disegnato suona al tocco (gesto deliberato, ripetibile) */
+(function(){
+  const v = document.querySelector(".violin-wrap");
+  if(!v) return;
+  v.style.cursor = "pointer";
+  v.setAttribute("role","button");
+  v.setAttribute("tabindex","0");
+  v.setAttribute("aria-label","Suona il violino");
+  const play = ()=>{ violinDone = true; playViolin(); };
+  v.addEventListener("click", play);
+  v.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); play(); } });
+})();
+
+render();
+</script>
+</body>
+</html>
