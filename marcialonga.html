@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GUSCIO × Marcialonga</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{--spruce:#1E2B25;--spruce2:#15201B;--wood:#C08A3E;--woodl:#E9D5A2;--snow:#F4F1E9;
+    --moss:#5B7A60;--ink:#26271F;--glacier:#3E6A8C;--glacierl:#7FA8C4;--muted:#8A8E80;--paper:#FFFFFF;--line:#E6E0D2;}
+  *{box-sizing:border-box;margin:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"Inter",system-ui,sans-serif;color:var(--ink);background:var(--snow);line-height:1.5}
+  .col{max-width:560px;margin:0 auto}
+  section{padding:46px 26px}
+  .eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--wood);font-weight:600;margin-bottom:10px}
+  h1{font-family:"Fraunces",serif;font-weight:600;font-style:italic;font-size:38px;line-height:1.08;color:#fff}
+  h2{font-family:"Fraunces",serif;font-weight:600;font-size:27px;line-height:1.15;color:var(--spruce);margin-bottom:14px}
+  p{font-size:16px;color:#3C3D34}
+  .lede{font-size:17px;color:#4A4B40}
+
+  /* hero */
+  .hero{background:radial-gradient(130% 90% at 50% -10%, #27382F 0%, var(--spruce) 50%, var(--spruce2) 100%);color:var(--snow);padding:54px 26px 40px}
+  .hero .eyebrow{color:var(--woodl)}
+  .hero p{color:var(--woodl);opacity:.92;font-size:16px;margin-top:16px}
+  .meta{margin-top:26px;background:rgba(0,0,0,.22);border-radius:14px;padding:16px 18px}
+  .meta p{color:#CDD8CE;font-size:14.5px;margin:0;line-height:1.5}
+  .meta b{color:var(--woodl)}
+  .scrollcue{margin-top:24px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#7E8A80}
+
+  /* problem stats */
+  .stats{display:flex;gap:12px;margin-bottom:20px}
+  .stat{flex:1;border-radius:14px;padding:20px 14px;text-align:center}
+  .stat.a{background:#EFEADD}.stat.b{background:var(--spruce)}
+  .stat .n{font-family:"Fraunces",serif;font-weight:600;font-size:46px;line-height:1}
+  .stat.a .n{color:var(--wood)}.stat.b .n{color:var(--woodl)}
+  .stat .l{font-size:13px;margin-top:6px}.stat.a .l{color:var(--muted)}.stat.b .l{color:#CDD8CE}
+
+  /* idea */
+  .idea{background:var(--spruce);color:var(--snow)}
+  .idea h2{color:#fff}.idea p{color:#CDD8CE}
+  .keyrow{display:flex;align-items:center;gap:18px;margin:8px 0 18px}
+  .zeros{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+  .zero{font-family:"Fraunces",serif;font-size:15px;background:var(--spruce2);border-radius:30px;padding:8px 16px}
+  .zero b{color:var(--woodl)}
+
+  /* level cards */
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .dot{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:10px}
+  .card h3{font-family:"Fraunces",serif;font-size:17px;color:var(--spruce);margin-bottom:5px}
+  .card p{font-size:13.5px;color:#52534A}
+
+  /* diploma */
+  .diploma{background:var(--spruce);color:var(--snow)}
+  .diploma h2{color:#fff}
+  .quote{font-family:"Fraunces",serif;font-style:italic;font-size:20px;color:var(--woodl);background:var(--spruce2);border-radius:14px;padding:20px;line-height:1.3;margin:16px 0 18px}
+  .langs{display:flex;flex-wrap:wrap;gap:7px}
+  .langs span{font-size:12.5px;color:#CDD8CE;border:1px solid #3a4a40;border-radius:20px;padding:4px 11px}
+  .diploma .after{color:#CDD8CE;margin-top:18px}
+
+  /* feature rows */
+  .frow{display:flex;gap:14px;margin-bottom:16px}
+  .frow .ic{flex:none;width:40px;height:40px;border-radius:11px;background:#EFEADD;display:flex;align-items:center;justify-content:center;font-size:19px}
+  .frow h3{font-family:"Fraunces",serif;font-size:17px;color:var(--spruce);margin-bottom:3px}
+  .frow p{font-size:14.5px;color:#52534A}
+
+  .priv{background:var(--spruce);color:var(--snow)}
+  .priv h2{color:#fff}.priv p{color:#CDD8CE}
+  .priv .ic{background:var(--moss)}
+
+  /* model */
+  .opts{display:grid;gap:12px;margin-top:18px}
+  .opt{border-radius:14px;padding:18px}
+  .opt.p{background:var(--spruce);color:var(--snow)}
+  .opt.c{background:#EFEADD}
+  .opt h3{font-family:"Fraunces",serif;font-size:18px;margin-bottom:6px}
+  .opt.p h3{color:var(--woodl)}.opt.c h3{color:var(--spruce)}
+  .opt.p p{color:#CDD8CE;font-size:14.5px}.opt.c p{color:#52534A;font-size:14.5px}
+
+  /* cta */
+  .cta{background:radial-gradient(130% 90% at 50% 120%, #27382F 0%, var(--spruce) 55%, var(--spruce2) 100%);color:var(--snow);text-align:center;padding:50px 26px}
+  .cta h2{color:#fff;font-style:italic}
+  .cta p{color:#CDD8CE;margin:14px auto 26px;max-width:420px}
+  .btn{display:inline-block;background:var(--wood);color:#fff;text-decoration:none;font-weight:600;font-size:16px;border-radius:40px;padding:15px 30px}
+  .btn.ghost{background:transparent;border:1px solid #45564c;color:var(--woodl);margin-top:12px}
+  .claim{font-family:"Fraunces",serif;font-style:italic;font-size:22px;line-height:1.3;margin-top:34px}
+  .claim .a{color:var(--woodl)}
+
+  footer{background:var(--spruce2);color:#8A968B;text-align:center;padding:24px;font-size:13px}
+  footer b{color:var(--woodl)}
+  .sig{font-size:13px;margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="col">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="eyebrow">GUSCIO × Marcialonga</div>
+    <h1>Il legno della valle<br>torna a parlare</h1>
+    <p>Il primo souvenir che non finisce in un cassetto: un portachiavi in legno di Fiemme che accompagna l'atleta tutto l'anno.</p>
+    <div class="meta">
+      <p>Stai leggendo questa presentazione perché hai <b>avvicinato il telefono a un pezzo di legno</b>. Nessuna app, nessun login. È esattamente ciò che vi proponiamo.</p>
+    </div>
+    <div class="scrollcue">scorri ↓</div>
+  </section>
+
+  <!-- PROBLEMA -->
+  <section>
+    <div class="eyebrow">Il problema</div>
+    <h2>La gara dura un giorno. Il legame può durare tutto l'anno.</h2>
+    <div class="stats">
+      <div class="stat a"><div class="n">1</div><div class="l">giorno di gara</div></div>
+      <div class="stat b"><div class="n">365</div><div class="l">giorni di legame</div></div>
+    </div>
+    <p class="lede">Medaglie e gadget finiscono dimenticati: spesa, plastica, nessun ritorno. Il valore vero per il Comitato non è l'oggetto del giorno della gara — è restare in contatto con migliaia di atleti nei 364 giorni in mezzo. Quel legame, oggi, non ce l'ha nessun souvenir.</p>
+  </section>
+
+  <!-- IDEA -->
+  <section class="idea">
+    <div class="eyebrow">L'idea</div>
+    <h2>Un portachiavi in legno di Fiemme, con un cuore invisibile.</h2>
+    <div class="keyrow">
+      <svg width="62" height="88" viewBox="0 0 120 168" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="flex:none">
+        <rect x="8" y="20" width="104" height="140" rx="20" fill="#C9A559"/>
+        <rect x="4" y="16" width="104" height="140" rx="20" fill="#E9D5A2" stroke="#C8A45A"/>
+        <circle cx="56" cy="40" r="7" fill="none" stroke="#B5893F" stroke-width="2.4"/>
+        <circle cx="56" cy="14" r="15" fill="none" stroke="#9AA0A6" stroke-width="4"/>
+        <circle cx="56" cy="66" r="5.5" fill="#7A5A2E"/><circle cx="56" cy="128" r="5.5" fill="#7A5A2E"/>
+        <path d="M56,70 C70,90 42,108 56,114 C70,120 42,138 56,144" stroke="#7A5A2E" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+        <line x1="44" y1="107" x2="68" y2="107" stroke="#7A5A2E" stroke-width="2.6" stroke-linecap="round"/>
+      </svg>
+      <p style="margin:0">Abete di risonanza — lo stesso legno dei violini, dalle foreste della Magnifica Comunità di Fiemme. Dentro, un tag NFC sigillato a filo. L'atleta avvicina il telefono e il legno parla, nella sua lingua.</p>
+    </div>
+    <div class="zeros"><span class="zero"><b>zero</b> app</span><span class="zero"><b>zero</b> login</span><span class="zero"><b>zero</b> batterie</span></div>
+  </section>
+
+  <!-- LIVELLI -->
+  <section>
+    <div class="eyebrow">Come funziona</div>
+    <h2>Quattro livelli. Un solo oggetto.</h2>
+    <p class="lede">Il portachiavi è riprogrammato dal cloud: lo stesso legno cambia contenuto con le stagioni. Un oggetto dato una volta, che parla tutto l'anno.</p>
+    <div class="cards">
+      <div class="card"><div class="dot" style="background:var(--glacier);color:#fff">❄️</div><h3>Pre-gara</h3><p>Meteo, stato neve, navette, viabilità in tempo reale.</p></div>
+      <div class="card"><div class="dot" style="background:var(--wood);color:#fff">⏱️</div><h3>Giorno gara</h3><p>I tempi ufficiali, subito, sul punto fisico.</p></div>
+      <div class="card"><div class="dot" style="background:var(--moss);color:#fff">🏅</div><h3>Diploma vocale</h3><p>Ti accoglie per nome e legge il tuo risultato.</p></div>
+      <div class="card"><div class="dot" style="background:var(--glacier);color:#fff">🔄</div><h3>Tutto l'anno</h3><p>Iscrizioni all'edizione dopo con un tap.</p></div>
+    </div>
+  </section>
+
+  <!-- DIPLOMA -->
+  <section class="diploma">
+    <div class="eyebrow">Il cuore emotivo</div>
+    <h2>Ti accoglie per nome. Legge il tuo tempo.</h2>
+    <div class="quote">«Complimenti Franco. Hai concluso i 70 km della Marcialonga in 4 ore, 12 minuti e 38 secondi.»</div>
+    <p class="after" style="margin-bottom:14px"><b style="color:var(--woodl)">In 11 lingue.</b> L'emozione del traguardo torna ogni volta che l'atleta avvicina il telefono — e arriva nella sua lingua, dall'italiano al giapponese. Per una gara con decine di nazioni al via, è il ricordo che lega davvero.</p>
+    <div class="langs"><span>Italiano</span><span>Français</span><span>Deutsch</span><span>English</span><span>Suomi</span><span>Svenska</span><span>Русский</span><span>Polski</span><span>Čeština</span><span>中文</span><span>日本語</span></div>
+  </section>
+
+  <!-- LOGISTICA -->
+  <section>
+    <div class="eyebrow">La svolta logistica</div>
+    <h2>Stock unico, identità nel cloud.</h2>
+    <p class="lede" style="margin-bottom:22px">I portachiavi sono prodotti in un unico lotto anonimo. L'atleta vi si abbina digitalmente, con il suo consenso, al ritiro del pettorale — nessun pezzo personalizzato da preparare in anticipo.</p>
+    <div class="frow"><div class="ic">☁️</div><div><h3>Zero ricerca del pezzo</h3><p>La segreteria non cerca il portachiavi giusto per ogni sacchetto: l'abbinamento è software.</p></div></div>
+    <div class="frow"><div class="ic">📦</div><div><h3>Zero sprechi</h3><p>Un solo lotto standardizzato, riprogrammabile. Niente resi, niente invenduto inciso.</p></div></div>
+    <div class="frow"><div class="ic">✉️</div><div><h3>Meno segreteria</h3><p>L'atleta riscatta il diploma da solo: meno email massive, meno telefonate ripetitive.</p></div></div>
+  </section>
+
+  <!-- DATI -->
+  <section class="priv">
+    <div class="eyebrow" style="color:var(--woodl)">Privacy</div>
+    <h2>Un canale, non una banca dati.</h2>
+    <div class="frow" style="margin-top:6px"><div class="ic">🛡️</div><div><p style="color:#CDD8CE">Il pubblico è del Comitato; il canale è nostro. GUSCIO porta la voce nella tasca dell'atleta <b style="color:#fff">senza tracciarne i movimenti</b> e senza raccoglierne i dati. Voi parlate ai vostri partecipanti — noi diamo l'oggetto che parla, nel pieno rispetto della privacy e dell'European Accessibility Act.</p></div></div>
+  </section>
+
+  <!-- SOSTENIBILITA -->
+  <section>
+    <div class="eyebrow">Durata e sostenibilità</div>
+    <h2>Fatto per durare, e per rispettare.</h2>
+    <div class="frow" style="margin-top:8px"><div class="ic">🌿</div><div><h3>Sostenibile</h3><p>Abete certificabile PEFC, da foreste gestite in modo sostenibile. Sostituisce il gadget usa-e-getta con un oggetto che si tiene.</p></div></div>
+    <div class="frow"><div class="ic">🛡️</div><div><h3>Robusto</h3><p>Il tag NFC è inserito a filo e sigillato nel legno: resistente a neve, acqua e urti. Pensato per la montagna d'inverno.</p></div></div>
+  </section>
+
+  <!-- MODELLO -->
+  <section>
+    <div class="eyebrow">Il modello</div>
+    <h2>Come si fa, insieme.</h2>
+    <p class="lede">Nessun budget software da chiedere. AlpCover produce l'oggetto (margine una tantum), GUSCIO fornisce la voce (canone annuale). Due formule possibili:</p>
+    <div class="opts">
+      <div class="opt p"><h3>Opzione premium</h3><p>Il portachiavi parlante come upgrade a pagamento in fase di iscrizione. L'atleta sceglie, il Comitato non anticipa nulla.</p></div>
+      <div class="opt c"><h3>Co-sponsorizzazione</h3><p>Il sistema entra come dotazione ufficiale per tutti gli iscritti, con uno sponsor tecnico a coprire la produzione.</p></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="eyebrow" style="color:var(--woodl)">La richiesta</div>
+    <h2>Partiamo da un'edizione.</h2>
+    <p>Un lotto pilota su una Marcialonga. Lo realizziamo, lo misuriamo, e diventa il caso che mostriamo agli sponsor e al territorio.</p>
+    <a class="btn" href="marcialonga-demo.html">Provalo dal vivo →</a>
+    <div class="claim">La gara dura un giorno.<br><span class="a">Il ricordo parla tutto l'anno.</span></div>
+  </section>
+
+  <footer>
+    <div class="sig">voce <b>GUSCIO</b> · oggetto <b>AlpCover</b></div>
+    Franco Luconi Bisti · guscio.ai
+  </footer>
+
+</div>
+</body>
+</html>
