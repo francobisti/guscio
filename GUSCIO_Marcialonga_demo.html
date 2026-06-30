@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GUSCIO × Marcialonga — il legno che parla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --spruce:#1E2B25; --spruce2:#15201B; --wood:#C08A3E; --woodl:#E9D5A2;
+    --snow:#F4F1E9; --moss:#5B7A60; --ink:#26271F; --glacier:#3E6A8C; --muted:#8A8E80; --line:#E2DCCE;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:"Inter",system-ui,sans-serif;color:var(--snow);
+    background:radial-gradient(120% 80% at 50% -10%, #27382F 0%, var(--spruce) 45%, var(--spruce2) 100%);
+    min-height:100vh;padding:26px 16px 40px}
+  .wrap{max-width:440px;margin:0 auto}
+  .brand{font-family:"Fraunces",serif;font-size:19px}
+  .brand b{color:var(--woodl)} .brand .x{color:var(--wood);font-style:italic;margin:0 5px}
+  .tagline{font-family:"Fraunces",serif;font-style:italic;color:#9FB3A2;font-size:14px;margin:4px 0 18px}
+  .modes{display:flex;gap:4px;background:rgba(0,0,0,.25);padding:4px;border-radius:12px;margin-bottom:20px}
+  .modes button{flex:1;border:0;background:transparent;color:#B9C4BC;font-family:inherit;font-size:13.5px;font-weight:500;padding:9px;border-radius:9px;cursor:pointer;transition:background .25s,color .25s}
+  .modes button[aria-selected="true"]{background:var(--woodl);color:#3a2c14}
+  .panel{display:none;animation:fade .4s ease}.panel.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .card{background:var(--snow);color:var(--ink);border-radius:16px;padding:20px 18px;box-shadow:0 14px 34px rgba(0,0,0,.28)}
+  .eyebrow{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--wood);font-weight:600;margin:0 0 4px}
+  .card h2{font-family:"Fraunces",serif;font-weight:600;font-size:22px;margin:0 0 6px;color:var(--spruce)}
+  .help{font-size:13px;line-height:1.5;color:#5C5E54;margin:0 0 16px}
+  label{display:block;font-size:11px;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin:0 0 5px;font-weight:500}
+  .field{margin-bottom:13px}
+  input,select{width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:9px;padding:11px 12px}
+  input.mono{font-family:"Space Mono",monospace;letter-spacing:1px}
+  input:focus,select:focus{outline:2px solid var(--moss);outline-offset:0;border-color:transparent}
+  .row{display:flex;gap:10px}.row .field{flex:1}
+  .btn{width:100%;border:0;border-radius:10px;padding:13px;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;transition:transform .12s,filter .2s}
+  .btn:active{transform:translateY(1px)}
+  .btn-wood{background:var(--spruce);color:var(--snow)}.btn-wood:hover{filter:brightness(1.12)}
+  .bound{margin-top:14px;background:#EAF0E9;border:1px solid #CADBC9;border-radius:11px;padding:13px 14px;display:none;align-items:center;gap:11px}
+  .bound.show{display:flex;animation:fade .4s ease}
+  .chip{font-family:"Space Mono",monospace;font-size:12px;background:var(--spruce);color:var(--woodl);padding:5px 8px;border-radius:6px;white-space:nowrap}
+  .bound p{margin:0;font-size:13px;color:#2E4632;line-height:1.4}.bound b{color:var(--spruce)}
+
+  .phone{background:#101713;border-radius:34px;padding:12px;box-shadow:0 20px 50px rgba(0,0,0,.4);border:1px solid #2c3b33}
+  .notch{height:5px;width:90px;background:#2c3b33;border-radius:5px;margin:2px auto 10px}
+  .screen{background:var(--snow);border-radius:24px;overflow:hidden;color:var(--ink);min-height:498px;position:relative}
+
+  .langbar{display:flex;gap:6px;overflow-x:auto;padding:8px 12px;background:#27332C;scrollbar-width:thin}
+  .langbar::-webkit-scrollbar{height:5px}.langbar::-webkit-scrollbar-thumb{background:#3a4a40;border-radius:3px}
+  .langbar button{flex:none;border:1px solid #3a4a40;background:transparent;color:#B9C4BC;font-family:inherit;font-size:11.5px;padding:5px 11px;border-radius:20px;cursor:pointer;white-space:nowrap;transition:background .2s,color .2s}
+  .langbar button[aria-selected="true"]{background:var(--woodl);color:#3a2c14;border-color:transparent;font-weight:600}
+
+  .lock{padding:30px 22px 36px;text-align:center;display:flex;flex-direction:column;align-items:center}
+  .lock h3{font-family:"Fraunces",serif;font-weight:600;font-size:21px;color:var(--spruce);margin:16px 0 6px}
+  .lock p{font-size:13.5px;color:#5C5E54;margin:0 0 22px;max-width:250px;line-height:1.5}
+  .tap{border:0;background:var(--wood);color:#fff;font-family:inherit;font-weight:600;font-size:15px;border-radius:40px;padding:14px 26px;cursor:pointer;animation:pulse 2.4s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(192,138,62,.45)}70%{box-shadow:0 0 0 18px rgba(192,138,62,0)}100%{box-shadow:0 0 0 0 rgba(192,138,62,0)}}
+
+  .exp{display:none}.exp.on{display:block;animation:wake .5s ease}
+  @keyframes wake{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+  .exp-top{background:var(--spruce);color:var(--snow);padding:14px 18px}
+  .exp-top .k{font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:#9FB3A2}
+  .exp-top .t{font-family:"Fraunces",serif;font-size:18px;margin-top:2px}
+  .phases{display:flex;background:#27332C;color:#9FB3A2;font-size:11px}
+  .phases button{flex:1;border:0;background:transparent;color:inherit;font-family:inherit;padding:9px 4px;cursor:pointer;border-bottom:2px solid transparent;line-height:1.2}
+  .phases button[aria-selected="true"]{color:var(--woodl);border-bottom-color:var(--wood)}
+  .phasebody{padding:20px 18px 26px}
+  .li{display:flex;gap:11px;align-items:flex-start;margin-bottom:13px;font-size:13.5px;color:#3C3D34;line-height:1.45}
+  .li .ic{flex:none;width:30px;height:30px;border-radius:8px;background:#EDE7DA;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .li b{color:var(--spruce)} .mut{font-size:12px;color:var(--muted)}
+
+  .greet{font-family:"Fraunces",serif;font-size:25px;color:var(--spruce);margin:0 0 2px}
+  .sub{font-size:12.5px;color:var(--muted);margin:0 0 16px}
+  .clock{font-family:"Space Mono",monospace;font-weight:700;font-size:38px;color:var(--glacier);letter-spacing:1px;line-height:1;margin:2px 0 3px}
+  .clocklbl{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+  .dipmsg{font-size:13.5px;line-height:1.5;color:#3C3D34;margin:0 0 14px;max-width:300px}
+  .listen{display:inline-flex;align-items:center;gap:9px;border:0;background:var(--spruce);color:var(--snow);font-family:inherit;font-weight:600;font-size:14px;border-radius:40px;padding:11px 20px;cursor:pointer}
+  .wave{display:flex;align-items:center;gap:3px;height:18px}
+  .wave i{width:3px;height:6px;background:var(--woodl);border-radius:2px}
+  .speaking .wave i{animation:bar .8s ease-in-out infinite}
+  .wave i:nth-child(2){animation-delay:.1s}.wave i:nth-child(3){animation-delay:.2s}.wave i:nth-child(4){animation-delay:.3s}.wave i:nth-child(5){animation-delay:.15s}
+  @keyframes bar{0%,100%{height:5px}50%{height:17px}}
+  .audionote{display:inline-block;font-size:11.5px;color:var(--muted);background:#EDE7DA;padding:7px 11px;border-radius:8px}
+  .empty{text-align:center;padding:10px 4px}
+  .empty p{font-size:13.5px;color:#5C5E54;line-height:1.5;margin:0 0 16px}
+  .link{background:none;border:0;color:var(--moss);font-family:inherit;font-weight:600;font-size:13.5px;cursor:pointer;text-decoration:underline}
+  .pill{display:inline-block;background:#EDE7DA;color:#6b5326;font-size:11px;font-family:"Space Mono",monospace;padding:4px 8px;border-radius:6px;margin-bottom:14px}
+  .footnote{text-align:center;font-size:11.5px;color:#7E8A80;margin-top:18px;line-height:1.5}.footnote b{color:#A9BAAC}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><b>GUSCIO</b><span class="x">×</span>Marcialonga</div>
+  <p class="tagline">Il legno della valle che torna a parlare</p>
+
+  <div class="modes" role="tablist">
+    <button id="m-seg" role="tab" aria-selected="true" onclick="setMode('seg')">Segreteria</button>
+    <button id="m-atl" role="tab" aria-selected="false" onclick="setMode('atl')">Atleta</button>
+  </div>
+
+  <!-- SEGRETERIA (sempre in italiano) -->
+  <section class="panel on" id="p-seg">
+    <div class="card">
+      <p class="eyebrow">Al ritiro del pettorale</p>
+      <h2>Abbina il portachiavi</h2>
+      <p class="help">Lo stock è unico e anonimo. L'identità dell'atleta si aggiunge qui, nel cloud — nessun pezzo da cercare, nessuna incisione personalizzata.</p>
+      <div class="field"><label for="f-nome">Nome e cognome</label><input id="f-nome" type="text" value="Franco Luconi Bisti" autocomplete="off"></div>
+      <div class="row">
+        <div class="field"><label for="f-bib">Pettorale</label><input id="f-bib" class="mono" type="text" value="1847" autocomplete="off"></div>
+        <div class="field"><label for="f-cat">Categoria</label><select id="f-cat"><option>Master M2</option><option>Master M1</option><option>Senior</option><option>Master F1</option><option>Élite</option></select></div>
+      </div>
+      <div class="field"><label for="f-time">Tempo finale &middot; 70 km</label><input id="f-time" class="mono" type="text" value="04:12:38" placeholder="hh:mm:ss"></div>
+      <button class="btn btn-wood" onclick="bind()">Abbina al portachiavi</button>
+      <div class="bound" id="bound"><span class="chip">#A7F3</span><p id="boundtxt"></p></div>
+    </div>
+  </section>
+
+  <!-- ATLETA -->
+  <section class="panel" id="p-atl">
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="screen">
+        <div class="langbar" id="langbar" role="tablist" aria-label="Lingua"></div>
+
+        <div class="lock" id="lock">
+          <svg width="78" height="110" viewBox="0 0 120 168" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="8" y="20" width="104" height="140" rx="20" fill="#C9A559"/>
+            <rect x="4" y="16" width="104" height="140" rx="20" fill="#E9D5A2" stroke="#C8A45A"/>
+            <circle cx="56" cy="40" r="7" fill="none" stroke="#B5893F" stroke-width="2.4"/>
+            <circle cx="56" cy="14" r="15" fill="none" stroke="#9AA0A6" stroke-width="4"/>
+            <circle cx="56" cy="66" r="5.5" fill="#7A5A2E"/><circle cx="56" cy="128" r="5.5" fill="#7A5A2E"/>
+            <path d="M56,70 C70,90 42,108 56,114 C70,120 42,138 56,144" stroke="#7A5A2E" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+            <line x1="44" y1="107" x2="68" y2="107" stroke="#7A5A2E" stroke-width="2.6" stroke-linecap="round"/>
+          </svg>
+          <h3 id="lockTitle"></h3>
+          <p id="lockSub"></p>
+          <button class="tap" id="lockBtn" onclick="tap()"></button>
+        </div>
+
+        <div class="exp" id="exp">
+          <div class="exp-top"><div class="k">Marcialonga di Fiemme e Fassa</div><div class="t" id="exp-title"></div></div>
+          <div class="phases" role="tablist">
+            <button id="tab0" role="tab" aria-selected="false" onclick="setPhase('pre')"></button>
+            <button id="tab1" role="tab" aria-selected="false" onclick="setPhase('day')"></button>
+            <button id="tab2" role="tab" aria-selected="true"  onclick="setPhase('post')"></button>
+            <button id="tab3" role="tab" aria-selected="false" onclick="setPhase('year')"></button>
+          </div>
+          <div class="phasebody" id="phasebody"></div>
+        </div>
+      </div>
+    </div>
+    <p class="footnote">Demo. L'italiano ha la <b>voce GUSCIO</b> (in produzione: Tiziana); le altre lingue qui sono solo testo &mdash; la voce arriva dopo. Nessun dato dell'atleta lascia il Comitato.</p>
+  </section>
+</div>
+
+<script>
+const LANGS = [
+  ["it","Italiano"],["fr","Français"],["de","Deutsch"],["en","English"],
+  ["fi","Suomi"],["sv","Svenska"],["ru","Русский"],["pl","Polski"],
+  ["cs","Čeština"],["zh","中文"],["ja","日本語"]
+];
+const T = {
+  it:{tapT:"Avvicina il telefono",tapS:"Tocca il portachiavi. Nessuna app, nessun login.",tapB:"Avvicina al portachiavi",
+    tabPre:"Pre-gara",tabDay:"Giorno gara",tabPost:"Diploma",tabYear:"Tutto l'anno",
+    titPre:"Bentornato sul tracciato",titDay:"Oggi si corre",titPost:"Il tuo diploma",titYear:"Ci vediamo l'anno prossimo",
+    greet:"Ciao",bib:"Pettorale",clock:"Il tuo tempo ufficiale",
+    msg:"Complimenti %N. Hai concluso i 70 km della Marcialonga in %T. Ti aspettiamo l'anno prossimo.",
+    audio:"Voce nella tua lingua: in arrivo.",listen:"Ascolta il diploma",
+    snowT:"Neve & meteo",snowD:"Fondo compatto, −6°C a Moena. Sereno.",busT:"Navette",busD:"Da Cavalese ogni 20 min dalle 6:00.",bibT:"Pettorale",bibD:"Ritiro fino alle 19:00 al Palafiemme.",
+    liveT:"Tempi in diretta",liveD:"Il tuo pettorale è seguito a ogni rilevamento.",pass:"Passaggio",arr:"Arrivo",wait:"in attesa…",
+    yearT:"Marcialonga 2027",yearD:"Domenica 31 gennaio. Iscrizioni dal 1° settembre.",yearB:"Iscriviti con un tap",yearN:"Lo stesso portachiavi, riprogrammato dal cloud.",
+    emptyP:"Questo portachiavi non è ancora collegato a un atleta. L'abbinamento avviene in Segreteria, al ritiro del pettorale.",emptyL:"Vai alla Segreteria →",notBound:"non abbinato"},
+  fr:{tapT:"Approchez le téléphone",tapS:"Touchez le porte-clés. Aucune appli, aucun compte.",tapB:"Toucher le porte-clés",
+    tabPre:"Avant",tabDay:"Jour J",tabPost:"Diplôme",tabYear:"Toute l'année",
+    titPre:"De retour sur la trace",titDay:"Jour de course",titPost:"Ton diplôme",titYear:"À l'année prochaine",
+    greet:"Salut",bib:"Dossard",clock:"Ton temps officiel",
+    msg:"Bravo %N. Tu as terminé les 70 km de la Marcialonga en %T. À l'année prochaine.",
+    audio:"Voix dans ta langue : bientôt.",listen:"",
+    snowT:"Neige & météo",snowD:"Neige compacte, −6°C à Moena. Ciel dégagé.",busT:"Navettes",busD:"De Cavalese toutes les 20 min dès 6h.",bibT:"Dossard",bibD:"Retrait jusqu'à 19h au Palafiemme.",
+    liveT:"Temps en direct",liveD:"Ton dossard est suivi à chaque point.",pass:"Passage",arr:"Arrivée",wait:"en attente…",
+    yearT:"Marcialonga 2027",yearD:"Dimanche 31 janvier. Inscriptions dès le 1er septembre.",yearB:"S'inscrire d'un geste",yearN:"Le même porte-clés, reprogrammé depuis le cloud.",
+    emptyP:"Ce porte-clés n'est pas encore lié à un athlète. La liaison se fait au secrétariat, au retrait du dossard.",emptyL:"Aller au secrétariat →",notBound:"non lié"},
+  de:{tapT:"Handy annähern",tapS:"Schlüsselanhänger antippen. Keine App, kein Login.",tapB:"Schlüsselanhänger antippen",
+    tabPre:"Vorher",tabDay:"Renntag",tabPost:"Urkunde",tabYear:"Ganzjährig",
+    titPre:"Zurück auf der Loipe",titDay:"Renntag",titPost:"Deine Urkunde",titYear:"Bis nächstes Jahr",
+    greet:"Hallo",bib:"Startnummer",clock:"Deine offizielle Zeit",
+    msg:"Glückwunsch %N. Du hast die 70 km der Marcialonga in %T geschafft. Bis nächstes Jahr.",
+    audio:"Stimme in deiner Sprache: kommt bald.",listen:"",
+    snowT:"Schnee & Wetter",snowD:"Kompakte Loipe, −6°C in Moena. Klar.",busT:"Shuttles",busD:"Ab Cavalese alle 20 Min ab 6:00.",bibT:"Startnummer",bibD:"Ausgabe bis 19:00 im Palafiemme.",
+    liveT:"Live-Zeiten",liveD:"Deine Startnummer wird an jedem Punkt erfasst.",pass:"Durchgang",arr:"Ziel",wait:"in Erwartung…",
+    yearT:"Marcialonga 2027",yearD:"Sonntag, 31. Januar. Anmeldung ab 1. September.",yearB:"Mit einem Tap anmelden",yearN:"Derselbe Anhänger, neu programmiert aus der Cloud.",
+    emptyP:"Dieser Anhänger ist noch keinem Athleten zugeordnet. Die Zuordnung erfolgt im Sekretariat bei der Startnummernausgabe.",emptyL:"Zum Sekretariat →",notBound:"nicht zugeordnet"},
+  en:{tapT:"Tap your phone",tapS:"Tap the keychain. No app, no login.",tapB:"Tap the keychain",
+    tabPre:"Before",tabDay:"Race day",tabPost:"Diploma",tabYear:"All year",
+    titPre:"Welcome back to the trail",titDay:"Race day",titPost:"Your diploma",titYear:"See you next year",
+    greet:"Hi",bib:"Bib",clock:"Your official time",
+    msg:"Well done %N. You completed the 70 km of the Marcialonga in %T. See you next year.",
+    audio:"Voice in your language: coming soon.",listen:"",
+    snowT:"Snow & weather",snowD:"Firm track, −6°C in Moena. Clear sky.",busT:"Shuttles",busD:"From Cavalese every 20 min from 6:00.",bibT:"Bib pickup",bibD:"Until 19:00 at the Palafiemme.",
+    liveT:"Live timing",liveD:"Your bib is tracked at every checkpoint.",pass:"Split",arr:"Finish",wait:"pending…",
+    yearT:"Marcialonga 2027",yearD:"Sunday 31 January. Entries open 1 September.",yearB:"Enter with one tap",yearN:"The same keychain, reprogrammed from the cloud.",
+    emptyP:"This keychain isn't linked to an athlete yet. Linking happens at the desk, at bib pickup.",emptyL:"Go to the desk →",notBound:"not linked"},
+  fi:{tapT:"Tuo puhelin lähelle",tapS:"Kosketa avaimenperää. Ei sovellusta, ei kirjautumista.",tapB:"Kosketa avaimenperää",
+    tabPre:"Ennen",tabDay:"Kisapäivä",tabPost:"Diplomi",tabYear:"Ympäri vuoden",
+    titPre:"Tervetuloa ladulle",titDay:"Kisapäivä",titPost:"Diplomisi",titYear:"Nähdään ensi vuonna",
+    greet:"Hei",bib:"Kilpailunumero",clock:"Virallinen aikasi",
+    msg:"Onneksi olkoon %N. Suoritit Marcialongan 70 km ajassa %T. Nähdään ensi vuonna.",
+    audio:"Ääni omalla kielelläsi: tulossa.",listen:"",
+    snowT:"Lumi & sää",snowD:"Kova latu, −6°C Moenassa. Selkeää.",busT:"Bussit",busD:"Cavalesesta 20 min välein klo 6:00 alkaen.",bibT:"Numeron nouto",bibD:"Klo 19:00 asti Palafiemmessä.",
+    liveT:"Ajat livenä",liveD:"Numeroasi seurataan jokaisella väliajalla.",pass:"Väliaika",arr:"Maali",wait:"odottaa…",
+    yearT:"Marcialonga 2027",yearD:"Sunnuntai 31. tammikuuta. Ilmoittautuminen 1. syyskuuta alkaen.",yearB:"Ilmoittaudu yhdellä kosketuksella",yearN:"Sama avaimenperä, ohjelmoitu uudelleen pilvestä.",
+    emptyP:"Tätä avaimenperää ei ole vielä liitetty urheilijaan. Liitos tehdään toimistossa numeron noudossa.",emptyL:"Siirry toimistoon →",notBound:"ei liitetty"},
+  sv:{tapT:"Håll telefonen nära",tapS:"Tryck på nyckelringen. Ingen app, ingen inloggning.",tapB:"Tryck på nyckelringen",
+    tabPre:"Före",tabDay:"Tävlingsdag",tabPost:"Diplom",tabYear:"Hela året",
+    titPre:"Tillbaka i spåret",titDay:"Tävlingsdag",titPost:"Ditt diplom",titYear:"Vi ses nästa år",
+    greet:"Hej",bib:"Nummerlapp",clock:"Din officiella tid",
+    msg:"Grattis %N. Du klarade Marcialongas 70 km på %T. Vi ses nästa år.",
+    audio:"Röst på ditt språk: kommer snart.",listen:"",
+    snowT:"Snö & väder",snowD:"Hårt spår, −6°C i Moena. Klart.",busT:"Bussar",busD:"Från Cavalese var 20:e min från 6:00.",bibT:"Nummerlapp",bibD:"Uthämtning till 19:00 i Palafiemme.",
+    liveT:"Tider live",liveD:"Din nummerlapp följs vid varje kontroll.",pass:"Passage",arr:"Mål",wait:"väntar…",
+    yearT:"Marcialonga 2027",yearD:"Söndag 31 januari. Anmälan från 1 september.",yearB:"Anmäl dig med ett tryck",yearN:"Samma nyckelring, omprogrammerad från molnet.",
+    emptyP:"Den här nyckelringen är inte kopplad till en åkare ännu. Kopplingen sker i sekretariatet vid uthämtning.",emptyL:"Till sekretariatet →",notBound:"ej kopplad"},
+  ru:{tapT:"Поднесите телефон",tapS:"Коснитесь брелока. Без приложения и входа.",tapB:"Коснуться брелока",
+    tabPre:"До",tabDay:"День гонки",tabPost:"Диплом",tabYear:"Весь год",
+    titPre:"Снова на трассе",titDay:"День гонки",titPost:"Ваш диплом",titYear:"До встречи в следующем году",
+    greet:"Привет",bib:"Номер",clock:"Ваше официальное время",
+    msg:"Поздравляем, %N. Вы преодолели 70 км Марчалонги за %T. До встречи в следующем году.",
+    audio:"Голос на вашем языке: скоро.",listen:"",
+    snowT:"Снег и погода",snowD:"Плотная трасса, −6°C в Моэне. Ясно.",busT:"Автобусы",busD:"Из Кавалезе каждые 20 мин с 6:00.",bibT:"Выдача номеров",bibD:"До 19:00 в Палафьемме.",
+    liveT:"Время онлайн",liveD:"Ваш номер отслеживается на каждом отсечке.",pass:"Отсечка",arr:"Финиш",wait:"ожидание…",
+    yearT:"Марчалонга 2027",yearD:"Воскресенье, 31 января. Регистрация с 1 сентября.",yearB:"Зарегистрироваться одним касанием",yearN:"Тот же брелок, перепрограммирован из облака.",
+    emptyP:"Этот брелок ещё не привязан к участнику. Привязка происходит в секретариате при выдаче номера.",emptyL:"В секретариат →",notBound:"не привязан"},
+  pl:{tapT:"Zbliż telefon",tapS:"Dotknij breloka. Bez aplikacji i logowania.",tapB:"Dotknij breloka",
+    tabPre:"Przed",tabDay:"Dzień wyścigu",tabPost:"Dyplom",tabYear:"Cały rok",
+    titPre:"Znów na trasie",titDay:"Dzień wyścigu",titPost:"Twój dyplom",titYear:"Do zobaczenia za rok",
+    greet:"Cześć",bib:"Numer",clock:"Twój oficjalny czas",
+    msg:"Gratulacje %N. Pokonałeś 70 km Marcialongi w czasie %T. Do zobaczenia za rok.",
+    audio:"Głos w Twoim języku: wkrótce.",listen:"",
+    snowT:"Śnieg i pogoda",snowD:"Twardy ślad, −6°C w Moenie. Bezchmurnie.",busT:"Autobusy",busD:"Z Cavalese co 20 min od 6:00.",bibT:"Odbiór numeru",bibD:"Do 19:00 w Palafiemme.",
+    liveT:"Czasy na żywo",liveD:"Twój numer jest śledzony na każdym pomiarze.",pass:"Pomiar",arr:"Meta",wait:"oczekiwanie…",
+    yearT:"Marcialonga 2027",yearD:"Niedziela 31 stycznia. Zapisy od 1 września.",yearB:"Zapisz się jednym dotknięciem",yearN:"Ten sam brelok, przeprogramowany z chmury.",
+    emptyP:"Ten brelok nie jest jeszcze powiązany z zawodnikiem. Powiązanie następuje w biurze przy odbiorze numeru.",emptyL:"Przejdź do biura →",notBound:"niepowiązany"},
+  cs:{tapT:"Přilož telefon",tapS:"Dotkni se přívěsku. Žádná aplikace, žádné přihlášení.",tapB:"Dotkni se přívěsku",
+    tabPre:"Před",tabDay:"Den závodu",tabPost:"Diplom",tabYear:"Celý rok",
+    titPre:"Zpět na trati",titDay:"Den závodu",titPost:"Tvůj diplom",titYear:"Na shledanou příští rok",
+    greet:"Ahoj",bib:"Číslo",clock:"Tvůj oficiální čas",
+    msg:"Gratulujeme %N. Zvládl jsi 70 km Marcialongy v čase %T. Těšíme se na tebe příští rok.",
+    audio:"Hlas ve tvém jazyce: již brzy.",listen:"",
+    snowT:"Sníh & počasí",snowD:"Tvrdá stopa, −6°C v Moeně. Jasno.",busT:"Autobusy",busD:"Z Cavalese každých 20 min od 6:00.",bibT:"Výdej čísel",bibD:"Do 19:00 v Palafiemme.",
+    liveT:"Časy živě",liveD:"Tvé číslo je sledováno na každém mezičase.",pass:"Mezičas",arr:"Cíl",wait:"čeká se…",
+    yearT:"Marcialonga 2027",yearD:"Neděle 31. ledna. Přihlášky od 1. září.",yearB:"Přihlas se jedním dotykem",yearN:"Stejný přívěsek, přeprogramovaný z cloudu.",
+    emptyP:"Tento přívěsek zatím není spojen se závodníkem. Spojení proběhne v kanceláři při výdeji čísla.",emptyL:"Do kanceláře →",notBound:"nespojený"},
+  zh:{tapT:"靠近手机",tapS:"轻触钥匙扣。无需应用，无需登录。",tapB:"轻触钥匙扣",
+    tabPre:"赛前",tabDay:"比赛日",tabPost:"证书",tabYear:"全年",
+    titPre:"回到赛道",titDay:"比赛日",titPost:"你的证书",titYear:"明年再见",
+    greet:"你好",bib:"号码牌",clock:"你的官方成绩",
+    msg:"恭喜你 %N。你以 %T 完成了 Marcialonga 70 公里。明年再见。",
+    audio:"你的语言语音：即将推出。",listen:"",
+    snowT:"雪况与天气",snowD:"雪道坚实，莫埃纳 −6°C，晴。",busT:"接驳车",busD:"从卡瓦莱塞 6:00 起每 20 分钟一班。",bibT:"领取号码牌",bibD:"在 Palafiemme，至 19:00。",
+    liveT:"实时成绩",liveD:"每个计时点都会追踪你的号码牌。",pass:"分段",arr:"终点",wait:"等待中…",
+    yearT:"Marcialonga 2027",yearD:"1 月 31 日星期日。9 月 1 日起报名。",yearB:"轻触一下即可报名",yearN:"同一个钥匙扣，从云端重新编程。",
+    emptyP:"此钥匙扣尚未关联到运动员。关联在领取号码牌时于服务台完成。",emptyL:"前往服务台 →",notBound:"未关联"},
+  ja:{tapT:"スマホをかざして",tapS:"キーホルダーにタッチ。アプリ不要、ログイン不要。",tapB:"キーホルダーにタッチ",
+    tabPre:"レース前",tabDay:"レース当日",tabPost:"修了証",tabYear:"通年",
+    titPre:"コースへおかえり",titDay:"レース当日",titPost:"あなたの修了証",titYear:"また来年",
+    greet:"こんにちは",bib:"ゼッケン",clock:"あなたの公式タイム",
+    msg:"おめでとう %N。Marcialonga の70kmを %T で完走しました。また来年お会いしましょう。",
+    audio:"あなたの言語の音声：近日対応。",listen:"",
+    snowT:"雪と天気",snowD:"締まった雪面、モエナ −6°C、晴れ。",busT:"シャトル",busD:"カヴァレーゼから6:00より20分間隔。",bibT:"ゼッケン受取",bibD:"19:00までPalafiemmeにて。",
+    liveT:"ライブ計測",liveD:"各計測ポイントでゼッケンを追跡します。",pass:"通過",arr:"フィニッシュ",wait:"待機中…",
+    yearT:"Marcialonga 2027",yearD:"1月31日（日）。エントリーは9月1日から。",yearB:"ワンタッチでエントリー",yearN:"同じキーホルダーを、クラウドから再設定。",
+    emptyP:"このキーホルダーはまだ選手に紐づいていません。紐づけはゼッケン受取時に受付で行います。",emptyL:"受付へ →",notBound:"未紐づけ"}
+};
+
+const state = { bound:false, nome:"", bib:"", cat:"", time:"" };
+let phase = "post", lang = "it";
+const L = () => T[lang];
+
+// build language bar
+(function(){
+  const bar = document.getElementById('langbar');
+  LANGS.forEach(([code,name])=>{
+    const b=document.createElement('button');
+    b.textContent=name; b.setAttribute('role','tab');
+    b.setAttribute('aria-selected', code===lang);
+    b.dataset.code=code; b.onclick=()=>setLang(code);
+    bar.appendChild(b);
+  });
+})();
+
+function setMode(m){
+  document.getElementById('m-seg').setAttribute('aria-selected', m==='seg');
+  document.getElementById('m-atl').setAttribute('aria-selected', m==='atl');
+  document.getElementById('p-seg').classList.toggle('on', m==='seg');
+  document.getElementById('p-atl').classList.toggle('on', m==='atl');
+}
+function bind(){
+  state.nome=document.getElementById('f-nome').value.trim()||"Atleta";
+  state.bib=document.getElementById('f-bib').value.trim();
+  state.cat=document.getElementById('f-cat').value;
+  state.time=document.getElementById('f-time').value.trim()||"00:00:00";
+  state.bound=true;
+  document.getElementById('boundtxt').innerHTML="Fatto. Il portachiavi <b>#A7F3</b> ora parla per <b>"+state.nome+"</b>.<br>Passa su <b>Atleta</b> e avvicina il telefono.";
+  document.getElementById('bound').classList.add('show');
+}
+function firstName(){ return (state.nome||"").split(' ')[0]; }
+function applyChrome(){
+  const l=L();
+  document.getElementById('lockTitle').textContent=l.tapT;
+  document.getElementById('lockSub').textContent=l.tapS;
+  document.getElementById('lockBtn').textContent=l.tapB;
+  document.getElementById('tab0').textContent=l.tabPre;
+  document.getElementById('tab1').textContent=l.tabDay;
+  document.getElementById('tab2').textContent=l.tabPost;
+  document.getElementById('tab3').textContent=l.tabYear;
+}
+function setLang(code){
+  lang=code;
+  document.querySelectorAll('#langbar button').forEach(b=>b.setAttribute('aria-selected', b.dataset.code===code));
+  applyChrome();
+  if(speechSynthesis && speechSynthesis.speaking) speechSynthesis.cancel();
+  setPhase(phase);
+}
+function tap(){
+  document.getElementById('lock').style.display='none';
+  document.getElementById('exp').classList.add('on');
+  setPhase(state.bound ? 'post' : 'pre');
+}
+function spokenTime(t){
+  const p=t.split(':').map(n=>parseInt(n,10)||0); const [h,m,s]=[p[0]||0,p[1]||0,p[2]||0];
+  const parts=[]; if(h)parts.push(h+(h===1?" ora":" ore")); if(m)parts.push(m+(m===1?" minuto":" minuti")); parts.push(s+(s===1?" secondo":" secondi"));
+  return parts.length>1 ? parts.slice(0,-1).join(", ")+" e "+parts[parts.length-1] : parts[0];
+}
+function setPhase(p){
+  phase=p; const l=L();
+  document.querySelectorAll('.phases button').forEach((b,i)=>b.setAttribute('aria-selected', ['pre','day','post','year'][i]===p));
+  document.getElementById('exp-title').textContent = {pre:l.titPre,day:l.titDay,post:l.titPost,year:l.titYear}[p];
+  document.getElementById('phasebody').innerHTML = render(p);
+}
+function render(p){
+  const l=L();
+  if(p==='pre'){return `
+    <div class="li"><div class="ic">❄️</div><div><b>${l.snowT}</b><br><span class="mut">${l.snowD}</span></div></div>
+    <div class="li"><div class="ic">🚌</div><div><b>${l.busT}</b><br><span class="mut">${l.busD}</span></div></div>
+    <div class="li"><div class="ic">📋</div><div><b>${l.bibT}</b><br><span class="mut">${l.bibD}</span></div></div>`;}
+  if(p==='day'){return `
+    <div class="li"><div class="ic">⏱️</div><div><b>${l.liveT}</b><br><span class="mut">${l.liveD}</span></div></div>
+    <div class="li"><div class="ic">🟢</div><div><span class="mut">${l.pass} Tesero &middot; <b>02:41:10</b></span></div></div>
+    <div class="li"><div class="ic">🟢</div><div><span class="mut">${l.pass} Lago di Tesero &middot; <b>03:38:55</b></span></div></div>
+    <div class="li"><div class="ic">🏁</div><div><span class="mut">${l.arr} Cavalese &middot; ${l.wait}</span></div></div>`;}
+  if(p==='year'){return `
+    <div class="li"><div class="ic">📅</div><div><b>${l.yearT}</b><br><span class="mut">${l.yearD}</span></div></div>
+    <button class="listen" style="margin-top:6px" onclick="alert('Demo')">${l.yearB}</button>
+    <p class="mut" style="margin-top:14px">${l.yearN}</p>`;}
+  // post
+  if(!state.bound){return `
+    <div class="empty"><span class="pill">#A7F3 · ${l.notBound}</span>
+    <p>${l.emptyP}</p><button class="link" onclick="setMode('seg')">${l.emptyL}</button></div>`;}
+  const msg=l.msg.replace('%N',firstName()).replace('%T',state.time);
+  const action = lang==='it'
+    ? `<button class="listen" id="listenBtn" onclick="speakDiploma()"><span>▶ ${l.listen}</span><span class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button>`
+    : `<span class="audionote">🔇 ${l.audio}</span>`;
+  return `
+    <p class="greet">${l.greet} ${firstName()}.</p>
+    <p class="sub">${l.bib} ${state.bib} · ${state.cat} · 70 km</p>
+    <div class="clock">${state.time}</div>
+    <div class="clocklbl">${l.clock}</div>
+    <p class="dipmsg">${msg}</p>
+    ${action}`;
+}
+function speakDiploma(){
+  const txt=`Complimenti ${firstName()}. Hai concluso i 70 chilometri della Marcialonga nel tempo di ${spokenTime(state.time)}. Grazie di aver corso con noi. Ti aspettiamo l'anno prossimo.`;
+  const btn=document.getElementById('listenBtn');
+  if(!('speechSynthesis' in window)){ alert(txt); return; }
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(txt); u.lang='it-IT'; u.rate=.96;
+  const v=speechSynthesis.getVoices().find(x=>/it(-|_)IT/i.test(x.lang))||speechSynthesis.getVoices().find(x=>/^it/i.test(x.lang));
+  if(v)u.voice=v;
+  u.onstart=()=>btn&&btn.classList.add('speaking'); u.onend=()=>btn&&btn.classList.remove('speaking');
+  speechSynthesis.speak(u);
+}
+if('speechSynthesis' in window){ speechSynthesis.onvoiceschanged=()=>{}; speechSynthesis.getVoices(); }
+applyChrome();
+</script>
+</body>
+</html>
