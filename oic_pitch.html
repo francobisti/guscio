@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OIC — l'accoglienza che parla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{--spruce:#1E2B25;--spruce2:#15201B;--wood:#C08A3E;--woodl:#E9D5A2;--snow:#F4F1E9;
+    --moss:#5B7A60;--ink:#26271F;--muted:#8A8E80;--paper:#FFFFFF;--line:#E6E0D2;--glacier:#3E6A8C;}
+  *{box-sizing:border-box;margin:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"Inter",system-ui,sans-serif;color:var(--ink);background:var(--snow);line-height:1.55}
+  .col{max-width:580px;margin:0 auto}
+  section{padding:46px 26px}
+  .eyebrow{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--wood);font-weight:600;margin-bottom:10px}
+  h1{font-family:"Fraunces",serif;font-weight:600;font-style:italic;font-size:38px;line-height:1.1;color:#fff}
+  h2{font-family:"Fraunces",serif;font-weight:600;font-size:27px;line-height:1.15;color:var(--spruce);margin-bottom:14px}
+  p{font-size:15.5px;color:#3C3D34}
+  .lede{font-size:16.5px;color:#4A4B40}
+  .back{display:inline-block;margin:18px 0 0 26px;font-size:12.5px;color:var(--moss);text-decoration:none;font-weight:600}
+
+  .hero{background:radial-gradient(130% 90% at 50% -10%, #27382F 0%, var(--spruce) 50%, var(--spruce2) 100%);color:var(--snow);padding:52px 26px 40px}
+  .hero .eyebrow{color:var(--woodl)}
+  .hero p{color:var(--woodl);opacity:.92;font-size:16px;margin-top:16px}
+
+  .stats{display:flex;gap:12px;margin-bottom:20px}
+  .stat{flex:1;border-radius:14px;padding:20px 14px;text-align:center}
+  .stat.a{background:#EFEADD}.stat.b{background:var(--spruce)}
+  .stat .n{font-family:"Fraunces",serif;font-weight:600;font-size:15px;line-height:1.3}
+  .stat.a .n{color:var(--wood)}.stat.b .n{color:var(--woodl)}
+  .stat .l{font-size:12px;margin-top:6px}.stat.a .l{color:var(--muted)}.stat.b .l{color:#CDD8CE}
+
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .dot{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:10px}
+  .card h3{font-family:"Fraunces",serif;font-size:16px;color:var(--spruce);margin-bottom:5px}
+  .card p{font-size:13px;color:#52534A}
+
+  .dark{background:var(--spruce);color:var(--snow)}
+  .dark h2{color:#fff}.dark p{color:#CDD8CE}
+
+  .frow{display:flex;gap:14px;margin-bottom:16px}
+  .frow .ic{flex:none;width:38px;height:38px;border-radius:10px;background:#EFEADD;display:flex;align-items:center;justify-content:center;font-size:17px}
+  .frow h4{font-family:"Fraunces",serif;font-size:16px;color:var(--spruce);margin-bottom:2px}
+  .frow p{font-size:14px;color:#52534A}
+
+  .quote{font-family:"Fraunces",serif;font-style:italic;font-size:19px;color:var(--woodl);background:var(--spruce2);border-radius:14px;padding:20px;line-height:1.35;margin:8px 0}
+
+  .note{background:#EFEADD;border-radius:12px;padding:16px 18px;font-size:13.5px;color:#5C5E54;line-height:1.5;margin-top:10px}
+  .note b{color:var(--spruce)}
+
+  .cta{background:radial-gradient(130% 90% at 50% 120%, #27382F 0%, var(--spruce) 55%, var(--spruce2) 100%);color:var(--snow);text-align:center;padding:50px 26px}
+  .cta h2{color:#fff;font-style:italic}
+  .cta p{color:#CDD8CE;margin:14px auto 26px;max-width:420px}
+  .btn{display:inline-block;background:var(--wood);color:#fff;text-decoration:none;font-weight:600;font-size:15.5px;border-radius:40px;padding:15px 30px}
+  .claim{font-family:"Fraunces",serif;font-style:italic;font-size:21px;line-height:1.35;margin-top:30px}
+  .claim .a{color:var(--woodl)}
+
+  footer{background:var(--spruce2);color:#8A968B;text-align:center;padding:24px;font-size:12.5px}
+  footer b{color:var(--woodl)}
+</style>
+</head>
+<body>
+<div class="col">
+
+  <a class="back" href="guscio_landing.html">&larr; GUSCIO</a>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="eyebrow">OIC &middot; Oliday Information Card</div>
+    <h1>L'accoglienza<br>che parla</h1>
+    <p>La linea GUSCIO per hotel e rifugi: un piccolo oggetto naturale al posto della cartellina informativa, del QR sul comodino, dell'app che nessuno scarica.</p>
+  </section>
+
+  <!-- PROBLEMA -->
+  <section>
+    <div class="eyebrow">Il problema</div>
+    <h2>L'ospite arriva, e l'informazione non lo trova</h2>
+    <div class="stats">
+      <div class="stat a"><div class="n">Cartellina</div><div class="l">letta una volta, dimenticata</div></div>
+      <div class="stat b"><div class="n">App</div><div class="l">scaricata mai, disinstallata subito</div></div>
+    </div>
+    <p class="lede">Il vostro hotel ha già tutto: la spa, la cucina, il territorio. Quello che manca è un modo per farlo arrivare all'ospite senza uno sforzo — soprattutto a chi non parla la vostra lingua, o non ha voglia di leggere un altro PDF in vacanza.</p>
+  </section>
+
+  <!-- IDEA -->
+  <section class="dark">
+    <div class="eyebrow" style="color:var(--woodl)">L'idea</div>
+    <h2>Un tocco, non un download</h2>
+    <p>Un piccolo oggetto — in camera, alla reception, in spa — con un tag invisibile dentro. L'ospite avvicina il telefono, e sente la voce: benvenuto, orari, wifi, il ristorante, il territorio. Nella sua lingua, nel momento in cui gli serve.</p>
+  </section>
+
+  <!-- LIVELLI -->
+  <section>
+    <div class="eyebrow">Cosa racconta</div>
+    <h2>Quattro momenti, un solo oggetto</h2>
+    <div class="cards">
+      <div class="card"><div class="dot" style="background:var(--glacier);color:#fff">🔑</div><h3>Arrivo</h3><p>Check-in, wifi, orari, regole della casa — senza aspettare la reception.</p></div>
+      <div class="card"><div class="dot" style="background:var(--wood);color:#fff">🧖</div><h3>Servizi</h3><p>Spa, ristorante, centro benessere: raccontati come li racconterebbe il personale migliore.</p></div>
+      <div class="card"><div class="dot" style="background:var(--moss);color:#fff">🥾</div><h3>Territorio</h3><p>Sentieri, parchi, storia del luogo — il valore aggiunto che distingue un soggiorno da una prenotazione.</p></div>
+      <div class="card"><div class="dot" style="background:var(--glacier);color:#fff">👋</div><h3>Partenza</h3><p>Un saluto, e l'invito a tornare — l'ultimo ricordo prima di lasciare le chiavi.</p></div>
+    </div>
+  </section>
+
+  <!-- VANTAGGI -->
+  <section class="dark">
+    <div class="eyebrow" style="color:var(--woodl)">Il vantaggio per voi</div>
+    <h2>Meno reception, più ospitalità</h2>
+    <div class="frow" style="margin-top:8px"><div class="ic" style="background:var(--spruce2)">📞</div><div><h4>Meno richieste ripetitive</h4><p style="color:#CDD8CE">Le domande più comuni — orari, wifi, come arrivare — l'ospite se le risponde da solo.</p></div></div>
+    <div class="frow"><div class="ic" style="background:var(--spruce2)">🌍</div><div><h4>Multilingue, senza tradurre nulla</h4><p style="color:#CDD8CE">Una voce vera, non un traduttore automatico, per ogni ospite che arriva da fuori.</p></div></div>
+    <div class="frow"><div class="ic" style="background:var(--spruce2)">🔒</div><div><h4>I dati restano vostri</h4><p style="color:#CDD8CE">OIC è un canale, non una banca dati: nessun tracciamento degli ospiti.</p></div></div>
+    <div class="quote">«Non sostituiamo la vostra accoglienza. Le diamo una voce quando voi non potete essere lì.»</div>
+  </section>
+
+  <!-- COME SI INTEGRA -->
+  <section>
+    <div class="eyebrow">Come si integra</div>
+    <h2>Nessun sistema da cambiare</h2>
+    <p class="lede">OIC non tocca il vostro gestionale, il vostro sito o il modo in cui lavorate oggi. È un canale in più — fisico, silenzioso — che aggiungete dove serve: una stanza pilota, la reception, la spa.</p>
+    <div class="note"><b>Onestà tecnica.</b> Il tag va scritto e collegato ai vostri contenuti — un piccolo lavoro iniziale, fatto insieme. Da lì in poi, aggiornare i contenuti è questione di minuti, dal cloud, in qualsiasi momento dell'anno.</div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="eyebrow" style="color:var(--woodl)">Proviamolo</div>
+    <h2>Partiamo da poche camere</h2>
+    <p>Un pilota piccolo, misurabile: qualche camera o un solo spazio comune. Lo valutiamo insieme, e diventa il caso su cui costruire il resto.</p>
+    <a class="btn" href="mailto:info@guscio.ai">Parliamone</a>
+    <div class="claim">Il vostro hotel racconta già molto.<br><span class="a">OIC gli dà una voce.</span></div>
+  </section>
+
+  <footer>
+    voce <b>GUSCIO</b> &middot; oggetto <b>AlpCover</b> &middot; linea <b>OIC</b><br>
+    Franco Luconi Bisti &middot; guscio.ai
+  </footer>
+
+</div>
+</body>
+</html>
