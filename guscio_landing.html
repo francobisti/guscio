@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GUSCIO — il legno della valle torna a parlare</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--spruce:#1E2B25;--spruce2:#15201B;--wood:#C08A3E;--woodl:#E9D5A2;--snow:#F4F1E9;
+    --moss:#5B7A60;--ink:#26271F;--muted:#8A8E80;--paper:#FFFFFF;--line:#E6E0D2;--glacier:#3E6A8C;}
+  *{box-sizing:border-box;margin:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"Inter",system-ui,sans-serif;color:var(--ink);background:var(--snow);line-height:1.55}
+  .col{max-width:600px;margin:0 auto}
+  section{padding:46px 26px}
+  .eyebrow{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--wood);font-weight:600;margin-bottom:10px}
+  h1{font-family:"Fraunces",serif;font-weight:600;font-style:italic;font-size:40px;line-height:1.08;color:#fff}
+  h2{font-family:"Fraunces",serif;font-weight:600;font-size:27px;line-height:1.15;color:var(--spruce);margin-bottom:12px}
+  p{font-size:15.5px;color:#3C3D34}
+  .lede{font-size:16.5px;color:#4A4B40}
+
+  /* nav */
+  nav{position:sticky;top:0;z-index:10;background:rgba(30,43,37,.92);backdrop-filter:blur(6px);
+    display:flex;justify-content:space-between;align-items:center;padding:14px 26px}
+  nav .brand{font-family:"Fraunces",serif;color:#fff;font-size:16px}
+  nav .brand b{color:var(--woodl)}
+  nav .links{display:flex;gap:16px}
+  nav a{color:#CDD8CE;font-size:12.5px;text-decoration:none;letter-spacing:.5px}
+
+  /* hero */
+  .hero{background:radial-gradient(130% 90% at 50% -10%, #27382F 0%, var(--spruce) 50%, var(--spruce2) 100%);color:var(--snow);padding:56px 26px 44px;text-align:center}
+  .hero .eyebrow{color:var(--woodl);justify-content:center}
+  .hero p{color:var(--woodl);opacity:.92;font-size:16px;margin-top:16px;max-width:440px;margin-left:auto;margin-right:auto}
+  .zeros{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:24px}
+  .zero{font-family:"Fraunces",serif;font-size:14px;background:var(--spruce2);border-radius:30px;padding:8px 16px;color:#fff}
+  .zero b{color:var(--woodl)}
+
+  /* patent strip */
+  .strip{background:var(--spruce2);color:#9FB3A2;text-align:center;padding:12px 20px;font-family:"Space Mono",monospace;font-size:11px;letter-spacing:1px}
+  .strip b{color:var(--woodl)}
+
+  /* three branches */
+  .branch{border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:16px;background:var(--paper)}
+  .branch .tag{font-family:"Space Mono",monospace;font-size:10.5px;letter-spacing:2px;color:var(--wood);text-transform:uppercase}
+  .branch h3{font-family:"Fraunces",serif;font-size:21px;color:var(--spruce);margin:6px 0 8px}
+  .branch p{font-size:14.5px;color:#52534A}
+
+  /* how it works */
+  .frow{display:flex;gap:14px;margin-bottom:16px}
+  .frow .ic{flex:none;width:38px;height:38px;border-radius:10px;background:#EFEADD;display:flex;align-items:center;justify-content:center;font-size:18px}
+  .frow h4{font-family:"Fraunces",serif;font-size:16px;color:var(--spruce);margin-bottom:2px}
+  .frow p{font-size:14px;color:#52534A}
+
+  .dark{background:var(--spruce);color:var(--snow)}
+  .dark h2{color:#fff}.dark p{color:#CDD8CE}
+  .dark .frow .ic{background:var(--spruce2)}
+  .dark .frow h4{color:var(--woodl)}
+  .dark .frow p{color:#CDD8CE}
+
+  .quote{font-family:"Fraunces",serif;font-style:italic;font-size:20px;color:var(--woodl);background:var(--spruce2);border-radius:14px;padding:22px;line-height:1.4;text-align:center;margin:6px 0}
+
+  /* materials */
+  .mats{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .mats span{font-size:12.5px;color:#52534A;border:1px solid var(--line);border-radius:20px;padding:6px 13px;background:#fff}
+
+  /* cta */
+  .cta{background:radial-gradient(130% 90% at 50% 120%, #27382F 0%, var(--spruce) 55%, var(--spruce2) 100%);color:var(--snow);text-align:center;padding:50px 26px}
+  .cta h2{color:#fff;font-style:italic}
+  .cta p{color:#CDD8CE;margin:14px auto 26px;max-width:420px}
+  .btn{display:inline-block;background:var(--wood);color:#fff;text-decoration:none;font-weight:600;font-size:15.5px;border-radius:40px;padding:15px 30px}
+  .claim{font-family:"Fraunces",serif;font-style:italic;font-size:22px;line-height:1.35;margin-top:32px}
+  .claim .a{color:var(--woodl)}
+
+  footer{background:var(--spruce2);color:#8A968B;text-align:center;padding:26px;font-size:12.5px}
+  footer b{color:var(--woodl)}
+  .sig{margin-bottom:4px}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand"><b>GUSCIO</b></div>
+  <div class="links">
+    <a href="#mondi">I mondi</a>
+    <a href="#come">Come funziona</a>
+    <a href="#contatti">Contatti</a>
+  </div>
+</nav>
+
+<div class="col">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="eyebrow">Voce per la valle</div>
+    <h1>Il legno della valle<br>torna a parlare</h1>
+    <p>Un sistema brevettato a soglia zero: avvicini il telefono a un oggetto naturale, e la voce racconta — nessuna app, nessun login, nessuna batteria.</p>
+    <div class="zeros">
+      <span class="zero"><b>zero</b> app</span>
+      <span class="zero"><b>zero</b> login</span>
+      <span class="zero"><b>zero</b> batterie</span>
+    </div>
+  </section>
+
+  <div class="strip">DUE BREVETTI ITALIANI &middot; <b>PP102026000011740</b> &middot; <b>PP102026000012760</b></div>
+
+  <!-- COS'È -->
+  <section>
+    <div class="eyebrow">Cos'è</div>
+    <h2>Un guscio, non uno schermo</h2>
+    <p class="lede">GUSCIO nasce da un'idea semplice: la tecnologia più potente è quella che non si vede. Un tag NFC, invisibile dentro un oggetto naturale — legno, cuoio, materia vera — che si fa voce solo quando viene toccato. Nessuno schermo da imparare, nessuna barriera per chi la tecnologia non la sa o non la vuole usare.</p>
+  </section>
+
+  <!-- I MONDI -->
+  <section id="mondi" style="background:#fff">
+    <div class="eyebrow">Tre mondi, una voce</div>
+    <h2>Dove vive GUSCIO</h2>
+
+    <div class="branch">
+      <div class="tag">Territorio</div>
+      <h3>Storia e paesaggio</h3>
+      <p>Il legno di un luogo racconta quel luogo: la Val di Fiemme, i sentieri, le comunità storiche. Un pilota nasce da un patrimonio vero — un bosco, un palazzo, un racconto che merita voce.</p>
+    </div>
+
+    <div class="branch">
+      <div class="tag">Eventi &amp; Sport</div>
+      <h3>Un ricordo che dura tutto l'anno</h3>
+      <p>Per una gara, un evento, una stagione: un piccolo oggetto che accompagna l'atleta dal pre-gara al diploma vocale, fino all'iscrizione dell'anno dopo. Lo stesso legno, riprogrammato dal cloud.</p>
+    </div>
+
+    <div class="branch">
+      <div class="tag">OIC · Ospitalità</div>
+      <h3>L'accoglienza che parla</h3>
+      <p>La linea per hotel e rifugi: check-in, spa, ristorante, territorio — raccontati a voce, nella lingua dell'ospite, senza sostituire nulla di ciò che l'albergo già fa bene.</p>
+    </div>
+  </section>
+
+  <!-- COME FUNZIONA -->
+  <section id="come" class="dark">
+    <div class="eyebrow" style="color:var(--woodl)">Come funziona</div>
+    <h2>Un oggetto, quattro livelli</h2>
+    <div class="frow" style="margin-top:18px">
+      <div class="ic">📡</div>
+      <div><h4>Il tag</h4><p>Sigillato a filo nel legno o nel cuoio. Nessuna batteria, nessuna manutenzione.</p></div>
+    </div>
+    <div class="frow">
+      <div class="ic">☁️</div>
+      <div><h4>Il cloud</h4><p>I contenuti vivono online e si aggiornano con le stagioni — lo stesso oggetto, voci diverse nel tempo.</p></div>
+    </div>
+    <div class="frow">
+      <div class="ic">🗣️</div>
+      <div><h4>La voce</h4><p>Una narrazione vera, multilingue, non un sintetizzatore da traduttore automatico.</p></div>
+    </div>
+    <div class="quote">«Un canale, non una banca dati. I vostri dati restano vostri — noi diamo solo la voce.»</div>
+  </section>
+
+  <!-- MATERIA -->
+  <section>
+    <div class="eyebrow">La materia</div>
+    <h2>Mai vernice. Mai plastica, se si può evitare</h2>
+    <p class="lede" style="margin-bottom:14px">Ogni oggetto GUSCIO nasce da un principio solo: togliere, non aggiungere. Legno inciso a laser, mai verniciato. Cuoio conciato al vegetale. Forme senza spigoli, pensate per essere toccate, non solo guardate.</p>
+    <div class="mats">
+      <span>Abete di risonanza · Val di Fiemme</span>
+      <span>Cirmolo · alta quota</span>
+      <span>Cuoio conciato al vegetale</span>
+      <span>Certificabile PEFC</span>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="contatti">
+    <div class="eyebrow" style="color:var(--woodl)">Parliamone</div>
+    <h2>Un pilota, non una promessa</h2>
+    <p>Ogni collaborazione parte da un progetto piccolo, misurabile, costruito insieme a chi conosce il luogo meglio di chiunque altro: chi lo abita.</p>
+    <a class="btn" href="mailto:info@guscio.ai">Scrivici</a>
+    <div class="claim">Dove Stradivari sceglieva il suo legno,<br><span class="a">voi scegliete una vacanza armoniosa.</span></div>
+  </section>
+
+  <footer>
+    <div class="sig">voce <b>GUSCIO</b> &middot; oggetto <b>AlpCover</b> &middot; linea <b>OIC</b></div>
+    Franco Luconi Bisti &middot; guscio.ai &middot; concepito, prodotto e dato voce in Trentino
+  </footer>
+
+</div>
+</body>
+</html>
