@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OIC × Hotel Caminetto — avvicina, ascolta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--spruce:#1E2B25;--spruce2:#15201B;--wood:#C08A3E;--woodl:#E9D5A2;--snow:#F4F1E9;
+    --moss:#5B7A60;--ink:#26271F;--muted:#8A8E80;--line:#E6E0D2;}
+  *{box-sizing:border-box;margin:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"Inter",system-ui,sans-serif;color:var(--ink);background:var(--snow);line-height:1.55}
+  .col{max-width:560px;margin:0 auto}
+  section{padding:40px 26px}
+  .eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--wood);font-weight:600;margin-bottom:10px}
+  h1{font-family:"Fraunces",serif;font-weight:600;font-style:italic;font-size:36px;line-height:1.12;color:#fff}
+  h2{font-family:"Fraunces",serif;font-weight:600;font-size:24px;line-height:1.18;color:var(--spruce);margin-bottom:12px}
+  p{font-size:15.5px;color:#3C3D34}
+
+  .hero{background:radial-gradient(130% 90% at 50% -10%, #27382F 0%, var(--spruce) 50%, var(--spruce2) 100%);
+    color:var(--snow);padding:56px 26px 42px;text-align:center}
+  .hero .eyebrow{color:var(--woodl);justify-content:center}
+  .hero p{color:var(--woodl);opacity:.92;font-size:16px;margin-top:16px;max-width:420px;margin-left:auto;margin-right:auto}
+
+  .meta{margin:26px auto 0;max-width:420px;background:rgba(0,0,0,.22);border-radius:14px;padding:16px 18px}
+  .meta p{color:#CDD8CE;font-size:14px;margin:0;line-height:1.55}
+  .meta b{color:var(--woodl)}
+
+  .scene{padding:38px 26px;text-align:center}
+  .scene .tag{font-family:"Fraunces",serif;font-style:italic;font-size:21px;color:var(--spruce);line-height:1.45;max-width:420px;margin:0 auto}
+  .scene .tag b{color:var(--wood);font-style:normal}
+
+  .cards{display:flex;flex-direction:column;gap:12px;margin-top:22px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;text-align:left;display:flex;gap:14px;align-items:flex-start}
+  .card .ic{flex:none;width:38px;height:38px;border-radius:10px;background:#EFEADD;display:flex;align-items:center;justify-content:center;font-size:18px}
+  .card h3{font-family:"Fraunces",serif;font-size:16.5px;color:var(--spruce);margin-bottom:3px}
+  .card p{font-size:13.5px;color:#52534A}
+
+  .close{background:var(--spruce);color:var(--snow);text-align:center;padding:44px 26px}
+  .close .quote{font-family:"Fraunces",serif;font-style:italic;font-size:21px;color:var(--woodl);line-height:1.4;max-width:400px;margin:0 auto}
+
+  footer{background:var(--spruce2);color:#8A968B;text-align:center;padding:22px;font-size:12px}
+  footer b{color:var(--woodl)}
+</style>
+</head>
+<body>
+<div class="col">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="eyebrow">OIC × Hotel Caminetto</div>
+    <h1>Benvenuti a Folgarida</h1>
+    <p>Avete appena avvicinato il telefono a un piccolo oggetto. Nessuna app, nessun login — solo una voce, quando vi serve.</p>
+    <div class="meta">
+      <p>Questo è <b>OIC</b>, la voce di GUSCIO per l'ospitalità. Il vostro hotel ha già tutto il resto — noi diamo solo un modo in più per raggiungervi.</p>
+    </div>
+  </section>
+
+  <!-- SCENA -->
+  <section class="scene">
+    <div class="tag">Un tocco per il <b>benvenuto</b>.<br>Un tocco per la <b>Wabi Sabi</b>.<br>Un tocco per il <b>Parco</b> che vi circonda.</div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="ic">🔑</div>
+        <div><h3>Il vostro arrivo</h3><p>Wifi, orari, camera — nella vostra lingua, senza aspettare la reception.</p></div>
+      </div>
+      <div class="card">
+        <div class="ic">🧖</div>
+        <div><h3>Wabi Sabi</h3><p>Sauna, bagno turco, idromassaggio panoramico: la spa vi accoglie con una voce, non solo un cartello.</p></div>
+      </div>
+      <div class="card">
+        <div class="ic">🌲</div>
+        <div><h3>Il Parco Adamello Brenta</h3><p>Sentieri, guide, un patrimonio UNESCO a due passi — raccontato quando avete voglia di scoprirlo.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHIUSURA -->
+  <section class="close">
+    <div class="eyebrow" style="color:var(--woodl);justify-content:center">Il vostro soggiorno</div>
+    <div class="quote">Il resto lo scoprirete voi.<br>Noi siamo solo un tocco di distanza.</div>
+  </section>
+
+  <footer>
+    voce <b>GUSCIO</b> &middot; linea <b>OIC</b> &middot; Hotel Caminetto, Folgarida
+  </footer>
+
+</div>
+</body>
+</html>
