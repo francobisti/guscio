@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO — Hotel Betulla</title>
+<style>
+  :root{
+    --ink:#28312A;
+    --sage:#5C7A63;
+    --sage-deep:#33453A;
+    --birch:#E8DEC8;
+    --birch-light:#F2ECDC;
+    --paper:#F5F2E9;
+    --paper-dim:#E1DAC5;
+    --charcoal:#3A3530;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0;
+    background: radial-gradient(circle at 30% 0%, #5C7A63 0%, #28312A 65%);
+    min-height:100vh;
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    color:var(--paper);
+    display:flex; align-items:center; justify-content:center;
+    padding: 28px 14px;
+  }
+  .stage{ width:100%; max-width:400px; }
+  .field-label{
+    text-align:center;
+    font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size:11px; letter-spacing:2.5px; text-transform:uppercase;
+    color:var(--birch); opacity:.8; margin-bottom:14px;
+  }
+  .phone{
+    background: linear-gradient(180deg, #1C231D 0%, #131813 100%);
+    border-radius: 34px; padding: 10px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,.6), 0 0 0 1px rgba(232,222,200,.12);
+  }
+  .screen{
+    background: var(--paper); border-radius: 26px; overflow:hidden;
+    min-height: 650px; position:relative;
+    color: var(--ink); display:flex; flex-direction:column;
+  }
+  #tapMoment{
+    position:absolute; inset:0;
+    background: linear-gradient(160deg, var(--sage) 0%, var(--sage-deep) 100%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    z-index:10; cursor:pointer; transition: opacity .5s ease, visibility .5s ease;
+  }
+  #tapMoment.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  .nfc-ring{
+    width:88px; height:88px; border-radius:50%; border:1.5px solid var(--birch);
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .nfc-ring::before, .nfc-ring::after{
+    content:''; position:absolute; border-radius:50%;
+    border:1.5px solid var(--birch-light); inset:0; opacity:0;
+    animation: pulseRing 2.2s ease-out infinite;
+  }
+  .nfc-ring::after{ animation-delay: 1.1s; }
+  @keyframes pulseRing{ 0%{transform:scale(1);opacity:.9;} 100%{transform:scale(1.9);opacity:0;} }
+  .nfc-ring svg{ width:34px; height:34px; fill:var(--paper); }
+  #tapMoment p{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12px; letter-spacing:1.8px; text-transform:uppercase;
+    color:var(--birch-light); margin-top:22px; opacity:.9;
+  }
+  .head{
+    padding: 22px 22px 16px; border-bottom:1px solid var(--paper-dim);
+    background: var(--paper);
+  }
+  .wordmark{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11px; letter-spacing:3px; text-transform:uppercase;
+    color:var(--sage); font-weight:700; margin:0 0 10px;
+  }
+  .prod-name{ font-size:26px; margin:0; line-height:1.15; color:var(--sage-deep); }
+  .prod-sub{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12.5px; color:#6B7268; margin-top:6px; font-style:italic;
+  }
+  .langs{ display:flex; gap:6px; padding: 14px 22px 0; }
+  .lang-btn{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11.5px; font-weight:700; border:1px solid var(--paper-dim);
+    background:transparent; color:#6B7268;
+    padding:6px 12px; border-radius:20px; cursor:pointer; transition: all .2s ease;
+  }
+  .lang-btn.active{ background:var(--sage-deep); color:var(--paper); border-color:var(--sage-deep); }
+  .content{ padding: 16px 22px 90px; overflow-y:auto; flex:1; }
+  .section{
+    margin-bottom:16px; padding:14px 16px; border-radius:12px;
+    background:#FAF8F0; border:1px solid var(--paper-dim); position:relative;
+  }
+  .section.feature{ border-color:var(--sage); background: linear-gradient(180deg, #F1F0E3, #E9E7D6); }
+  .section-eyebrow{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10px; letter-spacing:1.6px; text-transform:uppercase;
+    color:var(--sage); margin:0 0 6px; font-weight:700;
+  }
+  .section.feature .section-eyebrow{ color:var(--sage-deep); }
+  .section p{ margin:0; font-size:14.5px; line-height:1.5; color:var(--ink); }
+  .play-btn{
+    position:absolute; top:12px; right:12px; width:30px; height:30px;
+    border-radius:50%; border:none; background:var(--sage-deep); color:var(--paper);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition: background .2s ease;
+  }
+  .play-btn:hover{ background:var(--sage); }
+  .play-btn svg{ width:13px; height:13px; fill:currentColor; }
+  .play-btn.speaking{ background:var(--charcoal); }
+  .footbar{
+    position:absolute; bottom:0; left:0; right:0;
+    background: linear-gradient(0deg, var(--paper) 62%, rgba(245,242,233,0));
+    padding: 26px 22px 16px; text-align:center;
+  }
+  .tagline{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10.5px; letter-spacing:1px; color:#8A9186; font-style:italic;
+  }
+  .note{
+    text-align:center;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11px; color:var(--birch); opacity:.7;
+    margin-top:16px; line-height:1.5;
+  }
+  .contact-box{
+    margin-top:4px; margin-bottom:16px; padding:16px; border-radius:12px;
+    background: var(--sage-deep); color: var(--paper);
+  }
+  .contact-label{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10px; letter-spacing:1.6px; text-transform:uppercase;
+    color:var(--birch-light); margin:0 0 10px; font-weight:700;
+  }
+  .contact-actions{ display:flex; gap:8px; }
+  .contact-btn{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12px; font-weight:700; text-decoration:none;
+    padding:10px 6px; border-radius:8px;
+    background: rgba(255,255,255,.1); color: var(--paper);
+    border:1px solid rgba(255,255,255,.28);
+  }
+  .contact-btn svg{ width:14px; height:14px; fill:currentColor; flex-shrink:0; }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <p class="field-label">Simulazione tag NFC · in camera, alla reception, sul tavolo colazione</p>
+  <div class="phone">
+    <div class="screen">
+
+      <div id="tapMoment">
+        <div class="nfc-ring">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+        </div>
+        <p>Tocca per entrare</p>
+      </div>
+
+      <div class="head">
+        <p class="wordmark">Guscio · soglia zero</p>
+        <h1 class="prod-name">Hotel Betulla</h1>
+        <p class="prod-sub">Luca, Oscar e Vittorio vi accolgono a Madonna di Campiglio</p>
+      </div>
+
+      <div class="langs" id="langBar">
+        <button class="lang-btn active" data-lang="it">IT</button>
+        <button class="lang-btn" data-lang="de">DE</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+
+      <div class="content" id="content"></div>
+
+      <div class="footbar"><p class="tagline">la sicurezza è un atto d'amore</p></div>
+    </div>
+  </div>
+  <p class="note">Ogni sezione può essere ascoltata a voce, nella lingua selezionata.</p>
+</div>
+
+<script>
+const DATA = {
+  it: {
+    lang: "it-IT",
+    sections: [
+      { eyebrow: "Benvenuto", text: "Benvenuto all'Hotel Betulla. Siamo Luca, Oscar e Vittorio: insieme abbiamo scelto di creare un luogo dove sentirsi a casa a Madonna di Campiglio, con vista sulle Dolomiti di Brenta da ogni camera.", feature:true },
+      { eyebrow: "La vostra camera", text: "Ogni camera ha balcone, scrivania, pavimento in legno e vista sulle montagne. Se avete bisogno di qualcosa, la reception è sempre a vostra disposizione." },
+      { eyebrow: "Colazione e cucina", text: "La colazione è a buffet, dolce e salata. La cucina propone piatti della tradizione trentina con un tocco di modernità, prodotti locali e, su richiesta, opzioni senza glutine e vegetariane." },
+      { eyebrow: "Il vostro amico a quattro zampe", text: "Siamo pet friendly: il vostro cane è benvenuto su prenotazione, con un contributo di 15 euro al giorno." },
+      { eyebrow: "Le altre strutture", text: "Siamo anche il Rifugio Lago Nambino, l'Hungry Wolf e l'Osteria Al 30 — chiedete in reception per scoprire tutte le esperienze del gruppo Betulla Dolomiti." },
+      { eyebrow: "Filosofia green", text: "Raccolta differenziata, energie rinnovabili, no alla plastica monouso: crediamo che una vacanza indimenticabile possa anche lasciare un segno positivo sul pianeta." }
+    ],
+    contact: { label: "Prenotazioni", call: "0465 441215", callHref: "tel:+390465441215", site: "betulladolomiti.it", siteHref: "https://www.betulladolomiti.it" }
+  },
+  de: {
+    lang: "de-DE",
+    sections: [
+      { eyebrow: "Willkommen", text: "Willkommen im Hotel Betulla. Wir sind Luca, Oscar und Vittorio: gemeinsam haben wir uns entschieden, einen Ort zu schaffen, an dem man sich in Madonna di Campiglio zu Hause fühlt, mit Blick auf die Brenta-Dolomiten von jedem Zimmer aus.", feature:true },
+      { eyebrow: "Ihr Zimmer", text: "Jedes Zimmer hat einen Balkon, einen Schreibtisch, Holzboden und Bergblick. Bei Bedarf steht Ihnen die Rezeption jederzeit zur Verfügung." },
+      { eyebrow: "Frühstück und Küche", text: "Das Frühstück ist ein süßes und herzhaftes Buffet. Die Küche bietet traditionelle Trentiner Gerichte mit modernem Touch, lokale Produkte und auf Anfrage glutenfreie und vegetarische Optionen." },
+      { eyebrow: "Ihr vierbeiniger Freund", text: "Wir sind haustierfreundlich: Ihr Hund ist auf Anfrage willkommen, gegen einen Beitrag von 15 Euro pro Tag." },
+      { eyebrow: "Die anderen Häuser", text: "Wir sind auch die Rifugio Lago Nambino, der Hungry Wolf und die Osteria Al 30 — fragen Sie an der Rezeption nach allen Erlebnissen der Gruppe Betulla Dolomiti." },
+      { eyebrow: "Grüne Philosophie", text: "Mülltrennung, erneuerbare Energien, kein Einwegplastik: Wir glauben, dass ein unvergesslicher Urlaub auch einen positiven Beitrag für den Planeten leisten kann." }
+    ],
+    contact: { label: "Reservierungen", call: "0465 441215", callHref: "tel:+390465441215", site: "betulladolomiti.it", siteHref: "https://www.betulladolomiti.it" }
+  },
+  en: {
+    lang: "en-GB",
+    sections: [
+      { eyebrow: "Welcome", text: "Welcome to Hotel Betulla. We are Luca, Oscar and Vittorio: together we chose to create a place to feel at home in Madonna di Campiglio, with views of the Brenta Dolomites from every room.", feature:true },
+      { eyebrow: "Your room", text: "Every room has a balcony, a desk, wooden floors and mountain views. If you need anything, the reception is always at your disposal." },
+      { eyebrow: "Breakfast and kitchen", text: "Breakfast is a sweet and savoury buffet. The kitchen serves traditional Trentino dishes with a modern touch, local products, and gluten-free or vegetarian options on request." },
+      { eyebrow: "Your four-legged friend", text: "We are pet friendly: your dog is welcome by request, with a 15 euro daily contribution." },
+      { eyebrow: "Our other properties", text: "We're also behind Rifugio Lago Nambino, Hungry Wolf and Osteria Al 30 — ask at reception to discover all the experiences of the Betulla Dolomiti group." },
+      { eyebrow: "Green philosophy", text: "Waste sorting, renewable energy, no single-use plastic: we believe an unforgettable holiday can also leave a positive mark on the planet." }
+    ],
+    contact: { label: "Reservations", call: "0465 441215", callHref: "tel:+390465441215", site: "betulladolomiti.it", siteHref: "https://www.betulladolomiti.it" }
+  }
+};
+
+let currentLang = 'it';
+
+function renderContent(){
+  const c = document.getElementById('content');
+  c.innerHTML = '';
+  DATA[currentLang].sections.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'section' + (s.feature ? ' feature' : '');
+    div.innerHTML = `
+      <p class="section-eyebrow">${s.eyebrow}</p>
+      <p>${s.text}</p>
+      <button class="play-btn" data-index="${i}" aria-label="Ascolta">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+    `;
+    c.appendChild(div);
+  });
+
+  const ct = DATA[currentLang].contact;
+  if (ct) {
+    const box = document.createElement('div');
+    box.className = 'contact-box';
+    box.innerHTML = `
+      <p class="contact-label">${ct.label}</p>
+      <div class="contact-actions">
+        <a class="contact-btn" href="${ct.callHref}">
+          <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z"/></svg>
+          ${ct.call}
+        </a>
+        <a class="contact-btn" href="${ct.siteHref}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm6.93 6H15.5a15.9 15.9 0 0 0-1.25-3.53A8.03 8.03 0 0 1 18.93 8zM12 4.06c.83 1.2 1.5 2.55 1.94 3.94h-3.88c.44-1.39 1.11-2.74 1.94-3.94zM4.26 14A7.97 7.97 0 0 1 4 12c0-.68.09-1.35.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.81 2h3.43c.31 1.26.75 2.45 1.25 3.53A8 8 0 0 1 5.07 16zm3.43-8H5.07a8 8 0 0 1 4.68-3.53C9.25 5.55 8.81 6.74 8.5 8zM12 19.94c-.83-1.2-1.5-2.55-1.94-3.94h3.88c-.44 1.39-1.11 2.74-1.94 3.94zM14.36 14H9.64c-.09-.66-.14-1.32-.14-2s.05-1.34.14-2h4.72c.09.66.14 1.32.14 2s-.05 1.34-.14 2zm.14 4.53c.5-1.08.94-2.27 1.25-3.53h3.43a8 8 0 0 1-4.68 3.53zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.17.65.26 1.32.26 2s-.09 1.35-.26 2h-3.38z"/></svg>
+          ${ct.site}
+        </a>
+      </div>
+    `;
+    c.appendChild(box);
+  }
+
+  c.querySelectorAll('.play-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.getAttribute('data-index'));
+      speakSection(idx, btn);
+    });
+  });
+}
+
+function speakSection(idx, btn){
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.play-btn').forEach(b => b.classList.remove('speaking'));
+  const s = DATA[currentLang].sections[idx];
+  const utter = new SpeechSynthesisUtterance(s.eyebrow + '. ' + s.text);
+  utter.lang = DATA[currentLang].lang;
+  utter.rate = 0.95;
+  btn.classList.add('speaking');
+  utter.onend = () => btn.classList.remove('speaking');
+  utter.onerror = () => btn.classList.remove('speaking');
+  window.speechSynthesis.speak(utter);
+}
+
+document.getElementById('langBar').addEventListener('click', (e) => {
+  const btn = e.target.closest('.lang-btn');
+  if (!btn) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentLang = btn.getAttribute('data-lang');
+  renderContent();
+});
+
+document.getElementById('tapMoment').addEventListener('click', function(){
+  this.classList.add('hide');
+});
+
+renderContent();
+</script>
+
+</body>
+</html>
