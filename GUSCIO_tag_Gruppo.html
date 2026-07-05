@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO — Gruppo Betulla Dolomiti</title>
+<style>
+  :root{ --radius-card:12px; }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding: 28px 14px;
+    background: radial-gradient(circle at 30% 0%, var(--bg1) 0%, var(--bg2) 65%);
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    color:var(--paper);
+    transition: background 0.4s ease;
+  }
+  .stage{ width:100%; max-width:400px; }
+  .field-label{
+    text-align:center; font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10.5px; letter-spacing:2.5px; text-transform:uppercase;
+    color:var(--accent-light); opacity:.8; margin-bottom:14px;
+  }
+  .phone{
+    background: linear-gradient(180deg, #14100E 0%, #0D0A08 100%);
+    border-radius: 34px; padding: 10px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,.65), 0 0 0 1px rgba(255,255,255,.1);
+  }
+  .screen{
+    background: var(--paper); border-radius: 26px; overflow:hidden;
+    min-height: 660px; position:relative; color: var(--ink);
+    display:flex; flex-direction:column; transition: background 0.4s ease;
+  }
+  #tapMoment{
+    position:absolute; inset:0;
+    background: linear-gradient(160deg, var(--bg1) 0%, var(--bg2) 100%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    z-index:20; cursor:pointer; transition: opacity .5s ease, visibility .5s ease, background .4s ease;
+  }
+  #tapMoment.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  .nfc-ring{
+    width:90px; height:90px; border-radius:50%; border:1.5px solid var(--accent-light);
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .nfc-ring::before, .nfc-ring::after{
+    content:''; position:absolute; border-radius:50%;
+    border:1.5px solid var(--accent-light); inset:0; opacity:0;
+    animation: pulseRing 2.3s ease-out infinite;
+  }
+  .nfc-ring::after{ animation-delay: 1.15s; }
+  @keyframes pulseRing{ 0%{transform:scale(1);opacity:.9;} 100%{transform:scale(1.9);opacity:0;} }
+  .nfc-ring svg{ width:36px; height:36px; fill:var(--paper); }
+  #tapMoment p{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12px; letter-spacing:1.8px; text-transform:uppercase;
+    color:var(--paper); margin-top:22px; opacity:.9;
+  }
+
+  .head{ padding: 20px 22px 14px; border-bottom:1px solid var(--paper-dim); background: var(--paper); transition: background .4s ease; }
+  .wordmark{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10.5px; letter-spacing:3px; text-transform:uppercase;
+    color:var(--accent); font-weight:700; margin:0 0 8px;
+  }
+  .group-title{ font-size:21px; margin:0; line-height:1.15; color:var(--primary); }
+  .group-sub{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11.5px; color:#6B6B6B; margin-top:4px; font-style:italic;
+  }
+
+  .venue-picker{ display:flex; gap:6px; padding: 14px 22px 0; flex-wrap:wrap; }
+  .venue-btn{
+    flex:1 1 auto; min-width:70px;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10.8px; font-weight:700; text-align:center;
+    border:1.5px solid var(--paper-dim); background:#fff; color:#555;
+    padding:7px 6px; border-radius:10px; cursor:pointer; transition: all .2s ease;
+  }
+  .venue-btn.active{ color:#fff; border-color:transparent; }
+
+  .langs{ display:flex; gap:6px; padding: 12px 22px 0; }
+  .lang-btn{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11px; font-weight:700; border:1px solid var(--paper-dim);
+    background:transparent; color:#6B6B6B;
+    padding:5px 11px; border-radius:20px; cursor:pointer; transition: all .2s ease;
+  }
+  .lang-btn.active{ color:#fff; border-color:transparent; }
+
+  .content{ padding: 14px 22px 90px; overflow-y:auto; flex:1; }
+  .section{
+    margin-bottom:14px; padding:14px 16px; border-radius:var(--radius-card);
+    background:var(--card-bg); border:1px solid var(--paper-dim); position:relative;
+    transition: background .3s ease, border-color .3s ease;
+  }
+  .section.feature{ background:var(--card-feature-bg); border-color:var(--accent); }
+  .section-eyebrow{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:9.5px; letter-spacing:1.5px; text-transform:uppercase;
+    color:var(--accent); margin:0 0 6px; font-weight:800;
+  }
+  .section p{ margin:0; font-size:14px; line-height:1.5; color:var(--ink); }
+  .play-btn{
+    position:absolute; top:12px; right:12px; width:28px; height:28px;
+    border-radius:50%; border:none; background:var(--primary); color:#fff;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition: background .2s ease;
+  }
+  .play-btn svg{ width:12px; height:12px; fill:currentColor; }
+  .play-btn.speaking{ background:var(--secondary); }
+  .footbar{
+    position:absolute; bottom:0; left:0; right:0;
+    background: linear-gradient(0deg, var(--paper) 62%, rgba(0,0,0,0));
+    padding: 24px 22px 14px; text-align:center; transition: background .4s ease;
+  }
+  .tagline{ font-family: -apple-system, 'Segoe UI', sans-serif; font-size:10px; letter-spacing:1px; color:#8A8A8A; font-style:italic; }
+  .note{ text-align:center; font-family: -apple-system, 'Segoe UI', sans-serif; font-size:10.5px; color:var(--accent-light); opacity:.7; margin-top:14px; line-height:1.5; }
+  .contact-box{
+    margin-top:2px; margin-bottom:14px; padding:14px; border-radius:var(--radius-card);
+    background: var(--primary); color: #fff; transition: background .3s ease;
+  }
+  .contact-label{ font-family: -apple-system, 'Segoe UI', sans-serif; font-size:9.5px; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent-light); margin:0 0 8px; font-weight:700; }
+  .contact-actions{ display:flex; gap:8px; }
+  .contact-btn{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:5px;
+    font-family: -apple-system, 'Segoe UI', sans-serif; font-size:11.5px; font-weight:700;
+    text-decoration:none; padding:9px 6px; border-radius:8px;
+    background: rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.28);
+  }
+  .contact-btn svg{ width:13px; height:13px; fill:currentColor; flex-shrink:0; }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <p class="field-label">Simulazione tag NFC · reception, hall, punto informazioni del gruppo</p>
+  <div class="phone">
+    <div class="screen">
+      <div id="tapMoment">
+        <div class="nfc-ring">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+        </div>
+        <p>Tocca per scoprire il gruppo</p>
+      </div>
+
+      <div class="head">
+        <p class="wordmark">Guscio · soglia zero</p>
+        <h1 class="group-title" id="groupTitle">Gruppo Betulla Dolomiti</h1>
+        <p class="group-sub" id="groupSub">Scegli la struttura che vuoi ascoltare</p>
+      </div>
+
+      <div class="venue-picker" id="venuePicker"></div>
+      <div class="langs" id="langBar"></div>
+      <div class="content" id="content"></div>
+
+      <div class="footbar"><p class="tagline">la sicurezza è un atto d'amore</p></div>
+    </div>
+  </div>
+  <p class="note">Un solo tag, quattro strutture — ogni ospite trova la sua,<br>nella lingua che preferisce.</p>
+</div>
+
+<script>
+const VENUES = {
+  betulla: {
+    label: "Betulla",
+    name: "Hotel Betulla",
+    theme: { bg1:"#5C7A63", bg2:"#28312A", primary:"#33453A", secondary:"#5C7A63",
+      accent:"#5C7A63", accentLight:"#E8DEC8", paper:"#F5F2E9", paperDim:"#E1DAC5",
+      cardBg:"#FAF8F0", cardFeatureBg:"#EFEEDF" },
+    contact: { call:"0465 441215", callHref:"tel:+390465441215", site:"betulladolomiti.it", siteHref:"https://www.betulladolomiti.it" },
+    lang: {
+      it: { voice:"it-IT", sub:"Luca, Oscar e Vittorio vi accolgono", contactLabel:"Prenotazioni", sections:[
+        {eyebrow:"Benvenuto", feature:true, text:"Benvenuto all'Hotel Betulla. Siamo Luca, Oscar e Vittorio: un luogo dove sentirsi a casa a Madonna di Campiglio, con vista sulle Dolomiti di Brenta."},
+        {eyebrow:"La vostra camera", text:"Ogni camera ha balcone, scrivania, pavimento in legno e vista sulle montagne."},
+        {eyebrow:"Pet friendly", text:"Il vostro cane è benvenuto su prenotazione, con un contributo di 15 euro al giorno."}
+      ]},
+      de: { voice:"de-DE", sub:"Luca, Oscar und Vittorio empfangen Sie", contactLabel:"Reservierungen", sections:[
+        {eyebrow:"Willkommen", feature:true, text:"Willkommen im Hotel Betulla. Wir sind Luca, Oscar und Vittorio: ein Ort, an dem man sich zu Hause fühlt, mit Blick auf die Brenta-Dolomiten."},
+        {eyebrow:"Ihr Zimmer", text:"Jedes Zimmer hat einen Balkon, einen Schreibtisch, Holzboden und Bergblick."},
+        {eyebrow:"Haustierfreundlich", text:"Ihr Hund ist auf Anfrage willkommen, gegen einen Beitrag von 15 Euro pro Tag."}
+      ]},
+      en: { voice:"en-GB", sub:"Luca, Oscar and Vittorio welcome you", contactLabel:"Reservations", sections:[
+        {eyebrow:"Welcome", feature:true, text:"Welcome to Hotel Betulla. We are Luca, Oscar and Vittorio: a place to feel at home, with views of the Brenta Dolomites."},
+        {eyebrow:"Your room", text:"Every room has a balcony, a desk, wooden floors and mountain views."},
+        {eyebrow:"Pet friendly", text:"Your dog is welcome by request, with a 15 euro daily contribution."}
+      ]}
+    }
+  },
+  al30: {
+    label: "Al 30",
+    name: "Al 30 — Osteria & Friends",
+    theme: { bg1:"#5C2A28", bg2:"#2B1D16", primary:"#5C2A28", secondary:"#6E7F5C",
+      accent:"#8A5A3B", accentLight:"#C99B6E", paper:"#F3EADD", paperDim:"#E4D6C2",
+      cardBg:"#FBF7EF", cardFeatureBg:"#FBF0DE" },
+    contact: { call:"380 37 35 594", callHref:"tel:+393803735594", site:"osteriafriends.it", siteHref:"https://www.osteriafriends.it" },
+    lang: {
+      it: { voice:"it-IT", sub:"\u201cCasa mia, casa tua\u201d", contactLabel:"Prenotazioni", sections:[
+        {eyebrow:"Benvenuto", feature:true, text:"Benvenuto all'Al 30 — Osteria & Friends. Qui l'idea è semplice: casa mia, casa tua."},
+        {eyebrow:"Piatto del giorno", text:"Oggi lo chef propone i canederli fatti in casa, seguiti da un secondo di selvaggina di stagione."},
+        {eyebrow:"Allergeni", text:"La maggior parte dei piatti contiene glutine e latticini. Dillo in sala prima di ordinare."}
+      ]},
+      de: { voice:"de-DE", sub:"\u201cMein Zuhause, dein Zuhause\u201d", contactLabel:"Reservierungen", sections:[
+        {eyebrow:"Willkommen", feature:true, text:"Willkommen im Al 30 — Osteria & Friends. Die Idee ist einfach: mein Zuhause, dein Zuhause."},
+        {eyebrow:"Tagesgericht", text:"Heute empfiehlt der Küchenchef hausgemachte Canederli, gefolgt von saisonalem Wildgericht."},
+        {eyebrow:"Allergene", text:"Die meisten Gerichte enthalten Gluten und Milchprodukte. Bitte vor der Bestellung angeben."}
+      ]},
+      en: { voice:"en-GB", sub:"\u201cMy home, your home\u201d", contactLabel:"Reservations", sections:[
+        {eyebrow:"Welcome", feature:true, text:"Welcome to Al 30 — Osteria & Friends. The idea is simple: my home, your home."},
+        {eyebrow:"Dish of the day", text:"Today the chef suggests homemade canederli, followed by a seasonal game main course."},
+        {eyebrow:"Allergens", text:"Most dishes contain gluten and dairy. Please tell our staff before ordering."}
+      ]}
+    }
+  },
+  nambino: {
+    label: "Nambino",
+    name: "Rifugio Lago Nambino",
+    theme: { bg1:"#1F4A50", bg2:"#0A1B1F", primary:"#1F4A50", secondary:"#8A4B3B",
+      accent:"#C6A15B", accentLight:"#E4CD9A", paper:"#E9E4D6", paperDim:"#D9D1BC",
+      cardBg:"#FBF9F2", cardFeatureBg:"#F8ECD3" },
+    contact: { call:"0465 441621", callHref:"tel:+390465441621", site:"nambino.com", siteHref:"https://nambino.com" },
+    lang: {
+      it: { voice:"it-IT", sub:"Il lago, la leggenda, dal 1933", contactLabel:"Prenotazioni", sections:[
+        {eyebrow:"Il lago", feature:true, text:"Sei arrivato al Lago Nambino, a 1.780 metri, uno dei laghi più belli delle Dolomiti di Brenta."},
+        {eyebrow:"La leggenda del drago", feature:true, text:"Si racconta che nelle profondità del lago dormisse un drago, custode silenzioso di queste acque."},
+        {eyebrow:"La famiglia dal 1933", text:"Il rifugio è gestito dalla stessa famiglia dal 1933, tre generazioni di accoglienza."}
+      ]},
+      de: { voice:"de-DE", sub:"Der See, die Legende, seit 1933", contactLabel:"Reservierungen", sections:[
+        {eyebrow:"Der See", feature:true, text:"Sie sind am Nambino-See angekommen, auf 1.780 Metern, einer der schönsten Seen der Brenta-Dolomiten."},
+        {eyebrow:"Die Legende vom Drachen", feature:true, text:"Man erzählt sich, dass in der Tiefe des Sees ein Drache schlief, stiller Wächter dieser Gewässer."},
+        {eyebrow:"Die Familie seit 1933", text:"Die Hütte wird seit 1933 von derselben Familie geführt, drei Generationen der Gastfreundschaft."}
+      ]},
+      en: { voice:"en-GB", sub:"The lake, the legend, since 1933", contactLabel:"Reservations", sections:[
+        {eyebrow:"The lake", feature:true, text:"You have arrived at Lake Nambino, at 1,780 metres, one of the most beautiful lakes in the Brenta Dolomites."},
+        {eyebrow:"The legend of the dragon", feature:true, text:"It is said that a dragon once slept in the depths of the lake, a silent guardian of these waters."},
+        {eyebrow:"The family since 1933", text:"The refuge has been run by the same family since 1933, three generations of hospitality."}
+      ]}
+    }
+  },
+  wolf: {
+    label: "Hungry Wolf",
+    name: "Hungry Wolf",
+    theme: { bg1:"#2A2320", bg2:"#171310", primary:"#1A1512", secondary:"#6B7A3F",
+      accent:"#D97B2E", accentLight:"#F0A85C", paper:"#EFE7D8", paperDim:"#DCD1B9",
+      cardBg:"#FBF7EC", cardFeatureBg:"#FBE4C4" },
+    contact: { call:"379 136 5291", callHref:"tel:+393791365291", site:"hungrywolfmdc.it", siteHref:"https://www.hungrywolfmdc.it" },
+    lang: {
+      it: { voice:"it-IT", sub:"Pizza · Birreria · Wolfgarden", contactLabel:"Prenota un tavolo", sections:[
+        {eyebrow:"Chi siamo", feature:true, text:"Hungry Wolf: pizza vera, birre artigianali, e un Wolfgarden dove restare fuori fino a tardi."},
+        {eyebrow:"Traguardo Coppa del Mondo", feature:true, text:"Siamo in Via 3-Tre — il Canalone Miramonti arriva al traguardo a pochi passi da qui. Qui hanno vinto Stenmark, Tomba, e oggi corre Vinatzer."},
+        {eyebrow:"Allergeni", text:"Molti impasti contengono glutine, diverse pizze contengono latticini."}
+      ]},
+      de: { voice:"de-DE", sub:"Pizza · Birreria · Wolfgarden", contactLabel:"Tisch reservieren", sections:[
+        {eyebrow:"Wer wir sind", feature:true, text:"Hungry Wolf: echte Pizza, Craft-Bier, und ein Wolfgarden, in dem man bis spät bleiben kann."},
+        {eyebrow:"Das Ziel des Weltcups", feature:true, text:"Wir sind in der Via 3-Tre — der Canalone Miramonti endet nur wenige Schritte von hier. Hier gewannen Stenmark und Tomba."},
+        {eyebrow:"Allergene", text:"Viele Teige enthalten Gluten, mehrere Pizzen enthalten Milchprodukte."}
+      ]},
+      en: { voice:"en-GB", sub:"Pizza · Birreria · Wolfgarden", contactLabel:"Book a table", sections:[
+        {eyebrow:"Who we are", feature:true, text:"Hungry Wolf: real pizza, craft beer, and a Wolfgarden to stay out in until late."},
+        {eyebrow:"The World Cup finish line", feature:true, text:"We're on Via 3-Tre — the Canalone Miramonti finishes just steps from here. Stenmark and Tomba won on this snow."},
+        {eyebrow:"Allergens", text:"Many doughs contain gluten, several pizzas contain dairy."}
+      ]}
+    }
+  }
+};
+
+let currentVenue = 'betulla';
+let currentLang = 'it';
+
+function applyTheme(t){
+  const s = document.body.style;
+  s.setProperty('--bg1', t.bg1);
+  s.setProperty('--bg2', t.bg2);
+  s.setProperty('--primary', t.primary);
+  s.setProperty('--secondary', t.secondary);
+  s.setProperty('--accent', t.accent);
+  s.setProperty('--accent-light', t.accentLight);
+  s.setProperty('--paper', t.paper);
+  s.setProperty('--paper-dim', t.paperDim);
+  s.setProperty('--card-bg', t.cardBg);
+  s.setProperty('--card-feature-bg', t.cardFeatureBg);
+}
+
+function renderVenuePicker(){
+  const bar = document.getElementById('venuePicker');
+  bar.innerHTML = '';
+  Object.keys(VENUES).forEach(key => {
+    const v = VENUES[key];
+    const btn = document.createElement('button');
+    btn.className = 'venue-btn' + (key === currentVenue ? ' active' : '');
+    btn.textContent = v.label;
+    if (key === currentVenue) btn.style.background = v.theme.primary;
+    btn.addEventListener('click', () => {
+      window.speechSynthesis.cancel();
+      currentVenue = key;
+      selectVenue();
+    });
+    bar.appendChild(btn);
+  });
+}
+
+function renderLangBar(){
+  const bar = document.getElementById('langBar');
+  bar.innerHTML = '';
+  const theme = VENUES[currentVenue].theme;
+  ['it','de','en'].forEach(code => {
+    const btn = document.createElement('button');
+    btn.className = 'lang-btn' + (code === currentLang ? ' active' : '');
+    btn.textContent = code.toUpperCase();
+    if (code === currentLang) btn.style.background = theme.primary;
+    btn.addEventListener('click', () => {
+      window.speechSynthesis.cancel();
+      currentLang = code;
+      selectVenue(true);
+    });
+    bar.appendChild(btn);
+  });
+}
+
+function selectVenue(keepScroll){
+  const v = VENUES[currentVenue];
+  applyTheme(v.theme);
+  document.getElementById('groupTitle').textContent = v.name;
+  document.getElementById('groupSub').textContent = v.lang[currentLang].sub;
+  renderVenuePicker();
+  renderLangBar();
+  renderContent();
+}
+
+function renderContent(){
+  const v = VENUES[currentVenue];
+  const langData = v.lang[currentLang];
+  const c = document.getElementById('content');
+  c.innerHTML = '';
+
+  langData.sections.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'section' + (s.feature ? ' feature' : '');
+    div.innerHTML = `
+      <p class="section-eyebrow">${s.eyebrow}</p>
+      <p>${s.text}</p>
+      <button class="play-btn" data-index="${i}" aria-label="Ascolta">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+    `;
+    c.appendChild(div);
+  });
+
+  const box = document.createElement('div');
+  box.className = 'contact-box';
+  box.innerHTML = `
+    <p class="contact-label">${langData.contactLabel}</p>
+    <div class="contact-actions">
+      <a class="contact-btn" href="${v.contact.callHref}">
+        <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z"/></svg>
+        ${v.contact.call}
+      </a>
+      <a class="contact-btn" href="${v.contact.siteHref}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm6.93 6H15.5a15.9 15.9 0 0 0-1.25-3.53A8.03 8.03 0 0 1 18.93 8zM12 4.06c.83 1.2 1.5 2.55 1.94 3.94h-3.88c.44-1.39 1.11-2.74 1.94-3.94zM4.26 14A7.97 7.97 0 0 1 4 12c0-.68.09-1.35.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.81 2h3.43c.31 1.26.75 2.45 1.25 3.53A8 8 0 0 1 5.07 16zm3.43-8H5.07a8 8 0 0 1 4.68-3.53C9.25 5.55 8.81 6.74 8.5 8zM12 19.94c-.83-1.2-1.5-2.55-1.94-3.94h3.88c-.44 1.39-1.11 2.74-1.94 3.94zM14.36 14H9.64c-.09-.66-.14-1.32-.14-2s.05-1.34.14-2h4.72c.09.66.14 1.32.14 2s-.05 1.34-.14 2zm.14 4.53c.5-1.08.94-2.27 1.25-3.53h3.43a8 8 0 0 1-4.68 3.53zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.17.65.26 1.32.26 2s-.09 1.35-.26 2h-3.38z"/></svg>
+        ${v.contact.site}
+      </a>
+    </div>
+  `;
+  c.appendChild(box);
+
+  c.querySelectorAll('.play-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.getAttribute('data-index'));
+      speakSection(idx, btn);
+    });
+  });
+}
+
+function speakSection(idx, btn){
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.play-btn').forEach(b => b.classList.remove('speaking'));
+  const v = VENUES[currentVenue];
+  const s = v.lang[currentLang].sections[idx];
+  const utter = new SpeechSynthesisUtterance(s.eyebrow + '. ' + s.text);
+  utter.lang = v.lang[currentLang].voice;
+  utter.rate = 0.95;
+  btn.classList.add('speaking');
+  utter.onend = () => btn.classList.remove('speaking');
+  utter.onerror = () => btn.classList.remove('speaking');
+  window.speechSynthesis.speak(utter);
+}
+
+document.getElementById('tapMoment').addEventListener('click', function(){
+  this.classList.add('hide');
+});
+
+selectVenue();
+</script>
+
+</body>
+</html>
