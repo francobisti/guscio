@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO — Rifugio Lago Nambino</title>
+<style>
+  :root{
+    --ink:#152322;
+    --lake-deep:#0F2A30;
+    --lake:#1F4A50;
+    --lake-mist:#4E7E82;
+    --gold:#C6A15B;
+    --gold-light:#E4CD9A;
+    --stone:#E9E4D6;
+    --stone-dim:#D9D1BC;
+    --ember:#8A4B3B;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0;
+    background: radial-gradient(ellipse at 50% -10%, #1F4A50 0%, #0F2A30 55%, #0A1B1F 100%);
+    min-height:100vh;
+    font-family: 'Palatino Linotype', 'Iowan Old Style', Georgia, serif;
+    color:var(--stone);
+    display:flex; align-items:center; justify-content:center;
+    padding: 28px 14px;
+  }
+  .stage{ width:100%; max-width:400px; }
+  .field-label{
+    text-align:center;
+    font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size:10.5px; letter-spacing:3px; text-transform:uppercase;
+    color:var(--gold-light); opacity:.75; margin-bottom:14px;
+  }
+  .phone{
+    background: linear-gradient(180deg, #0C1B1A 0%, #070F0E 100%);
+    border-radius: 34px; padding: 10px;
+    box-shadow: 0 32px 64px -20px rgba(0,0,0,.65), 0 0 0 1px rgba(198,161,91,.14);
+  }
+  .screen{
+    background: var(--stone);
+    border-radius: 26px; overflow:hidden;
+    min-height: 660px; position:relative;
+    color: var(--ink); display:flex; flex-direction:column;
+  }
+
+  #tapMoment{
+    position:absolute; inset:0;
+    background:
+      radial-gradient(circle at 50% 38%, rgba(198,161,91,.16), transparent 55%),
+      linear-gradient(165deg, var(--lake) 0%, var(--lake-deep) 60%, #081619 100%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    z-index:10; cursor:pointer;
+    transition: opacity .6s ease, visibility .6s ease;
+  }
+  #tapMoment.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  .nfc-ring{
+    width:90px; height:90px; border-radius:50%;
+    border:1px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+  }
+  .nfc-ring::before, .nfc-ring::after{
+    content:''; position:absolute; border-radius:50%;
+    border:1px solid var(--gold-light); inset:0; opacity:0;
+    animation: pulseRing 2.6s ease-out infinite;
+  }
+  .nfc-ring::after{ animation-delay: 1.3s; }
+  @keyframes pulseRing{
+    0%{ transform:scale(1); opacity:.85; }
+    100%{ transform:scale(2); opacity:0; }
+  }
+  .nfc-ring svg{ width:32px; height:32px; fill:var(--gold-light); }
+  #tapMoment p{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11.5px; letter-spacing:2.2px; text-transform:uppercase;
+    color:var(--gold-light); margin-top:24px; opacity:.9;
+  }
+  #tapMoment .legend-hint{
+    font-family: 'Palatino Linotype', Georgia, serif;
+    font-style:italic; font-size:13px; color:var(--stone-dim);
+    opacity:.55; margin-top:10px; letter-spacing:.3px;
+  }
+
+  .head{
+    padding: 24px 22px 16px;
+    border-bottom:1px solid var(--stone-dim);
+    background:
+      linear-gradient(180deg, rgba(198,161,91,.08), transparent),
+      var(--stone);
+    position:relative;
+  }
+  .wordmark{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10.5px; letter-spacing:3px; text-transform:uppercase;
+    color:var(--ember); font-weight:600; margin:0 0 10px;
+  }
+  .prod-name{ font-size:26px; margin:0; line-height:1.18; color:var(--lake-deep); }
+  .prod-sub{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12px; color:#5E6E6C; margin-top:6px; font-style:italic;
+  }
+  .gold-rule{
+    height:1px; background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin-top:14px;
+  }
+
+  .langs{ display:flex; gap:6px; padding: 14px 22px 0; }
+  .lang-btn{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11.5px; font-weight:600;
+    border:1px solid var(--stone-dim);
+    background:transparent; color:#5E6E6C;
+    padding:6px 12px; border-radius:20px; cursor:pointer;
+    transition: all .2s ease;
+  }
+  .lang-btn.active{ background:var(--lake-deep); color:var(--stone); border-color:var(--lake-deep); }
+
+  .content{ padding: 16px 22px 94px; overflow-y:auto; flex:1; }
+  .section{
+    margin-bottom:16px; padding:15px 16px; border-radius:12px;
+    background:#FBF9F2; border:1px solid var(--stone-dim); position:relative;
+  }
+  .section.legend{
+    border-color:var(--gold);
+    background: linear-gradient(180deg, #FBF3E2, #F8ECD3);
+  }
+  .section-eyebrow{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10px; letter-spacing:1.6px; text-transform:uppercase;
+    color:var(--ember); margin:0 0 6px; font-weight:700;
+  }
+  .section.legend .section-eyebrow{ color:#9A7526; }
+  .section p{ margin:0; font-size:14.5px; line-height:1.55; color:var(--ink); }
+  .play-btn{
+    position:absolute; top:12px; right:12px;
+    width:30px; height:30px; border-radius:50%;
+    border:none; background:var(--lake-deep); color:var(--stone);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition: background .2s ease;
+  }
+  .play-btn:hover{ background:var(--gold); color:var(--lake-deep); }
+  .play-btn svg{ width:13px; height:13px; fill:currentColor; }
+  .play-btn.speaking{ background:var(--ember); color:var(--stone); }
+
+  .footbar{
+    position:absolute; bottom:0; left:0; right:0;
+    background: linear-gradient(0deg, var(--stone) 62%, rgba(233,228,214,0));
+    padding: 28px 22px 16px; text-align:center;
+  }
+  .tagline{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10.5px; letter-spacing:1px; color:#9A8F78; font-style:italic;
+  }
+  .note{
+    text-align:center;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11px; color:var(--gold-light); opacity:.65;
+    margin-top:16px; line-height:1.5;
+  }
+  .contact-box{
+    margin-top:4px; margin-bottom:16px;
+    padding:16px; border-radius:12px;
+    background: var(--lake-deep); color: var(--stone);
+  }
+  .contact-label{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10px; letter-spacing:1.6px; text-transform:uppercase;
+    color:var(--gold-light); margin:0 0 10px; font-weight:700;
+  }
+  .contact-actions{ display:flex; gap:8px; }
+  .contact-btn{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12.5px; font-weight:700; text-decoration:none;
+    padding:10px 8px; border-radius:8px;
+    background: rgba(255,255,255,.1); color: var(--stone);
+    border:1px solid rgba(198,161,91,.35);
+  }
+  .contact-btn svg{ width:14px; height:14px; fill:currentColor; flex-shrink:0; }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="field-label">Simulazione tag NFC · al tavolo, sul molo, sul sentiero d'accesso</div>
+  <div class="phone">
+    <div class="screen">
+
+      <div id="tapMoment">
+        <div class="nfc-ring">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+        </div>
+        <p>Tocca per ascoltare il lago</p>
+        <p class="legend-hint">1.780 m · dal 1933</p>
+      </div>
+
+      <div class="head">
+        <p class="wordmark">Guscio · soglia zero</p>
+        <h1 class="prod-name">Rifugio Lago Nambino</h1>
+        <p class="prod-sub">Il rifugio, il lago, la leggenda — dal 1933</p>
+        <div class="gold-rule"></div>
+      </div>
+
+      <div class="langs" id="langBar">
+        <button class="lang-btn active" data-lang="it">IT</button>
+        <button class="lang-btn" data-lang="de">DE</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+
+      <div class="content" id="content"></div>
+
+      <div class="footbar">
+        <p class="tagline">la sicurezza è un atto d'amore</p>
+      </div>
+
+    </div>
+  </div>
+  <p class="note">Ogni sezione può essere ascoltata a voce, nella lingua selezionata —<br>come accadrebbe toccando il tag reale in riva al lago.</p>
+</div>
+
+<script>
+const DATA = {
+  it: {
+    lang: "it-IT",
+    sections: [
+      { eyebrow: "Il lago", text: "Sei arrivato al Lago Nambino, a 1.780 metri, uno dei laghi più belli delle Dolomiti di Brenta. Le sue acque cambiano colore con la luce del giorno — smeraldo al mattino, quasi nero al tramonto.", legend:true },
+      { eyebrow: "La leggenda del drago", text: "Si racconta che nelle profondità del lago dormisse un drago, custode silenzioso di queste acque. Solo chi arriva con rispetto per la montagna, dicono i vecchi di qui, riesce a sentirne ancora il respiro nel vento che increspa la superficie.", legend:true },
+      { eyebrow: "La famiglia dal 1933", text: "Il rifugio è gestito dalla stessa famiglia dal 1933. Tre generazioni hanno portato in spalla, un passo dopo l'altro, quello che serviva per accogliere chi arrivava fin qui — oggi anche una piccola teleferica alleggerisce il cammino dei bagagli." },
+      { eyebrow: "In cucina", text: "La cucina propone piatti della tradizione trentina: canederli, strangolapreti, selvaggina quando è stagione. Chiedi in sala qual è la proposta di oggi." },
+      { eyebrow: "Come arrivare", text: "Si raggiunge a piedi con una camminata semplice da Madonna di Campiglio, adatta a famiglie. Porta acqua, scarpe comode, e un po' di tempo per fermarti a guardare il lago senza fretta." }
+    ],
+    contact: { label: "Prenotazioni", call: "0465 441621", callHref: "tel:+390465441621", site: "nambino.com", siteHref: "https://nambino.com" }
+  },
+  de: {
+    lang: "de-DE",
+    sections: [
+      { eyebrow: "Der See", text: "Sie sind am Nambino-See angekommen, auf 1.780 Metern Höhe, einer der schönsten Seen der Brenta-Dolomiten. Seine Farben wechseln mit dem Tageslicht — smaragdgrün am Morgen, fast schwarz bei Sonnenuntergang.", legend:true },
+      { eyebrow: "Die Legende vom Drachen", text: "Man erzählt sich, dass in der Tiefe des Sees ein Drache schlief, stiller Wächter dieser Gewässer. Nur wer der Bergwelt mit Respekt begegnet, so sagen die Alten hier, kann seinen Atem noch im Wind spüren, der die Wasseroberfläche kräuselt.", legend:true },
+      { eyebrow: "Die Familie seit 1933", text: "Die Hütte wird seit 1933 von derselben Familie geführt. Drei Generationen haben Schritt für Schritt alles hierhergetragen, was nötig war, um Gäste willkommen zu heißen — heute erleichtert eine kleine Seilbahn den Gepäcktransport." },
+      { eyebrow: "In der Küche", text: "Die Küche bietet traditionelle Trentiner Gerichte: Canederli, Strangolapreti, Wild in der Saison. Fragen Sie im Restaurant nach dem heutigen Angebot." },
+      { eyebrow: "Anreise", text: "Von Madonna di Campiglio aus erreichbar mit einer einfachen, familienfreundlichen Wanderung. Bringen Sie Wasser, bequeme Schuhe und etwas Zeit mit, um in Ruhe auf den See zu blicken." }
+    ],
+    contact: { label: "Reservierungen", call: "0465 441621", callHref: "tel:+390465441621", site: "nambino.com", siteHref: "https://nambino.com" }
+  },
+  en: {
+    lang: "en-GB",
+    sections: [
+      { eyebrow: "The lake", text: "You have arrived at Lake Nambino, at 1,780 metres, one of the most beautiful lakes in the Brenta Dolomites. Its colours shift with the daylight — emerald in the morning, almost black at sunset.", legend:true },
+      { eyebrow: "The legend of the dragon", text: "It is said that a dragon once slept in the depths of the lake, a silent guardian of these waters. Only those who approach the mountain with respect, the old locals say, can still feel its breath in the wind that ripples the surface.", legend:true },
+      { eyebrow: "The family since 1933", text: "The refuge has been run by the same family since 1933. Three generations carried up, step by step, everything needed to welcome those who made it this far — today a small cable lift also eases the journey for luggage." },
+      { eyebrow: "In the kitchen", text: "The kitchen serves traditional Trentino dishes: canederli, strangolapreti, game when in season. Ask our staff what's on offer today." },
+      { eyebrow: "Getting here", text: "Reachable on foot with an easy, family-friendly walk from Madonna di Campiglio. Bring water, comfortable shoes, and a little time to stop and look at the lake without hurry." }
+    ],
+    contact: { label: "Reservations", call: "0465 441621", callHref: "tel:+390465441621", site: "nambino.com", siteHref: "https://nambino.com" }
+  }
+};
+
+let currentLang = 'it';
+
+function renderContent(){
+  const c = document.getElementById('content');
+  c.innerHTML = '';
+  DATA[currentLang].sections.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'section' + (s.legend ? ' legend' : '');
+    div.innerHTML = `
+      <p class="section-eyebrow">${s.eyebrow}</p>
+      <p>${s.text}</p>
+      <button class="play-btn" data-index="${i}" aria-label="Ascolta">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+    `;
+    c.appendChild(div);
+  });
+
+  const ct = DATA[currentLang].contact;
+  if (ct) {
+    const box = document.createElement('div');
+    box.className = 'contact-box';
+    box.innerHTML = `
+      <p class="contact-label">${ct.label}</p>
+      <div class="contact-actions">
+        <a class="contact-btn" href="${ct.callHref}">
+          <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z"/></svg>
+          ${ct.call}
+        </a>
+        <a class="contact-btn" href="${ct.siteHref}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm6.93 6H15.5a15.9 15.9 0 0 0-1.25-3.53A8.03 8.03 0 0 1 18.93 8zM12 4.06c.83 1.2 1.5 2.55 1.94 3.94h-3.88c.44-1.39 1.11-2.74 1.94-3.94zM4.26 14A7.97 7.97 0 0 1 4 12c0-.68.09-1.35.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.81 2h3.43c.31 1.26.75 2.45 1.25 3.53A8 8 0 0 1 5.07 16zm3.43-8H5.07a8 8 0 0 1 4.68-3.53C9.25 5.55 8.81 6.74 8.5 8zM12 19.94c-.83-1.2-1.5-2.55-1.94-3.94h3.88c-.44 1.39-1.11 2.74-1.94 3.94zM14.36 14H9.64c-.09-.66-.14-1.32-.14-2s.05-1.34.14-2h4.72c.09.66.14 1.32.14 2s-.05 1.34-.14 2zm.14 4.53c.5-1.08.94-2.27 1.25-3.53h3.43a8 8 0 0 1-4.68 3.53zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.17.65.26 1.32.26 2s-.09 1.35-.26 2h-3.38z"/></svg>
+          ${ct.site}
+        </a>
+      </div>
+    `;
+    c.appendChild(box);
+  }
+
+  c.querySelectorAll('.play-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.getAttribute('data-index'));
+      speakSection(idx, btn);
+    });
+  });
+}
+
+function speakSection(idx, btn){
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.play-btn').forEach(b => b.classList.remove('speaking'));
+
+  const s = DATA[currentLang].sections[idx];
+  const utter = new SpeechSynthesisUtterance(s.eyebrow + '. ' + s.text);
+  utter.lang = DATA[currentLang].lang;
+  utter.rate = 0.92;
+  btn.classList.add('speaking');
+  utter.onend = () => btn.classList.remove('speaking');
+  utter.onerror = () => btn.classList.remove('speaking');
+  window.speechSynthesis.speak(utter);
+}
+
+document.getElementById('langBar').addEventListener('click', (e) => {
+  const btn = e.target.closest('.lang-btn');
+  if (!btn) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentLang = btn.getAttribute('data-lang');
+  renderContent();
+});
+
+document.getElementById('tapMoment').addEventListener('click', function(){
+  this.classList.add('hide');
+});
+
+renderContent();
+</script>
+
+</body>
+</html>
