@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO — Al 30 Osteria & Friends</title>
+<style>
+  :root{
+    --ink:#2B1D16;
+    --wine:#5C2A28;
+    --wine-deep:#3E1B1A;
+    --oak:#8A5A3B;
+    --oak-light:#C99B6E;
+    --cream:#F3EADD;
+    --cream-dim:#E4D6C2;
+    --sage:#6E7F5C;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0;
+    background: radial-gradient(circle at 30% 0%, #5C2A28 0%, #2B1D16 65%);
+    min-height:100vh;
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    color:var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    padding: 28px 14px;
+  }
+  .stage{ width:100%; max-width:400px; }
+  .field-label{
+    text-align:center;
+    font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size:11px; letter-spacing:2.5px; text-transform:uppercase;
+    color:var(--oak-light); opacity:.8; margin-bottom:14px;
+  }
+  .phone{
+    background: linear-gradient(180deg, #241512 0%, #180F0D 100%);
+    border-radius: 34px; padding: 10px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,.6), 0 0 0 1px rgba(201,155,110,.1);
+  }
+  .screen{
+    background: var(--cream);
+    border-radius: 26px; overflow:hidden;
+    min-height: 640px; position:relative;
+    color: var(--ink); display:flex; flex-direction:column;
+  }
+
+  #tapMoment{
+    position:absolute; inset:0;
+    background: linear-gradient(160deg, var(--wine) 0%, var(--wine-deep) 100%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    z-index:10; cursor:pointer;
+    transition: opacity .5s ease, visibility .5s ease;
+  }
+  #tapMoment.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  .nfc-ring{
+    width:88px; height:88px; border-radius:50%;
+    border:1.5px solid var(--oak-light);
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+  }
+  .nfc-ring::before, .nfc-ring::after{
+    content:''; position:absolute; border-radius:50%;
+    border:1.5px solid var(--oak-light); inset:0; opacity:0;
+    animation: pulseRing 2.2s ease-out infinite;
+  }
+  .nfc-ring::after{ animation-delay: 1.1s; }
+  @keyframes pulseRing{
+    0%{ transform:scale(1); opacity:.9; }
+    100%{ transform:scale(1.9); opacity:0; }
+  }
+  .nfc-ring svg{ width:34px; height:34px; fill:var(--cream); }
+  #tapMoment p{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12px; letter-spacing:1.8px; text-transform:uppercase;
+    color:var(--oak-light); margin-top:22px; opacity:.9;
+  }
+
+  .head{
+    padding: 22px 22px 16px;
+    border-bottom:1px solid var(--cream-dim);
+    background: var(--cream);
+  }
+  .wordmark{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11px; letter-spacing:3px; text-transform:uppercase;
+    color:var(--oak); font-weight:600; margin:0 0 10px;
+  }
+  .prod-name{ font-size:27px; margin:0; line-height:1.15; color:var(--wine); }
+  .prod-sub{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12.5px; color:#7A6455; margin-top:6px; font-style:italic;
+  }
+
+  .langs{ display:flex; gap:6px; padding: 14px 22px 0; }
+  .lang-btn{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11.5px; font-weight:600;
+    border:1px solid var(--cream-dim);
+    background:transparent; color:#7A6455;
+    padding:6px 12px; border-radius:20px; cursor:pointer;
+    transition: all .2s ease;
+  }
+  .lang-btn.active{ background:var(--wine); color:var(--cream); border-color:var(--wine); }
+
+  .content{ padding: 16px 22px 90px; overflow-y:auto; flex:1; }
+  .section{
+    margin-bottom:16px; padding:14px 16px; border-radius:12px;
+    background:#FBF7EF; border:1px solid var(--cream-dim); position:relative;
+  }
+  .section.highlight{ border-color:var(--oak-light); background:#FBF0DE; }
+  .section-eyebrow{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10px; letter-spacing:1.6px; text-transform:uppercase;
+    color:var(--oak); margin:0 0 6px; font-weight:700;
+  }
+  .section.highlight .section-eyebrow{ color:var(--wine); }
+  .section p{ margin:0; font-size:14.5px; line-height:1.5; color:var(--ink); }
+  .play-btn{
+    position:absolute; top:12px; right:12px;
+    width:30px; height:30px; border-radius:50%;
+    border:none; background:var(--wine); color:var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition: background .2s ease;
+  }
+  .play-btn:hover{ background:var(--oak); }
+  .play-btn svg{ width:13px; height:13px; fill:currentColor; }
+  .play-btn.speaking{ background:var(--sage); }
+
+  .footbar{
+    position:absolute; bottom:0; left:0; right:0;
+    background: linear-gradient(0deg, var(--cream) 60%, rgba(243,234,221,0));
+    padding: 26px 22px 16px; text-align:center;
+  }
+  .tagline{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10.5px; letter-spacing:1px; color:#9A8570; font-style:italic;
+  }
+  .note{
+    text-align:center;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11px; color:var(--oak-light); opacity:.7;
+    margin-top:16px; line-height:1.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="field-label">Simulazione tag NFC · sul tavolo, all'ingresso o sul menu</div>
+  <div class="phone">
+    <div class="screen">
+
+      <div id="tapMoment">
+        <div class="nfc-ring">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+        </div>
+        <p>Tocca per entrare</p>
+      </div>
+
+      <div class="head">
+        <p class="wordmark">Guscio · soglia zero</p>
+        <h1 class="prod-name">Al 30 — Osteria & Friends</h1>
+        <p class="prod-sub">"Casa mia, casa tua", dice l'oste in allegria</p>
+      </div>
+
+      <div class="langs" id="langBar">
+        <button class="lang-btn active" data-lang="it">IT</button>
+        <button class="lang-btn" data-lang="de">DE</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+
+      <div class="content" id="content"></div>
+
+      <div class="footbar">
+        <p class="tagline">la sicurezza è un atto d'amore</p>
+      </div>
+
+    </div>
+  </div>
+  <p class="note">Ogni sezione può essere ascoltata a voce, nella lingua selezionata —<br>esattamente come sentirebbe il cliente toccando il tag vero sul tavolo.</p>
+</div>
+
+<script>
+const DATA = {
+  it: {
+    lang: "it-IT",
+    sections: [
+      { eyebrow: "Benvenuto", text: "Benvenuto all'Al 30 — Osteria & Friends. Qui a Madonna di Campiglio l'idea è semplice: casa mia, casa tua. Siediti, respira, e lasciati raccontare cosa c'è in cucina oggi.", highlight:true },
+      { eyebrow: "Piatto del giorno", text: "Oggi lo chef propone i canederli fatti in casa, in brodo o burro fuso, seguiti da un secondo di selvaggina di stagione. Chiedi in sala per i dettagli e per l'abbinamento con il vino." },
+      { eyebrow: "Da dove viene", text: "I prodotti arrivano per lo più da piccoli produttori della Val Rendena e delle Giudicarie: formaggi di malga, salumi locali, verdure di stagione dell'orto qui vicino." },
+      { eyebrow: "Allergeni", text: "La maggior parte dei piatti contiene glutine e latticini. Se hai allergie o intolleranze, dillo in sala prima di ordinare: la cucina può quasi sempre trovare un'alternativa." },
+      { eyebrow: "Un aneddoto", text: "Il nome Al 30 viene semplicemente dal numero civico di questa via — ma con gli anni è diventato il punto d'incontro di chi, di passaggio o di casa, qui si sente sempre benvenuto." }
+    ]
+  },
+  de: {
+    lang: "de-DE",
+    sections: [
+      { eyebrow: "Willkommen", text: "Willkommen im Al 30 — Osteria & Friends. Hier in Madonna di Campiglio ist die Idee einfach: mein Zuhause, dein Zuhause. Setz dich, atme durch, und lass dir erzählen, was heute in der Küche los ist.", highlight:true },
+      { eyebrow: "Tagesgericht", text: "Heute empfiehlt der Küchenchef hausgemachte Canederli, in Brühe oder mit geschmolzener Butter, gefolgt von saisonalem Wildgericht. Fragen Sie im Restaurant nach Details und Weinempfehlung." },
+      { eyebrow: "Herkunft", text: "Die Produkte stammen größtenteils von kleinen Erzeugern aus dem Val Rendena und den Giudicarie: Bergkäse, lokale Wurstwaren, saisonales Gemüse aus dem nahen Garten." },
+      { eyebrow: "Allergene", text: "Die meisten Gerichte enthalten Gluten und Milchprodukte. Bei Allergien oder Unverträglichkeiten bitte vor der Bestellung Bescheid geben — die Küche findet fast immer eine Alternative." },
+      { eyebrow: "Eine kleine Geschichte", text: "Der Name Al 30 kommt einfach von der Hausnummer dieser Straße — doch mit den Jahren ist er zum Treffpunkt geworden für alle, die sich hier willkommen fühlen." }
+    ]
+  },
+  en: {
+    lang: "en-GB",
+    sections: [
+      { eyebrow: "Welcome", text: "Welcome to Al 30 — Osteria & Friends. Here in Madonna di Campiglio the idea is simple: my home, your home. Sit down, take a breath, and let us tell you what's cooking today.", highlight:true },
+      { eyebrow: "Dish of the day", text: "Today the chef suggests homemade canederli, in broth or melted butter, followed by a seasonal game main course. Ask our staff for details and wine pairing." },
+      { eyebrow: "Where it comes from", text: "Most of our products come from small producers in Val Rendena and the Giudicarie valleys: mountain-hut cheeses, local cured meats, seasonal vegetables from the garden nearby." },
+      { eyebrow: "Allergens", text: "Most dishes contain gluten and dairy. If you have allergies or intolerances, please tell our staff before ordering — the kitchen can almost always find an alternative." },
+      { eyebrow: "A little story", text: "The name Al 30 simply comes from this street's house number — but over the years it has become a meeting point for anyone who feels at home here, whether passing through or a regular." }
+    ]
+  }
+};
+
+let currentLang = 'it';
+
+function renderContent(){
+  const c = document.getElementById('content');
+  c.innerHTML = '';
+  DATA[currentLang].sections.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'section' + (s.highlight ? ' highlight' : '');
+    div.innerHTML = `
+      <p class="section-eyebrow">${s.eyebrow}</p>
+      <p>${s.text}</p>
+      <button class="play-btn" data-index="${i}" aria-label="Ascolta">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+    `;
+    c.appendChild(div);
+  });
+
+  c.querySelectorAll('.play-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.getAttribute('data-index'));
+      speakSection(idx, btn);
+    });
+  });
+}
+
+function speakSection(idx, btn){
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.play-btn').forEach(b => b.classList.remove('speaking'));
+
+  const s = DATA[currentLang].sections[idx];
+  const utter = new SpeechSynthesisUtterance(s.eyebrow + '. ' + s.text);
+  utter.lang = DATA[currentLang].lang;
+  utter.rate = 0.95;
+  btn.classList.add('speaking');
+  utter.onend = () => btn.classList.remove('speaking');
+  utter.onerror = () => btn.classList.remove('speaking');
+  window.speechSynthesis.speak(utter);
+}
+
+document.getElementById('langBar').addEventListener('click', (e) => {
+  const btn = e.target.closest('.lang-btn');
+  if (!btn) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentLang = btn.getAttribute('data-lang');
+  renderContent();
+});
+
+document.getElementById('tapMoment').addEventListener('click', function(){
+  this.classList.add('hide');
+});
+
+renderContent();
+</script>
+
+</body>
+</html>
