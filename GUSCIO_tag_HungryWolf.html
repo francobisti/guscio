@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO — Hungry Wolf</title>
+<style>
+  :root{
+    --ink:#1A1512;
+    --charcoal:#2A2320;
+    --charcoal-deep:#171310;
+    --amber:#D97B2E;
+    --amber-light:#F0A85C;
+    --cream:#EFE7D8;
+    --cream-dim:#DCD1B9;
+    --hop:#6B7A3F;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0;
+    background: radial-gradient(circle at 30% 0%, #2A2320 0%, #171310 65%);
+    min-height:100vh;
+    font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    color:var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    padding: 28px 14px;
+  }
+  .stage{ width:100%; max-width:400px; }
+  .field-label{
+    text-align:center; font-size:11px; letter-spacing:2.5px; text-transform:uppercase;
+    color:var(--amber-light); opacity:.8; margin-bottom:14px;
+  }
+  .phone{
+    background: linear-gradient(180deg, #14100E 0%, #0D0A08 100%);
+    border-radius: 34px; padding: 10px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,.65), 0 0 0 1px rgba(240,168,92,.12);
+  }
+  .screen{
+    background: var(--cream);
+    border-radius: 26px; overflow:hidden;
+    min-height: 630px; position:relative;
+    color: var(--ink); display:flex; flex-direction:column;
+  }
+
+  #tapMoment{
+    position:absolute; inset:0;
+    background: linear-gradient(160deg, var(--charcoal) 0%, var(--charcoal-deep) 100%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    z-index:10; cursor:pointer;
+    transition: opacity .5s ease, visibility .5s ease;
+  }
+  #tapMoment.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  .nfc-ring{
+    width:88px; height:88px; border-radius:50%;
+    border:1.5px solid var(--amber);
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+  }
+  .nfc-ring::before, .nfc-ring::after{
+    content:''; position:absolute; border-radius:50%;
+    border:1.5px solid var(--amber-light); inset:0; opacity:0;
+    animation: pulseRing 2s ease-out infinite;
+  }
+  .nfc-ring::after{ animation-delay: 1s; }
+  @keyframes pulseRing{
+    0%{ transform:scale(1); opacity:.9; }
+    100%{ transform:scale(1.9); opacity:0; }
+  }
+  .nfc-ring svg{ width:34px; height:34px; fill:var(--amber-light); }
+  #tapMoment p{
+    font-size:12px; letter-spacing:1.8px; text-transform:uppercase;
+    color:var(--amber-light); margin-top:22px; opacity:.9; font-weight:700;
+  }
+
+  .head{
+    padding: 22px 22px 16px;
+    border-bottom:2px solid var(--ink);
+    background: var(--cream);
+  }
+  .wordmark{
+    font-size:11px; letter-spacing:3px; text-transform:uppercase;
+    color:var(--amber); font-weight:700; margin:0 0 10px;
+  }
+  .prod-name{
+    font-family: Georgia, serif; font-weight:900;
+    font-size:28px; margin:0; line-height:1.1; color:var(--ink);
+    text-transform:uppercase; letter-spacing:.5px;
+  }
+  .prod-sub{ font-size:12.5px; color:#5A5148; margin-top:6px; font-weight:600; }
+
+  .langs{ display:flex; gap:6px; padding: 14px 22px 0; }
+  .lang-btn{
+    font-size:11.5px; font-weight:700;
+    border:2px solid var(--ink);
+    background:transparent; color:var(--ink);
+    padding:6px 12px; border-radius:6px; cursor:pointer;
+    transition: all .2s ease;
+  }
+  .lang-btn.active{ background:var(--ink); color:var(--cream); }
+
+  .content{ padding: 16px 22px 90px; overflow-y:auto; flex:1; }
+  .section{
+    margin-bottom:14px; padding:14px 16px; border-radius:8px;
+    background:#FBF7EC; border:2px solid var(--cream-dim); position:relative;
+  }
+  .section.punch{
+    border-color:var(--amber);
+    background: linear-gradient(135deg, #FCEFDD, #FBE4C4);
+  }
+  .section-eyebrow{
+    font-size:10px; letter-spacing:1.6px; text-transform:uppercase;
+    color:var(--amber); margin:0 0 6px; font-weight:800;
+  }
+  .section.punch .section-eyebrow{ color:#9C5A1A; }
+  .section p{ margin:0; font-size:14.5px; line-height:1.5; color:var(--ink); font-family: Georgia, serif; }
+  .play-btn{
+    position:absolute; top:12px; right:12px;
+    width:30px; height:30px; border-radius:6px;
+    border:none; background:var(--ink); color:var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition: background .2s ease;
+  }
+  .play-btn:hover{ background:var(--amber); }
+  .play-btn svg{ width:13px; height:13px; fill:currentColor; }
+  .play-btn.speaking{ background:var(--hop); }
+
+  .footbar{
+    position:absolute; bottom:0; left:0; right:0;
+    background: linear-gradient(0deg, var(--cream) 62%, rgba(239,231,216,0));
+    padding: 26px 22px 16px; text-align:center;
+  }
+  .tagline{
+    font-size:10.5px; letter-spacing:1px; color:#8A8072; font-style:italic;
+  }
+  .note{
+    text-align:center; font-size:11px; color:var(--amber-light); opacity:.7;
+    margin-top:16px; line-height:1.5;
+  }
+  .contact-box{
+    margin-top:2px; margin-bottom:14px;
+    padding:16px; border-radius:8px;
+    background: var(--ink); color: var(--cream);
+  }
+  .contact-label{
+    font-size:10px; letter-spacing:1.6px; text-transform:uppercase;
+    color:var(--amber-light); margin:0 0 10px; font-weight:800;
+  }
+  .contact-actions{ display:flex; gap:8px; }
+  .contact-btn{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+    font-size:12.5px; font-weight:700; text-decoration:none;
+    padding:10px 8px; border-radius:6px;
+    background: rgba(255,255,255,.1); color: var(--cream);
+    border:1px solid rgba(240,168,92,.4);
+  }
+  .contact-btn svg{ width:14px; height:14px; fill:currentColor; flex-shrink:0; }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="field-label">Simulazione tag NFC · sul tavolo, sul menu, al Wolfgarden</div>
+  <div class="phone">
+    <div class="screen">
+
+      <div id="tapMoment">
+        <div class="nfc-ring">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+        </div>
+        <p>Tocca. Ordina. Ringhia.</p>
+      </div>
+
+      <div class="head">
+        <p class="wordmark">Guscio · soglia zero</p>
+        <h1 class="prod-name">Hungry Wolf</h1>
+        <p class="prod-sub">Pizza · Birreria · Wolfgarden</p>
+      </div>
+
+      <div class="langs" id="langBar">
+        <button class="lang-btn active" data-lang="it">IT</button>
+        <button class="lang-btn" data-lang="de">DE</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+
+      <div class="content" id="content"></div>
+
+      <div class="footbar">
+        <p class="tagline">la sicurezza è un atto d'amore</p>
+      </div>
+
+    </div>
+  </div>
+  <p class="note">Ogni sezione può essere ascoltata a voce, nella lingua selezionata —<br>come al tavolo, tra una birra e l'altra.</p>
+</div>
+
+<script>
+const DATA = {
+  it: {
+    lang: "it-IT",
+    sections: [
+      { eyebrow: "Chi siamo", text: "Hungry Wolf: pizza vera, birre artigianali, e un Wolfgarden dove restare fuori fino a tardi. Non è la solita pizzeria — qui si viene per la serata, non solo per la cena.", punch:true },
+      { eyebrow: "Il traguardo di Coppa del Mondo", text: "Siamo in Via 3-Tre — sì, proprio la pista. Il Canalone Miramonti, dove ogni dicembre lo slalom notturno di Coppa del Mondo incendia Campiglio, arriva al traguardo a pochi passi da qui. Su questa neve hanno vinto Stenmark, Tomba, e oggi corrono Vinatzer e i più forti al mondo. Vieni a bere una birra dove i campioni tagliano il traguardo.", punch:true },
+      { eyebrow: "La pizza del lupo", text: "La nostra proposta cambia spesso: impasto a lunga lievitazione, ingredienti veri, qualche accostamento fuori dagli schemi. Chiedi al tavolo qual è la special di stagione." },
+      { eyebrow: "Le birre", text: "Selezione di birre artigianali, in rotazione. Se non sai cosa scegliere, dillo — il nostro staff ti guida verso quella giusta per i tuoi gusti." },
+      { eyebrow: "Allergeni", text: "Molti impasti contengono glutine, diverse pizze contengono latticini. Segnala allergie o intolleranze al momento dell'ordine: troviamo quasi sempre un'alternativa." },
+      { eyebrow: "Wolfgarden", text: "Se il tempo lo permette, il giardino esterno resta apertο fino a tardi — luci calde, musica bassa, birra fresca. È il posto giusto per allungare la serata." }
+    ],
+    contact: { label: "Prenota un tavolo", call: "379 136 5291", callHref: "tel:+393791365291", site: "hungrywolfmdc.it", siteHref: "https://www.hungrywolfmdc.it" }
+  },
+  de: {
+    lang: "de-DE",
+    sections: [
+      { eyebrow: "Wer wir sind", text: "Hungry Wolf: echte Pizza, Craft-Bier, und ein Wolfgarden, in dem man bis spät bleiben kann. Keine gewöhnliche Pizzeria — hier kommt man für den ganzen Abend, nicht nur zum Essen.", punch:true },
+      { eyebrow: "Das Ziel des Weltcups", text: "Wir sind in der Via 3-Tre — ja, genau, die Piste. Der Canalone Miramonti, wo jeden Dezember der Nacht-Slalom des Weltcups Campiglio in Flammen setzt, endet nur wenige Schritte von hier. Auf diesem Schnee gewannen Stenmark und Tomba, heute fahren Vinatzer und die Besten der Welt. Trinken Sie ein Bier dort, wo die Champions die Ziellinie überqueren.", punch:true },
+      { eyebrow: "Die Pizza des Wolfs", text: "Unser Angebot wechselt oft: lang geführter Teig, echte Zutaten, mutige Kombinationen. Fragen Sie am Tisch nach der Saison-Special." },
+      { eyebrow: "Die Biere", text: "Auswahl an Craft-Bieren, die wechselt. Wenn Sie unsicher sind, sagen Sie es einfach — unser Team hilft Ihnen, das richtige für Ihren Geschmack zu finden." },
+      { eyebrow: "Allergene", text: "Viele Teige enthalten Gluten, mehrere Pizzen enthalten Milchprodukte. Bitte Allergien oder Unverträglichkeiten bei der Bestellung angeben — wir finden fast immer eine Alternative." },
+      { eyebrow: "Wolfgarden", text: "Bei gutem Wetter bleibt der Außenbereich bis spät geöffnet — warmes Licht, leise Musik, kaltes Bier. Der richtige Ort, um den Abend zu verlängern." }
+    ],
+    contact: { label: "Tisch reservieren", call: "379 136 5291", callHref: "tel:+393791365291", site: "hungrywolfmdc.it", siteHref: "https://www.hungrywolfmdc.it" }
+  },
+  en: {
+    lang: "en-GB",
+    sections: [
+      { eyebrow: "Who we are", text: "Hungry Wolf: real pizza, craft beer, and a Wolfgarden to stay out in until late. Not your usual pizzeria — people come here for the night, not just for dinner.", punch:true },
+      { eyebrow: "The World Cup finish line", text: "We're on Via 3-Tre — yes, named after the race itself. The Canalone Miramonti, where every December the World Cup night slalom sets Campiglio alight, finishes just steps from here. Stenmark and Tomba won on this snow, and today Vinatzer and the world's best race down it. Come have a beer where the champions cross the line.", punch:true },
+      { eyebrow: "The wolf's pizza", text: "Our menu changes often: long-fermented dough, real ingredients, a few combinations that break the rules. Ask your server about today's seasonal special." },
+      { eyebrow: "The beers", text: "A rotating selection of craft beers. If you're not sure what to pick, just say so — our staff will guide you to the right one for your taste." },
+      { eyebrow: "Allergens", text: "Many doughs contain gluten, several pizzas contain dairy. Please mention any allergies or intolerances when ordering — we can almost always find an alternative." },
+      { eyebrow: "Wolfgarden", text: "Weather permitting, our outdoor garden stays open late — warm lights, low music, cold beer. The right place to stretch the evening a little longer." }
+    ],
+    contact: { label: "Book a table", call: "379 136 5291", callHref: "tel:+393791365291", site: "hungrywolfmdc.it", siteHref: "https://www.hungrywolfmdc.it" }
+  }
+};
+
+let currentLang = 'it';
+
+function renderContent(){
+  const c = document.getElementById('content');
+  c.innerHTML = '';
+  DATA[currentLang].sections.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'section' + (s.punch ? ' punch' : '');
+    div.innerHTML = `
+      <p class="section-eyebrow">${s.eyebrow}</p>
+      <p>${s.text}</p>
+      <button class="play-btn" data-index="${i}" aria-label="Ascolta">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+    `;
+    c.appendChild(div);
+  });
+
+  const ct = DATA[currentLang].contact;
+  if (ct) {
+    const box = document.createElement('div');
+    box.className = 'contact-box';
+    box.innerHTML = `
+      <p class="contact-label">${ct.label}</p>
+      <div class="contact-actions">
+        <a class="contact-btn" href="${ct.callHref}">
+          <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z"/></svg>
+          ${ct.call}
+        </a>
+        <a class="contact-btn" href="${ct.siteHref}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm6.93 6H15.5a15.9 15.9 0 0 0-1.25-3.53A8.03 8.03 0 0 1 18.93 8zM12 4.06c.83 1.2 1.5 2.55 1.94 3.94h-3.88c.44-1.39 1.11-2.74 1.94-3.94zM4.26 14A7.97 7.97 0 0 1 4 12c0-.68.09-1.35.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.81 2h3.43c.31 1.26.75 2.45 1.25 3.53A8 8 0 0 1 5.07 16zm3.43-8H5.07a8 8 0 0 1 4.68-3.53C9.25 5.55 8.81 6.74 8.5 8zM12 19.94c-.83-1.2-1.5-2.55-1.94-3.94h3.88c-.44 1.39-1.11 2.74-1.94 3.94zM14.36 14H9.64c-.09-.66-.14-1.32-.14-2s.05-1.34.14-2h4.72c.09.66.14 1.32.14 2s-.05 1.34-.14 2zm.14 4.53c.5-1.08.94-2.27 1.25-3.53h3.43a8 8 0 0 1-4.68 3.53zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.17.65.26 1.32.26 2s-.09 1.35-.26 2h-3.38z"/></svg>
+          ${ct.site}
+        </a>
+      </div>
+    `;
+    c.appendChild(box);
+  }
+
+  c.querySelectorAll('.play-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.getAttribute('data-index'));
+      speakSection(idx, btn);
+    });
+  });
+}
+
+function speakSection(idx, btn){
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.play-btn').forEach(b => b.classList.remove('speaking'));
+
+  const s = DATA[currentLang].sections[idx];
+  const utter = new SpeechSynthesisUtterance(s.eyebrow + '. ' + s.text);
+  utter.lang = DATA[currentLang].lang;
+  utter.rate = 0.97;
+  btn.classList.add('speaking');
+  utter.onend = () => btn.classList.remove('speaking');
+  utter.onerror = () => btn.classList.remove('speaking');
+  window.speechSynthesis.speak(utter);
+}
+
+document.getElementById('langBar').addEventListener('click', (e) => {
+  const btn = e.target.closest('.lang-btn');
+  if (!btn) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentLang = btn.getAttribute('data-lang');
+  renderContent();
+});
+
+document.getElementById('tapMoment').addEventListener('click', function(){
+  this.classList.add('hide');
+});
+
+renderContent();
+</script>
+
+</body>
+</html>
