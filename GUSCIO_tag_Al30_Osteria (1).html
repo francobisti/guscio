@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Al 30 — Osteria & Friends | Madonna di Campiglio</title>
+<meta name="description" content="Al 30 - Osteria & Friends a Madonna di Campiglio. Cucina trentina tradizionale, ingredienti locali della Val Rendena. Menu e informazioni in italiano, tedesco e inglese con GUSCIO.">
+<meta property="og:title" content="Al 30 — Osteria & Friends">
+<meta property="og:description" content="Casa mia, casa tua. Osteria a Madonna di Campiglio con cucina trentina tradizionale.">
+<meta property="og:type" content="restaurant">
+<meta property="og:locale" content="it_IT">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Restaurant",
+  "name": "Al 30 - Osteria & Friends",
+  "servesCuisine": "Trentina",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Madonna di Campiglio",
+    "addressRegion": "TN",
+    "addressCountry": "IT"
+  },
+  "telephone": "+393803735594",
+  "url": "https://www.osteriafriends.it"
+}
+</script>
+<style>
+  :root{
+    --ink:#2B1D16;
+    --wine:#5C2A28;
+    --wine-deep:#3E1B1A;
+    --oak:#8A5A3B;
+    --oak-light:#C99B6E;
+    --cream:#F3EADD;
+    --cream-dim:#E4D6C2;
+    --sage:#6E7F5C;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0;
+    background: radial-gradient(circle at 30% 0%, #5C2A28 0%, #2B1D16 65%);
+    min-height:100vh;
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    color:var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    padding: 28px 14px;
+  }
+  .stage{ width:100%; max-width:400px; }
+  .field-label{
+    text-align:center;
+    font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size:11px; letter-spacing:2.5px; text-transform:uppercase;
+    color:var(--oak-light); opacity:.8; margin-bottom:14px;
+  }
+  .phone{
+    background: linear-gradient(180deg, #241512 0%, #180F0D 100%);
+    border-radius: 34px; padding: 10px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,.6), 0 0 0 1px rgba(201,155,110,.1);
+  }
+  .screen{
+    background: var(--cream);
+    border-radius: 26px; overflow:hidden;
+    min-height: 640px; position:relative;
+    color: var(--ink); display:flex; flex-direction:column;
+  }
+
+  #tapMoment{
+    position:absolute; inset:0;
+    background: linear-gradient(160deg, var(--wine) 0%, var(--wine-deep) 100%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    z-index:10; cursor:pointer;
+    transition: opacity .5s ease, visibility .5s ease;
+  }
+  #tapMoment.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  .nfc-ring{
+    width:88px; height:88px; border-radius:50%;
+    border:1.5px solid var(--oak-light);
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+  }
+  .nfc-ring::before, .nfc-ring::after{
+    content:''; position:absolute; border-radius:50%;
+    border:1.5px solid var(--oak-light); inset:0; opacity:0;
+    animation: pulseRing 2.2s ease-out infinite;
+  }
+  .nfc-ring::after{ animation-delay: 1.1s; }
+  @keyframes pulseRing{
+    0%{ transform:scale(1); opacity:.9; }
+    100%{ transform:scale(1.9); opacity:0; }
+  }
+  .nfc-ring svg{ width:34px; height:34px; fill:var(--cream); }
+  #tapMoment p{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12px; letter-spacing:1.8px; text-transform:uppercase;
+    color:var(--oak-light); margin-top:22px; opacity:.9;
+  }
+
+  .head{
+    padding: 22px 22px 16px;
+    border-bottom:1px solid var(--cream-dim);
+    background: var(--cream);
+  }
+  .wordmark{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11px; letter-spacing:3px; text-transform:uppercase;
+    color:var(--oak); font-weight:600; margin:0 0 10px;
+  }
+  .prod-name{ font-size:27px; margin:0; line-height:1.15; color:var(--wine); }
+  .prod-sub{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12.5px; color:#7A6455; margin-top:6px; font-style:italic;
+  }
+
+  .langs{ display:flex; gap:6px; padding: 14px 22px 0; }
+  .lang-btn{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11.5px; font-weight:600;
+    border:1px solid var(--cream-dim);
+    background:transparent; color:#7A6455;
+    padding:6px 12px; border-radius:20px; cursor:pointer;
+    transition: all .2s ease;
+  }
+  .lang-btn.active{ background:var(--wine); color:var(--cream); border-color:var(--wine); }
+
+  .content{ padding: 16px 22px 90px; overflow-y:auto; flex:1; }
+  .section{
+    margin-bottom:16px; padding:14px 16px; border-radius:12px;
+    background:#FBF7EF; border:1px solid var(--cream-dim); position:relative;
+  }
+  .section.highlight{ border-color:var(--oak-light); background:#FBF0DE; }
+  .section-eyebrow{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10px; letter-spacing:1.6px; text-transform:uppercase;
+    color:var(--oak); margin:0 0 6px; font-weight:700;
+  }
+  .section.highlight .section-eyebrow{ color:var(--wine); }
+  .section p{ margin:0; font-size:14.5px; line-height:1.5; color:var(--ink); }
+  .play-btn{
+    position:absolute; top:12px; right:12px;
+    width:30px; height:30px; border-radius:50%;
+    border:none; background:var(--wine); color:var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition: background .2s ease;
+  }
+  .play-btn:hover{ background:var(--oak); }
+  .play-btn svg{ width:13px; height:13px; fill:currentColor; }
+  .play-btn.speaking{ background:var(--sage); }
+
+  .footbar{
+    position:absolute; bottom:0; left:0; right:0;
+    background: linear-gradient(0deg, var(--cream) 60%, rgba(243,234,221,0));
+    padding: 26px 22px 16px; text-align:center;
+  }
+  .tagline{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10.5px; letter-spacing:1px; color:#9A8570; font-style:italic;
+  }
+  .note{
+    text-align:center;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11px; color:var(--oak-light); opacity:.7;
+    margin-top:16px; line-height:1.5;
+  }
+  .contact-box{
+    margin-top:4px; margin-bottom:16px;
+    padding:16px; border-radius:12px;
+    background: var(--wine); color: var(--cream);
+  }
+  .contact-label{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10px; letter-spacing:1.6px; text-transform:uppercase;
+    color:var(--oak-light); margin:0 0 10px; font-weight:700;
+  }
+  .contact-actions{ display:flex; gap:8px; }
+  .contact-btn{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12.5px; font-weight:700; text-decoration:none;
+    padding:10px 8px; border-radius:8px;
+    background: rgba(255,255,255,.12); color: var(--cream);
+    border:1px solid rgba(255,255,255,.25);
+  }
+  .contact-btn svg{ width:14px; height:14px; fill:currentColor; flex-shrink:0; }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="field-label">Simulazione tag NFC · sul tavolo, all'ingresso o sul menu</div>
+  <div class="phone">
+    <div class="screen">
+
+      <div id="tapMoment">
+        <div class="nfc-ring">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+        </div>
+        <p>Tocca per entrare</p>
+      </div>
+
+      <div class="head">
+        <p class="wordmark">Guscio · soglia zero</p>
+        <h1 class="prod-name">Al 30 — Osteria & Friends</h1>
+        <p class="prod-sub">"Casa mia, casa tua", dice l'oste in allegria</p>
+      </div>
+
+      <div class="langs" id="langBar">
+        <button class="lang-btn active" data-lang="it">IT</button>
+        <button class="lang-btn" data-lang="de">DE</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+
+      <div class="content" id="content"></div>
+
+      <div class="footbar">
+        <p class="tagline">la sicurezza è un atto d'amore</p>
+      </div>
+
+    </div>
+  </div>
+  <p class="note">Ogni sezione può essere ascoltata a voce, nella lingua selezionata —<br>esattamente come sentirebbe il cliente toccando il tag vero sul tavolo.</p>
+</div>
+
+<script>
+const DATA = {
+  it: {
+    lang: "it-IT",
+    sections: [
+      { eyebrow: "Benvenuto", text: "Benvenuto all'Al 30 — Osteria & Friends. Qui a Madonna di Campiglio l'idea è semplice: casa mia, casa tua. Siediti, respira, e lasciati raccontare cosa c'è in cucina oggi.", highlight:true },
+      { eyebrow: "Antipasti", text: "Tagliere di affettati, salumi e formaggi a venti euro. Uovo, patate, speck e fonduta a tredici euro. Crostini misti a quattordici euro. Carpaccio con misticanza e grana a diciotto euro. Antipasto dell'oste a diciannove euro." },
+      { eyebrow: "Primi", text: "Canederlo pressato con funghi e fonduta a quindici euro. Tagliolini al ragù di cervo a sedici euro. Strangolapreti burro e salvia a quattordici euro. Zuppa del giorno a tredici euro." },
+      { eyebrow: "Secondi", text: "Polenta, funghi e formaggio a diciannove euro. Polpette al sugo con purè a diciotto euro. Gulasch con polenta a diciannove euro. Stracotto con polenta e mele caramellate a diciannove euro." },
+      { eyebrow: "Contorni", text: "Patate al forno, fagioli e cipolla, crauti e pancetta, o cavolo cappuccio, a sei euro. Verdure miste a sette euro. Funghi trifolati a otto euro." },
+      { eyebrow: "Dolci", text: "Strudel, tiramisù, panna cotta o semifreddo a sei euro; il semifreddo a sette; il gelato della casa a otto euro." },
+      { eyebrow: "Da bere", text: "Calice di vino rosso o bianco a tre euro e cinquanta. Un quarto litro a quattro euro e cinquanta, mezzo litro a sette euro e cinquanta, un litro a quattordici euro. Birra piccola a tre euro, birra media a cinque." },
+      { eyebrow: "Da dove viene", text: "I prodotti arrivano per lo più da piccoli produttori della Val Rendena e delle Giudicarie: formaggi di malga, salumi locali, verdure di stagione dell'orto qui vicino." },
+      { eyebrow: "Allergeni", text: "Il menu scritto indica un numero accanto a ogni piatto, da uno a quattordici, corrispondente agli allergeni presenti: ad esempio uno per i cereali, tre per le uova, sette per il latte. Se hai dubbi, chiedi in sala il dettaglio completo prima di ordinare." },
+      { eyebrow: "Un aneddoto", text: "Il nome Al 30 viene semplicemente dal numero civico di questa via — ma con gli anni è diventato il punto d'incontro di chi, di passaggio o di casa, qui si sente sempre benvenuto." }
+    ],
+    contact: { label: "Prenotazioni", call: "380 37 35 594", callHref: "tel:+393803735594", site: "osteriafriends.it", siteHref: "https://www.osteriafriends.it" }
+  },
+  de: {
+    lang: "de-DE",
+    sections: [
+      { eyebrow: "Willkommen", text: "Willkommen im Al 30 — Osteria & Friends. Hier in Madonna di Campiglio ist die Idee einfach: mein Zuhause, dein Zuhause. Setz dich, atme durch, und lass dir erzählen, was heute in der Küche los ist.", highlight:true },
+      { eyebrow: "Vorspeisen", text: "Aufschnitt-, Wurst- und Käseplatte für zwanzig Euro. Ei, Kartoffeln, Speck und Fonduta für dreizehn Euro. Gemischte Crostini für vierzehn Euro. Carpaccio mit Salat und Grana für achtzehn Euro. Antipasto dell'Oste für neunzehn Euro." },
+      { eyebrow: "Erste Gänge", text: "Gepresster Canederlo mit Pilzen und Fonduta für fünfzehn Euro. Tagliolini mit Hirschragout für sechzehn Euro. Strangolapreti mit Butter und Salbei für vierzehn Euro. Tagessuppe für dreizehn Euro." },
+      { eyebrow: "Hauptgänge", text: "Polenta mit Pilzen und Käse für neunzehn Euro. Fleischbällchen in Sauce mit Kartoffelpüree für achtzehn Euro. Gulasch mit Polenta für neunzehn Euro. Schmorbraten mit Polenta und karamellisierten Äpfeln für neunzehn Euro." },
+      { eyebrow: "Beilagen", text: "Ofenkartoffeln, Bohnen mit Zwiebeln, Sauerkraut mit Speck oder Weißkohl für sechs Euro. Gemischtes Gemüse für sieben Euro. Pilze in Butter für acht Euro." },
+      { eyebrow: "Desserts", text: "Strudel, Tiramisù oder Panna Cotta für sechs Euro; Semifreddo für sieben; hausgemachtes Eis für acht Euro." },
+      { eyebrow: "Getränke", text: "Ein Glas Rot- oder Weißwein für drei Euro fünfzig. Ein Viertelliter für vier Euro fünfzig, ein halber Liter für sieben Euro fünfzig, ein Liter für vierzehn Euro. Kleines Bier für drei Euro, mittleres für fünf." },
+      { eyebrow: "Herkunft", text: "Die Produkte stammen größtenteils von kleinen Erzeugern aus dem Val Rendena und den Giudicarie: Bergkäse, lokale Wurstwaren, saisonales Gemüse aus dem nahen Garten." },
+      { eyebrow: "Allergene", text: "Die schriftliche Speisekarte zeigt neben jedem Gericht eine Nummer von eins bis vierzehn, die den enthaltenen Allergenen entspricht: zum Beispiel eins für Getreide, drei für Eier, sieben für Milch. Bei Fragen bitte vor der Bestellung im Restaurant nachfragen." },
+      { eyebrow: "Eine kleine Geschichte", text: "Der Name Al 30 kommt einfach von der Hausnummer dieser Straße — doch mit den Jahren ist er zum Treffpunkt geworden für alle, die sich hier willkommen fühlen." }
+    ],
+    contact: { label: "Reservierungen", call: "380 37 35 594", callHref: "tel:+393803735594", site: "osteriafriends.it", siteHref: "https://www.osteriafriends.it" }
+  },
+  en: {
+    lang: "en-GB",
+    sections: [
+      { eyebrow: "Welcome", text: "Welcome to Al 30 — Osteria & Friends. Here in Madonna di Campiglio the idea is simple: my home, your home. Sit down, take a breath, and let us tell you what's cooking today.", highlight:true },
+      { eyebrow: "Starters", text: "Cured meats, sausage and cheese board for twenty euros. Egg, potatoes, speck and fondue for thirteen euros. Mixed crostini for fourteen euros. Carpaccio with salad and grana cheese for eighteen euros. Antipasto dell'Oste for nineteen euros." },
+      { eyebrow: "First courses", text: "Pressed canederlo with mushrooms and fondue for fifteen euros. Tagliolini with venison ragù for sixteen euros. Strangolapreti with butter and sage for fourteen euros. Soup of the day for thirteen euros." },
+      { eyebrow: "Main courses", text: "Polenta with mushrooms and cheese for nineteen euros. Meatballs in sauce with mashed potatoes for eighteen euros. Goulash with polenta for nineteen euros. Braised beef with polenta and caramelised apples for nineteen euros." },
+      { eyebrow: "Side dishes", text: "Roast potatoes, beans with onion, sauerkraut with bacon, or cabbage, for six euros. Mixed vegetables for seven euros. Sautéed mushrooms for eight euros." },
+      { eyebrow: "Desserts", text: "Strudel, tiramisù or panna cotta for six euros; semifreddo for seven; house-made ice cream for eight euros." },
+      { eyebrow: "To drink", text: "A glass of red or white wine for three euros fifty. A quarter litre for four fifty, half a litre for seven fifty, one litre for fourteen euros. Small beer for three euros, medium for five." },
+      { eyebrow: "Where it comes from", text: "Most of our products come from small producers in Val Rendena and the Giudicarie valleys: mountain-hut cheeses, local cured meats, seasonal vegetables from the garden nearby." },
+      { eyebrow: "Allergens", text: "The written menu shows a number next to each dish, from one to fourteen, corresponding to the allergens it contains: for example one for cereals, three for eggs, seven for dairy. If in doubt, please ask our staff for the full detail before ordering." },
+      { eyebrow: "A little story", text: "The name Al 30 simply comes from this street's house number — but over the years it has become a meeting point for anyone who feels at home here, whether passing through or a regular." }
+    ],
+    contact: { label: "Reservations", call: "380 37 35 594", callHref: "tel:+393803735594", site: "osteriafriends.it", siteHref: "https://www.osteriafriends.it" }
+  }
+};
+
+let currentLang = 'it';
+
+function renderContent(){
+  const c = document.getElementById('content');
+  c.innerHTML = '';
+  DATA[currentLang].sections.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'section' + (s.highlight ? ' highlight' : '');
+    div.innerHTML = `
+      <p class="section-eyebrow">${s.eyebrow}</p>
+      <p>${s.text}</p>
+      <button class="play-btn" data-index="${i}" aria-label="Ascolta">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+    `;
+    c.appendChild(div);
+  });
+
+  const ct = DATA[currentLang].contact;
+  if (ct) {
+    const box = document.createElement('div');
+    box.className = 'contact-box';
+    box.innerHTML = `
+      <p class="contact-label">${ct.label}</p>
+      <div class="contact-actions">
+        <a class="contact-btn" href="${ct.callHref}">
+          <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z"/></svg>
+          ${ct.call}
+        </a>
+        <a class="contact-btn" href="${ct.siteHref}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm6.93 6H15.5a15.9 15.9 0 0 0-1.25-3.53A8.03 8.03 0 0 1 18.93 8zM12 4.06c.83 1.2 1.5 2.55 1.94 3.94h-3.88c.44-1.39 1.11-2.74 1.94-3.94zM4.26 14A7.97 7.97 0 0 1 4 12c0-.68.09-1.35.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.81 2h3.43c.31 1.26.75 2.45 1.25 3.53A8 8 0 0 1 5.07 16zm3.43-8H5.07a8 8 0 0 1 4.68-3.53C9.25 5.55 8.81 6.74 8.5 8zM12 19.94c-.83-1.2-1.5-2.55-1.94-3.94h3.88c-.44 1.39-1.11 2.74-1.94 3.94zM14.36 14H9.64c-.09-.66-.14-1.32-.14-2s.05-1.34.14-2h4.72c.09.66.14 1.32.14 2s-.05 1.34-.14 2zm.14 4.53c.5-1.08.94-2.27 1.25-3.53h3.43a8 8 0 0 1-4.68 3.53zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.17.65.26 1.32.26 2s-.09 1.35-.26 2h-3.38z"/></svg>
+          ${ct.site}
+        </a>
+      </div>
+    `;
+    c.appendChild(box);
+  }
+
+  c.querySelectorAll('.play-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.getAttribute('data-index'));
+      speakSection(idx, btn);
+    });
+  });
+}
+
+function speakSection(idx, btn){
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.play-btn').forEach(b => b.classList.remove('speaking'));
+
+  const s = DATA[currentLang].sections[idx];
+  const utter = new SpeechSynthesisUtterance(s.eyebrow + '. ' + s.text);
+  utter.lang = DATA[currentLang].lang;
+  utter.rate = 0.95;
+  btn.classList.add('speaking');
+  utter.onend = () => btn.classList.remove('speaking');
+  utter.onerror = () => btn.classList.remove('speaking');
+  window.speechSynthesis.speak(utter);
+}
+
+document.getElementById('langBar').addEventListener('click', (e) => {
+  const btn = e.target.closest('.lang-btn');
+  if (!btn) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentLang = btn.getAttribute('data-lang');
+  renderContent();
+});
+
+document.getElementById('tapMoment').addEventListener('click', function(){
+  this.classList.add('hide');
+});
+
+renderContent();
+</script>
+
+</body>
+</html>
