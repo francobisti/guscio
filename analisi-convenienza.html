@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO — Analisi di convenienza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --forest:#1F3A2E;
+    --forest-deep:#152A21;
+    --gold:#C9A227;
+    --gold-soft:#E4C875;
+    --cream:#FAF6EC;
+    --ink:#2A2A24;
+    --sage:#DCE3D6;
+    --sage-line:#C4CFBC;
+    --white:#FFFFFF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;color:var(--forest-deep);}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+
+  /* NAV */
+  header.nav{
+    padding:22px 0;
+    border-bottom:1px solid var(--sage-line);
+  }
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;}
+  .brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:600;font-size:1.15rem;color:var(--forest-deep);text-decoration:none;}
+  .brand .fan{width:22px;height:22px;flex-shrink:0;}
+  .nav-links{display:flex;gap:28px;font-size:.88rem;color:var(--forest);}
+  .nav-links a{text-decoration:none;opacity:.75;transition:opacity .2s;}
+  .nav-links a:hover{opacity:1;}
+
+  /* HERO */
+  .hero{
+    padding:88px 0 72px;
+    position:relative;
+    overflow:hidden;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.78rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--gold);
+    background:var(--forest-deep);
+    display:inline-block;
+    padding:6px 14px;
+    border-radius:20px;
+    margin-bottom:28px;
+  }
+  .hero h1{
+    font-size:clamp(2.1rem, 4.6vw, 3.4rem);
+    line-height:1.12;
+    max-width:16ch;
+    margin-bottom:24px;
+    letter-spacing:-0.01em;
+  }
+  .hero p.lead{
+    font-size:1.12rem;
+    max-width:52ch;
+    color:#4A4A3F;
+    margin-bottom:44px;
+  }
+
+  /* Step visual - signature element */
+  .step-compare{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:16px;
+    margin-top:8px;
+  }
+  .step-card{
+    background:var(--white);
+    border:1px solid var(--sage-line);
+    border-radius:14px;
+    padding:22px 22px 20px;
+  }
+  .step-card .label{
+    font-size:.82rem;
+    color:#6B6B5E;
+    margin-bottom:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+  }
+  .step-card .count{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    color:var(--forest-deep);
+  }
+  .dots{display:flex;gap:6px;flex-wrap:wrap;}
+  .dot{
+    width:15px;height:15px;border-radius:50%;
+    border:2px solid var(--sage-line);
+    background:transparent;
+  }
+  .dot.filled{background:var(--gold);border-color:var(--gold);}
+  .step-card.guscio{
+    border-color:var(--gold);
+    background:linear-gradient(180deg, #FFFDF7 0%, var(--white) 100%);
+    box-shadow:0 4px 18px rgba(201,162,39,.14);
+  }
+  .step-card.guscio .dot.filled{background:var(--forest);border-color:var(--forest);}
+
+  /* SECTION generic */
+  section{padding:64px 0;}
+  section.on-sage{background:var(--sage);}
+  .section-head{max-width:56ch;margin-bottom:40px;}
+  .section-head .eyebrow-inline{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.78rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--forest);
+    opacity:.7;
+    display:block;
+    margin-bottom:10px;
+  }
+  .section-head h2{font-size:clamp(1.5rem,2.6vw,2rem);}
+
+  /* COMPARISON TABLE */
+  .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:16px;border:1px solid var(--sage-line);}
+  table.compare{
+    width:100%;
+    border-collapse:collapse;
+    min-width:760px;
+    background:var(--white);
+  }
+  table.compare th, table.compare td{
+    text-align:left;
+    padding:16px 18px;
+    border-bottom:1px solid var(--sage-line);
+    font-size:.92rem;
+    vertical-align:top;
+  }
+  table.compare th{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:.98rem;
+    background:var(--forest-deep);
+    color:var(--cream);
+    position:sticky;
+    top:0;
+  }
+  table.compare th:first-child, table.compare td:first-child{
+    color:#6B6B5E;
+    font-size:.82rem;
+    font-family:'JetBrains Mono',monospace;
+    width:180px;
+  }
+  table.compare th.hero-col{
+    background:var(--gold);
+    color:var(--forest-deep);
+  }
+  table.compare td.hero-col{
+    background:#FFFBF0;
+    font-weight:600;
+  }
+  table.compare tr:last-child td{border-bottom:none;}
+  .good{color:#2F6B3E;font-weight:600;}
+  .mid{color:#8A6B12;}
+  .bad{color:#A14B3A;}
+
+  /* COST SECTION */
+  .cost-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:18px;
+  }
+  .cost-card{
+    background:var(--white);
+    border:1px solid var(--sage-line);
+    border-radius:14px;
+    padding:26px;
+  }
+  .cost-card h3{font-size:1.05rem;margin-bottom:6px;}
+  .cost-card .price{
+    font-family:'JetBrains Mono',monospace;
+    font-size:1.6rem;
+    color:var(--forest-deep);
+    font-weight:700;
+    margin:10px 0 4px;
+  }
+  .cost-card .price small{font-size:.65em;font-weight:500;color:#6B6B5E;}
+  .cost-card p{font-size:.88rem;color:#5A5A4E;}
+  .cost-card.highlight{
+    border-color:var(--gold);
+    box-shadow:0 4px 18px rgba(201,162,39,.14);
+  }
+  .note-editable{
+    margin-top:28px;
+    font-size:.82rem;
+    color:#6B6B5E;
+    border-left:3px solid var(--gold);
+    padding-left:14px;
+  }
+
+  /* CTA */
+  .cta{
+    background:var(--forest-deep);
+    color:var(--cream);
+    border-radius:20px;
+    padding:48px 40px;
+    text-align:center;
+    margin:0 auto;
+  }
+  .cta h2{color:var(--cream);font-size:clamp(1.4rem,2.6vw,1.9rem);margin-bottom:14px;}
+  .cta p{max-width:44ch;margin:0 auto 26px;opacity:.85;}
+  .cta a.btn{
+    display:inline-block;
+    background:var(--gold);
+    color:var(--forest-deep);
+    font-weight:600;
+    padding:13px 30px;
+    border-radius:30px;
+    text-decoration:none;
+    font-size:.95rem;
+  }
+
+  footer{padding:36px 0;font-size:.8rem;color:#6B6B5E;text-align:center;}
+
+  @media (max-width:640px){
+    .hero{padding:64px 0 48px;}
+    section{padding:48px 0;}
+    .cta{padding:36px 22px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="#" class="brand">
+      <svg class="fan" viewBox="0 0 24 24" fill="none">
+        <path d="M12 22C12 14 6 10 2 10C2 16 6 22 12 22Z" fill="#1F3A2E"/>
+        <path d="M12 22C12 14 18 10 22 10C22 16 18 22 12 22Z" fill="#C9A227"/>
+        <path d="M12 22V4" stroke="#1F3A2E" stroke-width="1.4"/>
+      </svg>
+      GUSCIO
+    </a>
+    <nav class="nav-links">
+      <a href="#confronto">Confronto</a>
+      <a href="#costi">Costi</a>
+      <a href="#contatti">Contatti</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Analisi di convenienza</span>
+    <h1>Quanti passaggi separano una persona dall'informazione?</h1>
+    <p class="lead">GUSCIO nasce per azzerarli. Qui confrontiamo, passaggio per passaggio e costo per costo, come arriva l'informazione a chi la cerca — con GUSCIO e con le alternative più comuni.</p>
+
+    <div class="step-compare">
+      <div class="step-card guscio">
+        <div class="label">GUSCIO <span class="count">1 passaggio</span></div>
+        <div class="dots">
+          <div class="dot filled"></div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="label">QR code + app <span class="count">5 passaggi</span></div>
+        <div class="dots">
+          <div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="label">Cartellonistica cartacea <span class="count">0 passaggi, 0 profondità</span></div>
+        <div class="dots">
+          <div class="dot"></div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="label">Assistente vocale generico <span class="count">4+ passaggi</span></div>
+        <div class="dots">
+          <div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div><div class="dot filled"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="confronto" class="on-sage">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow-inline">Confronto diretto</span>
+      <h2>GUSCIO messo a confronto con le alternative</h2>
+    </div>
+
+    <div class="table-scroll">
+      <table class="compare">
+        <thead>
+          <tr>
+            <th>Criterio</th>
+            <th class="hero-col">GUSCIO</th>
+            <th>QR code + app</th>
+            <th>Cartellonistica cartacea</th>
+            <th>Assistente vocale generico</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Passaggi per l'utente</td>
+            <td class="hero-col good">Tap → ascolto</td>
+            <td>Inquadra, apre camera, apre link, attende caricamento, eventuale download app</td>
+            <td class="mid">Nessuno, ma nessuna interazione</td>
+            <td class="bad">Attivazione dispositivo, ricerca comando, attesa risposta, spesso fraintendimenti</td>
+          </tr>
+          <tr>
+            <td>App richiesta</td>
+            <td class="hero-col good">Nessuna</td>
+            <td class="bad">Spesso sì</td>
+            <td class="good">Nessuna</td>
+            <td class="bad">Sì, dispositivo dedicato</td>
+          </tr>
+          <tr>
+            <td>Login o account</td>
+            <td class="hero-col good">Mai richiesto</td>
+            <td class="mid">A volte</td>
+            <td class="good">Non applicabile</td>
+            <td class="mid">Spesso legato ad account</td>
+          </tr>
+          <tr>
+            <td>Multilingua reale</td>
+            <td class="hero-col good">Sì, per ogni tag</td>
+            <td class="mid">Dipende dal sito collegato</td>
+            <td class="bad">Richiede più stampe</td>
+            <td class="mid">Dipende dal motore usato</td>
+          </tr>
+          <tr>
+            <td>Accessibilità (anziani, ipovedenti, chi non legge bene l'italiano)</td>
+            <td class="hero-col good">Alta — voce, zero lettura</td>
+            <td class="bad">Bassa — richiede vista e manualità</td>
+            <td class="bad">Bassa — solo testo</td>
+            <td class="mid">Media — ma barriera del dispositivo</td>
+          </tr>
+          <tr>
+            <td>Aggiornamento contenuti</td>
+            <td class="hero-col good">Da remoto, in autonomia</td>
+            <td class="good">Da remoto, se il sito è gestito</td>
+            <td class="bad">Richiede nuova stampa</td>
+            <td class="mid">Da remoto, ma piattaforma terza</td>
+          </tr>
+          <tr>
+            <td>Dati personali richiesti all'utente</td>
+            <td class="hero-col good">Nessuno</td>
+            <td class="mid">Spesso tracciamento del sito</td>
+            <td class="good">Nessuno</td>
+            <td class="bad">Profilazione dell'account</td>
+          </tr>
+          <tr>
+            <td>Durata fisica del supporto</td>
+            <td class="hero-col good">Anni, tag passivo senza batteria</td>
+            <td class="mid">Anni, ma degrado grafico dell'adesivo</td>
+            <td class="bad">Mesi, si rovina con intemperie</td>
+            <td class="mid">Legata alla vita del dispositivo</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="costi">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow-inline">Convenienza economica</span>
+      <h2>Cosa costa mantenere l'informazione aggiornata</h2>
+    </div>
+
+    <div class="cost-grid">
+      <div class="cost-card highlight">
+        <h3>GUSCIO</h3>
+        <div class="price">€ ___<small>/mese</small></div>
+        <p>Canone che include hosting, aggiornamento contenuti e supporto multilingua. Nessun costo di ristampa quando cambia un'informazione.</p>
+      </div>
+      <div class="cost-card">
+        <h3>QR + app dedicata</h3>
+        <div class="price">€ ___<small>una tantum</small></div>
+        <p>Sviluppo iniziale elevato, più costi di manutenzione e aggiornamento sugli store se prevista un'app nativa.</p>
+      </div>
+      <div class="cost-card">
+        <h3>Cartellonistica cartacea</h3>
+        <div class="price">€ ___<small>a ogni ristampa</small></div>
+        <p>Costo ricorrente ogni volta che cambia una norma, un orario o un prezzo. Nessuna interattività, nessun dato su chi legge.</p>
+      </div>
+      <div class="cost-card">
+        <h3>Assistente vocale generico</h3>
+        <div class="price">€ ___<small>hardware + piattaforma</small></div>
+        <p>Costo del dispositivo più eventuali abbonamenti alla piattaforma terza, con dati e logica fuori dal controllo diretto.</p>
+      </div>
+    </div>
+
+    <p class="note-editable">Le cifre sono segnaposto — vanno sostituite con i canoni reali prima di pubblicare la pagina (es. i canoni già proposti per Chalet Spinale e al30 Osteria).</p>
+  </div>
+</section>
+
+<section class="on-sage" id="contatti">
+  <div class="wrap">
+    <div class="cta">
+      <h2>Un tap. Zero attrito. Un'informazione che arriva.</h2>
+      <p>Se vuoi vedere GUSCIO applicato al tuo caso specifico, possiamo costruire una demo in pochi giorni.</p>
+      <a href="mailto:info@guscio.ai" class="btn">Richiedi una demo</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  GUSCIO — un progetto AlpCover · guscio.ai
+</footer>
+
+</body>
+</html>
