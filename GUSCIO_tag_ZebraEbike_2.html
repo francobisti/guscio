@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO — Zebra E-Bike</title>
+<style>
+  :root{
+    --ink:#28312A;
+    --sage:#5C7A63;
+    --sage-deep:#33453A;
+    --birch:#E8DEC8;
+    --birch-light:#F2ECDC;
+    --paper:#F5F2E9;
+    --paper-dim:#E1DAC5;
+    --charcoal:#3A3530;
+    --gold:#C9A227;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0;
+    background: radial-gradient(circle at 30% 0%, #5C7A63 0%, #28312A 65%);
+    min-height:100vh;
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    color:var(--paper);
+    display:flex; align-items:center; justify-content:center;
+    padding: 28px 14px;
+  }
+  .stage{ width:100%; max-width:400px; }
+  .field-label{
+    text-align:center;
+    font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size:11px; letter-spacing:2.5px; text-transform:uppercase;
+    color:var(--birch); opacity:.8; margin-bottom:14px;
+  }
+  .phone{
+    background: linear-gradient(180deg, #1C231D 0%, #131813 100%);
+    border-radius: 34px; padding: 10px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,.6), 0 0 0 1px rgba(232,222,200,.12);
+  }
+  .screen{
+    background-color: var(--paper);
+    background-image: repeating-linear-gradient(
+      124deg,
+      rgba(51,69,58,.10) 0px, rgba(51,69,58,.10) 10px,
+      transparent 10px, transparent 22px,
+      rgba(51,69,58,.10) 22px, rgba(51,69,58,.10) 29px,
+      transparent 29px, transparent 46px,
+      rgba(51,69,58,.10) 46px, rgba(51,69,58,.10) 52px,
+      transparent 52px, transparent 74px
+    );
+    border-radius: 26px; overflow:hidden;
+    min-height: 650px; position:relative;
+    color: var(--ink); display:flex; flex-direction:column;
+  }
+  #tapMoment{
+    position:absolute; inset:0;
+    background: linear-gradient(160deg, var(--sage) 0%, var(--sage-deep) 100%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    z-index:10; cursor:pointer; transition: opacity .5s ease, visibility .5s ease;
+  }
+  #tapMoment.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  .nfc-ring{
+    width:88px; height:88px; border-radius:50%; border:1.5px solid var(--birch);
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .nfc-ring::before, .nfc-ring::after{
+    content:''; position:absolute; border-radius:50%;
+    border:1.5px solid var(--birch-light); inset:0; opacity:0;
+    animation: pulseRing 2.2s ease-out infinite;
+  }
+  .nfc-ring::after{ animation-delay: 1.1s; }
+  @keyframes pulseRing{ 0%{transform:scale(1);opacity:.9;} 100%{transform:scale(1.9);opacity:0;} }
+  .nfc-ring svg{ width:34px; height:34px; fill:var(--paper); }
+  #tapMoment p{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12px; letter-spacing:1.8px; text-transform:uppercase;
+    color:var(--birch-light); margin-top:22px; opacity:.9;
+  }
+  .head{
+    padding: 22px 22px 16px; border-bottom:1px solid var(--paper-dim);
+    background: var(--paper);
+  }
+  .wordmark{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11px; letter-spacing:3px; text-transform:uppercase;
+    color:var(--sage); font-weight:700; margin:0 0 10px;
+  }
+  .prod-name{ font-size:26px; margin:0; line-height:1.15; color:var(--sage-deep); }
+  .prod-sub{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12.5px; color:#6B7268; margin-top:6px; font-style:italic;
+  }
+  .langs{ display:flex; gap:6px; padding: 14px 22px 0; }
+  .lang-btn{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11.5px; font-weight:700; border:1px solid var(--paper-dim);
+    background:transparent; color:#6B7268;
+    padding:6px 12px; border-radius:20px; cursor:pointer; transition: all .2s ease;
+  }
+  .lang-btn.active{ background:var(--sage-deep); color:var(--paper); border-color:var(--sage-deep); }
+  .content{ padding: 16px 22px 90px; overflow-y:auto; flex:1; }
+  .section{
+    margin-bottom:16px; padding:14px 16px; border-radius:12px;
+    background:#FAF8F0; border:1px solid var(--paper-dim); position:relative;
+  }
+  .section.feature{ border-color:var(--sage); background: linear-gradient(180deg, #F1F0E3, #E9E7D6); }
+  .section-eyebrow{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10px; letter-spacing:1.6px; text-transform:uppercase;
+    color:var(--sage); margin:0 0 6px; font-weight:700;
+  }
+  .section.feature .section-eyebrow{ color:var(--sage-deep); }
+  .section p{ margin:0; font-size:14.5px; line-height:1.5; color:var(--ink); }
+  .section table{ width:100%; border-collapse:collapse; margin-top:8px; font-size:13px; }
+  .section table th, .section table td{ padding:4px 6px; text-align:center; border-bottom:1px solid var(--paper-dim); }
+  .section table th{ font-family:-apple-system,'Segoe UI',sans-serif; font-weight:700; color:var(--sage-deep); font-size:11px; }
+  .play-btn{
+    position:absolute; top:12px; right:12px; width:30px; height:30px;
+    border-radius:50%; border:none; background:var(--sage-deep); color:var(--paper);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition: background .2s ease;
+  }
+  .play-btn:hover{ background:var(--sage); }
+  .play-btn svg{ width:13px; height:13px; fill:currentColor; }
+  .play-btn.speaking{ background:var(--charcoal); }
+  .footbar{
+    position:absolute; bottom:0; left:0; right:0;
+    background: linear-gradient(0deg, var(--paper) 62%, rgba(245,242,233,0));
+    padding: 26px 22px 16px; text-align:center;
+  }
+  .tagline{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10.5px; letter-spacing:1px; color:#8A9186; font-style:italic;
+  }
+  .note{
+    text-align:center;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11px; color:var(--birch); opacity:.7;
+    margin-top:16px; line-height:1.5;
+  }
+  .contact-box{
+    margin-top:4px; margin-bottom:12px; padding:16px; border-radius:12px;
+    background: var(--sage-deep); color: var(--paper);
+  }
+  .contact-label{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10px; letter-spacing:1.6px; text-transform:uppercase;
+    color:var(--birch-light); margin:0 0 10px; font-weight:700;
+  }
+  .contact-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+  .contact-btn{
+    flex:1; min-width:100px; display:flex; align-items:center; justify-content:center; gap:6px;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12px; font-weight:700; text-decoration:none;
+    padding:10px 6px; border-radius:8px;
+    background: rgba(255,255,255,.1); color: var(--paper);
+    border:1px solid rgba(255,255,255,.28);
+  }
+  .contact-btn svg{ width:14px; height:14px; fill:currentColor; flex-shrink:0; }
+  .review-box{
+    margin-bottom:16px; padding:16px; border-radius:12px;
+    background: linear-gradient(180deg,#FFFDF3,#FBF3DC);
+    border:1px solid var(--gold); text-align:center;
+  }
+  .review-box p.review-title{
+    font-family:'Georgia',serif; font-size:15px; color:var(--sage-deep); margin:0 0 4px; font-weight:700;
+  }
+  .review-box p.review-sub{
+    font-family:-apple-system,'Segoe UI',sans-serif; font-size:11.5px; color:#7A6E3E; margin:0 0 12px;
+  }
+  .review-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:-apple-system,'Segoe UI',sans-serif; font-size:12.5px; font-weight:700;
+    text-decoration:none; padding:10px 20px; border-radius:22px;
+    background: var(--gold); color:#2A2410;
+  }
+  .review-btn svg{ width:14px; height:14px; fill:currentColor; }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <p class="field-label">Simulazione tag NFC · alla cassa, sulle bici, in vetrina</p>
+  <div class="phone">
+    <div class="screen">
+
+      <div id="tapMoment">
+        <div class="nfc-ring">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+        </div>
+        <p>Tocca per entrare</p>
+      </div>
+
+      <div class="head">
+        <p class="wordmark">Guscio · soglia zero</p>
+        <h1 class="prod-name">Zebra E-Bike</h1>
+        <p class="prod-sub">Noleggio e-bike nel cuore di Madonna di Campiglio</p>
+      </div>
+
+      <div class="langs" id="langBar">
+        <button class="lang-btn active" data-lang="it">IT</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="de">DE</button>
+      </div>
+
+      <div class="content" id="content"></div>
+
+      <div class="footbar"><p class="tagline">pedala e alza la testa</p></div>
+    </div>
+  </div>
+  <p class="note">Ogni sezione può essere ascoltata a voce, nella lingua selezionata.</p>
+</div>
+
+<script>
+const DATA = {
+  it: {
+    lang: "it-IT",
+    sections: [
+      { eyebrow: "Benvenuti", text: "Zebra E-Bike vi accoglie in Piazza Righi, nel cuore di Madonna di Campiglio. Dal 2010 accompagniamo chi vuole scoprire le Dolomiti di Brenta in sella a una e-bike, con meno sforzo e più tempo per guardarsi intorno.", feature:true },
+      { eyebrow: "I nostri modelli", text: "Full suspension Santa Cruz e Focus, front suspension Focus Jarifa, bici 24\" per i più piccoli e carrelli per i cani. Ogni bicicletta è mantenuta e controllata prima di ogni noleggio." },
+      { eyebrow: "Tour guidati", text: "I nostri istruttori vi accompagnano lungo i sentieri del Parco Naturale Adamello Brenta, tra rifugi, malghe e panorami sulle Dolomiti, adatti sia ai principianti che ai ciclisti esperti." },
+      { eyebrow: "Per tutta la famiglia", text: "Bici per bambini, carrelli per i più piccoli e per il vostro cane: Zebra E-Bike è pensata per essere vissuta insieme, dai nonni ai nipoti." },
+      { eyebrow: "Dove siamo", text: "Piazza Righi 5, Madonna di Campiglio. Siamo raggiungibili facilmente a piedi da qualsiasi hotel del paese." }
+    ],
+    contact: { label: "Prenotazioni e informazioni", call: "0465 442080", callHref: "tel:+390465442080", site: "zebraebike.com", siteHref: "https://zebraebike.com" },
+    review: { title: "Vi siete trovati bene?", sub: "Un vostro commento ci aiuta a crescere e aiuta chi verrà dopo di voi", btn: "Lascia una recensione", href: "https://www.google.com/search?q=Zebra+E-Bike+Madonna+di+Campiglio+recensioni" }
+  },
+  en: {
+    lang: "en-GB",
+    sections: [
+      { eyebrow: "Welcome", text: "Zebra E-Bike welcomes you in Piazza Righi, in the heart of Madonna di Campiglio. Since 2010 we've been helping people discover the Brenta Dolomites by e-bike, with less effort and more time to take in the view.", feature:true },
+      { eyebrow: "Our bikes", text: "Full suspension Santa Cruz and Focus models, front suspension Focus Jarifa, 24\" bikes for children, and trailers for your dog. Every bike is checked and serviced before each rental." },
+      { eyebrow: "Guided tours", text: "Our instructors guide you along the trails of the Adamello Brenta Natural Park, past mountain huts and viewpoints over the Dolomites, suitable for beginners and experienced riders alike." },
+      { eyebrow: "For the whole family", text: "Kids' bikes, trailers for little ones and for your dog: Zebra E-Bike is designed to be enjoyed together, from grandparents to grandchildren." },
+      { eyebrow: "Where we are", text: "Piazza Righi 5, Madonna di Campiglio. Easy walking distance from any hotel in town." }
+    ],
+    contact: { label: "Bookings & info", call: "0465 442080", callHref: "tel:+390465442080", site: "zebraebike.com", siteHref: "https://zebraebike.com" },
+    review: { title: "Had a good time with us?", sub: "Your feedback helps us improve and helps the next rider", btn: "Leave a review", href: "https://www.google.com/search?q=Zebra+E-Bike+Madonna+di+Campiglio+recensioni" }
+  },
+  de: {
+    lang: "de-DE",
+    sections: [
+      { eyebrow: "Willkommen", text: "Zebra E-Bike heißt Sie in der Piazza Righi im Herzen von Madonna di Campiglio willkommen. Seit 2010 begleiten wir Gäste, die die Brenta-Dolomiten mit dem E-Bike entdecken möchten — mit weniger Anstrengung und mehr Zeit für die Aussicht.", feature:true },
+      { eyebrow: "Unsere Räder", text: "Fully-Modelle von Santa Cruz und Focus, Hardtail Focus Jarifa, 24-Zoll-Räder für Kinder und Anhänger für Ihren Hund. Jedes Rad wird vor jeder Vermietung geprüft und gewartet." },
+      { eyebrow: "Geführte Touren", text: "Unsere Guides begleiten Sie auf den Wegen des Naturparks Adamello Brenta, vorbei an Hütten und Aussichtspunkten über die Dolomiten — geeignet für Anfänger und erfahrene Fahrer." },
+      { eyebrow: "Für die ganze Familie", text: "Kinderräder, Anhänger für die Kleinsten und für Ihren Hund: Zebra E-Bike ist dafür gemacht, gemeinsam erlebt zu werden, von den Großeltern bis zu den Enkeln." },
+      { eyebrow: "Wo wir sind", text: "Piazza Righi 5, Madonna di Campiglio. Von jedem Hotel im Ort bequem zu Fuß erreichbar." }
+    ],
+    contact: { label: "Buchung & Info", call: "0465 442080", callHref: "tel:+390465442080", site: "zebraebike.com", siteHref: "https://zebraebike.com" },
+    review: { title: "Hat es Ihnen gefallen?", sub: "Ihr Feedback hilft uns und den nächsten Gästen", btn: "Bewertung hinterlassen", href: "https://www.google.com/search?q=Zebra+E-Bike+Madonna+di+Campiglio+recensioni" }
+  }
+};
+
+let currentLang = 'it';
+
+function renderContent(){
+  const c = document.getElementById('content');
+  c.innerHTML = '';
+  DATA[currentLang].sections.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'section' + (s.feature ? ' feature' : '');
+    div.innerHTML = `
+      <p class="section-eyebrow">${s.eyebrow}</p>
+      <p>${s.text}</p>
+      <button class="play-btn" data-index="${i}" aria-label="Ascolta">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+    `;
+    c.appendChild(div);
+  });
+
+  const ct = DATA[currentLang].contact;
+  if (ct) {
+    const box = document.createElement('div');
+    box.className = 'contact-box';
+    box.innerHTML = `
+      <p class="contact-label">${ct.label}</p>
+      <div class="contact-actions">
+        <a class="contact-btn" href="${ct.callHref}">
+          <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z"/></svg>
+          ${ct.call}
+        </a>
+        <a class="contact-btn" href="${ct.siteHref}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm6.93 6H15.5a15.9 15.9 0 0 0-1.25-3.53A8.03 8.03 0 0 1 18.93 8zM12 4.06c.83 1.2 1.5 2.55 1.94 3.94h-3.88c.44-1.39 1.11-2.74 1.94-3.94zM4.26 14A7.97 7.97 0 0 1 4 12c0-.68.09-1.35.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2H4.26zm.81 2h3.43c.31 1.26.75 2.45 1.25 3.53A8 8 0 0 1 5.07 16zm3.43-8H5.07a8 8 0 0 1 4.68-3.53C9.25 5.55 8.81 6.74 8.5 8zM12 19.94c-.83-1.2-1.5-2.55-1.94-3.94h3.88c-.44 1.39-1.11 2.74-1.94 3.94zM14.36 14H9.64c-.09-.66-.14-1.32-.14-2s.05-1.34.14-2h4.72c.09.66.14 1.32.14 2s-.05 1.34-.14 2zm.14 4.53c.5-1.08.94-2.27 1.25-3.53h3.43a8 8 0 0 1-4.68 3.53zM16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.17.65.26 1.32.26 2s-.09 1.35-.26 2h-3.38z"/></svg>
+          ${ct.site}
+        </a>
+      </div>
+    `;
+    c.appendChild(box);
+  }
+
+  const rv = DATA[currentLang].review;
+  if (rv) {
+    const rbox = document.createElement('div');
+    rbox.className = 'review-box';
+    rbox.innerHTML = `
+      <p class="review-title">${rv.title}</p>
+      <p class="review-sub">${rv.sub}</p>
+      <a class="review-btn" href="${rv.href}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+        ${rv.btn}
+      </a>
+    `;
+    c.appendChild(rbox);
+  }
+
+  c.querySelectorAll('.play-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.getAttribute('data-index'));
+      speakSection(idx, btn);
+    });
+  });
+}
+
+function speakSection(idx, btn){
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.play-btn').forEach(b => b.classList.remove('speaking'));
+  const s = DATA[currentLang].sections[idx];
+  const utter = new SpeechSynthesisUtterance(s.eyebrow + '. ' + s.text);
+  utter.lang = DATA[currentLang].lang;
+  utter.rate = 0.95;
+  btn.classList.add('speaking');
+  utter.onend = () => btn.classList.remove('speaking');
+  utter.onerror = () => btn.classList.remove('speaking');
+  window.speechSynthesis.speak(utter);
+}
+
+document.getElementById('langBar').addEventListener('click', (e) => {
+  const btn = e.target.closest('.lang-btn');
+  if (!btn) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentLang = btn.getAttribute('data-lang');
+  renderContent();
+});
+
+document.getElementById('tapMoment').addEventListener('click', function(){
+  this.classList.add('hide');
+});
+
+renderContent();
+</script>
+
+</body>
+</html>
