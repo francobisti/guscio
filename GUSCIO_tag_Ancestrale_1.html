@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUSCIO — Ancestrale</title>
+<style>
+  :root{
+    --ink:#EDE6D6;
+    --red:#C23B2E;
+    --red-deep:#8E271D;
+    --charcoal:#171412;
+    --charcoal-2:#1F1B18;
+    --paper:#EDE6D6;
+    --paper-dim:#D8CFBA;
+    --stone:#4A453C;
+    --gold:#C9A227;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0;
+    background: radial-gradient(circle at 30% 0%, #2B2622 0%, #100D0B 68%);
+    min-height:100vh;
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    color:var(--paper);
+    display:flex; align-items:center; justify-content:center;
+    padding: 28px 14px;
+  }
+  .stage{ width:100%; max-width:400px; }
+  .field-label{
+    text-align:center;
+    font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size:11px; letter-spacing:2.5px; text-transform:uppercase;
+    color:var(--paper-dim); opacity:.8; margin-bottom:14px;
+  }
+  .phone{
+    background: linear-gradient(180deg, #1C1815 0%, #0F0D0B 100%);
+    border-radius: 34px; padding: 10px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,.7), 0 0 0 1px rgba(237,230,214,.10);
+  }
+  .screen{
+    background: var(--charcoal); border-radius: 26px; overflow:hidden;
+    min-height: 680px; position:relative;
+    color: var(--paper); display:flex; flex-direction:column;
+  }
+  #tapMoment{
+    position:absolute; inset:0;
+    background: linear-gradient(160deg, var(--red) 0%, var(--red-deep) 100%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    z-index:10; cursor:pointer; transition: opacity .5s ease, visibility .5s ease;
+  }
+  #tapMoment.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  .nfc-ring{
+    width:88px; height:88px; border-radius:50%; border:1.5px solid var(--paper);
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .nfc-ring::before, .nfc-ring::after{
+    content:''; position:absolute; border-radius:50%;
+    border:1.5px solid var(--paper); inset:0; opacity:0;
+    animation: pulseRing 2.2s ease-out infinite;
+  }
+  .nfc-ring::after{ animation-delay: 1.1s; }
+  @keyframes pulseRing{ 0%{transform:scale(1);opacity:.9;} 100%{transform:scale(1.9);opacity:0;} }
+  .nfc-ring svg{ width:34px; height:34px; fill:var(--paper); }
+  #tapMoment p{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12px; letter-spacing:1.8px; text-transform:uppercase;
+    color:var(--paper); margin-top:22px; opacity:.9;
+  }
+  .head{
+    padding: 22px 22px 16px; border-bottom:1px solid #2A2521;
+    background: var(--charcoal);
+    position:relative;
+  }
+  .sound-toggle{
+    position:absolute; top:18px; right:18px;
+    width:34px; height:34px; border-radius:50%;
+    background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.16);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition: background .2s ease;
+  }
+  .sound-toggle:hover{ background: rgba(255,255,255,.12); }
+  .sound-toggle svg{ width:16px; height:16px; fill:var(--paper-dim); }
+  .wordmark{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11px; letter-spacing:3px; text-transform:uppercase;
+    color:var(--red); font-weight:700; margin:0 0 10px;
+  }
+  .prod-name{ font-size:27px; margin:0; line-height:1.1; color:var(--paper); letter-spacing:.5px; }
+  .prod-sub{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12px; color:var(--red); margin-top:6px; letter-spacing:1.5px; text-transform:uppercase; font-weight:700;
+  }
+  .prod-dates{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12.5px; color:var(--paper-dim); margin-top:8px; font-style:italic;
+  }
+  .langs{ display:flex; gap:6px; padding: 14px 22px 0; }
+  .lang-btn{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11.5px; font-weight:700; border:1px solid #35302B;
+    background:transparent; color:var(--paper-dim);
+    padding:6px 12px; border-radius:20px; cursor:pointer; transition: all .2s ease;
+  }
+  .lang-btn.active{ background:var(--red); color:var(--paper); border-color:var(--red); }
+  .content{ padding: 16px 22px 90px; overflow-y:auto; flex:1; }
+  .section{
+    margin-bottom:16px; padding:14px 16px; border-radius:12px;
+    background:var(--charcoal-2); border:1px solid #2E2823; position:relative;
+  }
+  .section.feature{ border-color:var(--red); background: linear-gradient(180deg, #241E1A, #1C1714); }
+  .section-eyebrow{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10px; letter-spacing:1.6px; text-transform:uppercase;
+    color:var(--red); margin:0 0 6px; font-weight:700;
+  }
+  .section p{ margin:0; font-size:14.5px; line-height:1.55; color:var(--paper); }
+  .section .lineup{ font-size:13.5px; line-height:1.7; color:var(--paper-dim); }
+  .play-btn{
+    position:absolute; top:12px; right:12px; width:30px; height:30px;
+    border-radius:50%; border:none; background:var(--red); color:var(--paper);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition: background .2s ease;
+  }
+  .play-btn:hover{ background:var(--red-deep); }
+  .play-btn svg{ width:13px; height:13px; fill:currentColor; }
+  .play-btn.speaking{ background:var(--gold); }
+  .footbar{
+    position:absolute; bottom:0; left:0; right:0;
+    background: linear-gradient(0deg, var(--charcoal) 62%, rgba(23,20,18,0));
+    padding: 26px 22px 16px; text-align:center;
+  }
+  .tagline{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10.5px; letter-spacing:1px; color:var(--paper-dim); font-style:italic;
+  }
+  .note{
+    text-align:center;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:11px; color:var(--paper-dim); opacity:.7;
+    margin-top:16px; line-height:1.5;
+  }
+  .contact-box{
+    margin-top:4px; margin-bottom:12px; padding:16px; border-radius:12px;
+    background: #241E1A; color: var(--paper); border:1px solid #35302B;
+  }
+  .contact-label{
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:10px; letter-spacing:1.6px; text-transform:uppercase;
+    color:var(--paper-dim); margin:0 0 10px; font-weight:700;
+  }
+  .contact-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+  .contact-btn{
+    flex:1; min-width:100px; display:flex; align-items:center; justify-content:center; gap:6px;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    font-size:12px; font-weight:700; text-decoration:none;
+    padding:10px 6px; border-radius:8px;
+    background: rgba(255,255,255,.06); color: var(--paper);
+    border:1px solid rgba(255,255,255,.18);
+  }
+  .contact-btn svg{ width:14px; height:14px; fill:currentColor; flex-shrink:0; }
+  .ticket-box{
+    margin-bottom:16px; padding:18px; border-radius:12px;
+    background: linear-gradient(180deg,#C23B2E,#8E271D);
+    text-align:center;
+  }
+  .ticket-box p.ticket-title{
+    font-family:'Georgia',serif; font-size:17px; color:var(--paper); margin:0 0 4px; font-weight:700;
+  }
+  .ticket-box p.ticket-sub{
+    font-family:-apple-system,'Segoe UI',sans-serif; font-size:11.5px; color:#F4DDD8; margin:0 0 14px;
+  }
+  .ticket-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:-apple-system,'Segoe UI',sans-serif; font-size:13px; font-weight:700;
+    text-decoration:none; padding:11px 22px; border-radius:22px;
+    background: var(--paper); color:#8E271D;
+  }
+  .ticket-btn svg{ width:14px; height:14px; fill:currentColor; }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <p class="field-label">Simulazione tag NFC · all'ingresso, sui banchi d'assaggio, sui tavoli</p>
+  <div class="phone">
+    <div class="screen">
+
+      <div id="tapMoment">
+        <div class="nfc-ring">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+        </div>
+        <p>Tocca per entrare</p>
+      </div>
+
+      <div class="head">
+        <button id="soundToggle" class="sound-toggle" aria-label="Audio ambientale">
+          <svg id="soundIconOn" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+          <svg id="soundIconOff" viewBox="0 0 24 24" style="display:none;"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3 3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4l-1.88 1.88L12 7.76V4z"/></svg>
+        </button>
+        <p class="wordmark">Guscio · soglia zero</p>
+        <h1 class="prod-name">Ancestrale</h1>
+        <p class="prod-sub">Natural Wine, Food &amp; Music</p>
+        <p class="prod-dates">24–25 luglio 2026 · Madonna di Campiglio</p>
+      </div>
+
+      <div class="langs" id="langBar">
+        <button class="lang-btn active" data-lang="it">IT</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
+
+      <div class="content" id="content"></div>
+
+      <div class="footbar"><p class="tagline">back to the origin</p></div>
+    </div>
+  </div>
+  <p class="note">Ogni sezione può essere ascoltata a voce, nella lingua selezionata.</p>
+</div>
+
+<script>
+const DATA = {
+  it: {
+    lang: "it-IT",
+    sections: [
+      { eyebrow: "Back to the Origin", text: "Ancestrale porta a Madonna di Campiglio due giorni di vino naturale, cibo e musica dal vivo. Un ritorno alle origini: vignaioli che lavorano in vigna con rispetto, senza scorciatoie, e portano in quota bottiglie che raccontano un luogo e un modo di intendere il vino.", feature:true },
+      { eyebrow: "Quando e dove", text: "24 e 25 luglio 2026, in Via Nambino, Località Patascoss, Madonna di Campiglio. Due giornate tra i banchi d'assaggio, il cibo e la musica dal vivo, in un contesto che unisce le Dolomiti di Brenta al mondo del vino naturale." },
+      { eyebrow: "I produttori", text: "" , lineup: "Ferro Wine · Triple A · Da Lucio* · Alois Lageder · Retrobottega · Etica · Wild Vigneron · Patrizia · Cascina Lago Scuro · Foradori · Salvetta · Alto* · DWNL · Ostreria · Fratelli Pavesi · The Morning Club · Fratelli Raguzzoni · Michele Bontempi — e molti altri." },
+      { eyebrow: "Cibo e musica", text: "Accanto ai banchi d'assaggio, una selezione di cibo pensata per accompagnare i vini in degustazione, e un programma musicale dal vivo che accompagna le due giornate dal pomeriggio fino a sera." },
+      { eyebrow: "Come arrivare", text: "L'evento si trova in Località Patascoss, a Madonna di Campiglio (TN), facilmente raggiungibile dal centro paese. Si consiglia di arrivare con comodo anticipo nelle ore di maggiore affluenza." }
+    ],
+    contact: { label: "Instagram e aggiornamenti", call: null, site: "@ancestrale_food_at_the_origin", siteHref: "https://www.instagram.com/ancestrale_food_at_the_origin/" },
+    ticket: { title: "Vieni ad Ancestrale", sub: "Posti limitati — assicurati il biglietto per entrambe le giornate", btn: "Acquista il biglietto", href: "https://www.instagram.com/ancestrale_food_at_the_origin/" }
+  },
+  en: {
+    lang: "en-GB",
+    sections: [
+      { eyebrow: "Back to the Origin", text: "Ancestrale brings two days of natural wine, food and live music to Madonna di Campiglio. A return to origins: winemakers who work the vineyard with respect, without shortcuts, bringing up to the mountains bottles that tell the story of a place and a way of thinking about wine.", feature:true },
+      { eyebrow: "When & where", text: "24–25 July 2026, in Via Nambino, Località Patascoss, Madonna di Campiglio. Two days among tasting tables, food and live music, set against the backdrop of the Brenta Dolomites." },
+      { eyebrow: "The producers", text: "", lineup: "Ferro Wine · Triple A · Da Lucio* · Alois Lageder · Retrobottega · Etica · Wild Vigneron · Patrizia · Cascina Lago Scuro · Foradori · Salvetta · Alto* · DWNL · Ostreria · Fratelli Pavesi · The Morning Club · Fratelli Raguzzoni · Michele Bontempi — and many more." },
+      { eyebrow: "Food & music", text: "Alongside the tasting tables, a food selection designed to pair with the wines on offer, plus a live music programme running through both afternoons into the evening." },
+      { eyebrow: "Getting there", text: "The event is held in Località Patascoss, Madonna di Campiglio (TN), an easy reach from the town centre. Arriving a little early is recommended during peak hours." }
+    ],
+    contact: { label: "Instagram & updates", call: null, site: "@ancestrale_food_at_the_origin", siteHref: "https://www.instagram.com/ancestrale_food_at_the_origin/" },
+    ticket: { title: "Join us at Ancestrale", sub: "Limited spots — secure your ticket for both days", btn: "Get your ticket", href: "https://www.instagram.com/ancestrale_food_at_the_origin/" }
+  }
+};
+
+let currentLang = 'it';
+let availableVoices = [];
+
+function loadVoices(){
+  availableVoices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+}
+if ('speechSynthesis' in window) {
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+function pickVoice(langCode){
+  if (!availableVoices.length) return null;
+  const base = langCode.split('-')[0];
+  // prefer voices explicitly matching the full locale (e.g. it-IT)
+  let candidates = availableVoices.filter(v => v.lang.toLowerCase() === langCode.toLowerCase());
+  if (!candidates.length) candidates = availableVoices.filter(v => v.lang.toLowerCase().startsWith(base));
+  if (!candidates.length) return null;
+  // avoid obviously robotic/compact engines when a richer alternative exists
+  const preferred = candidates.find(v => /natural|enhanced|premium|neural/i.test(v.name));
+  if (preferred) return preferred;
+  const nonCompact = candidates.find(v => !/compact/i.test(v.name));
+  return nonCompact || candidates[0];
+}
+
+function renderContent(){
+  const c = document.getElementById('content');
+  c.innerHTML = '';
+  DATA[currentLang].sections.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'section' + (s.feature ? ' feature' : '');
+    div.innerHTML = `
+      <p class="section-eyebrow">${s.eyebrow}</p>
+      ${s.text ? `<p>${s.text}</p>` : ''}
+      ${s.lineup ? `<p class="lineup">${s.lineup}</p>` : ''}
+      <button class="play-btn" data-index="${i}" aria-label="Ascolta">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+    `;
+    c.appendChild(div);
+  });
+
+  const ct = DATA[currentLang].contact;
+  if (ct) {
+    const box = document.createElement('div');
+    box.className = 'contact-box';
+    box.innerHTML = `
+      <p class="contact-label">${ct.label}</p>
+      <div class="contact-actions">
+        <a class="contact-btn" href="${ct.siteHref}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.13 1.38C1.35 2.68.94 3.35.63 4.14.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.66.66 1.33 1.07 2.13 1.38.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.38.66-.66 1.07-1.33 1.38-2.13.3-.76.5-1.64.56-2.91.06-1.27.07-1.68.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.9 5.9 0 0 0-1.38-2.13A5.9 5.9 0 0 0 19.86.63C19.1.33 18.22.13 16.95.07 15.67.01 15.26 0 12 0z"/><path d="M12 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zm0 10.16A4 4 0 1 1 16 12a4 4 0 0 1-4 4zM19.85 5.6a1.44 1.44 0 1 1-1.44-1.44 1.44 1.44 0 0 1 1.44 1.44z"/></svg>
+          ${ct.site}
+        </a>
+      </div>
+    `;
+    c.appendChild(box);
+  }
+
+  const tk = DATA[currentLang].ticket;
+  if (tk) {
+    const tbox = document.createElement('div');
+    tbox.className = 'ticket-box';
+    tbox.innerHTML = `
+      <p class="ticket-title">${tk.title}</p>
+      <p class="ticket-sub">${tk.sub}</p>
+      <a class="ticket-btn" href="${tk.href}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M20 12c0-1.1.9-2 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v4c1.1 0 2 .9 2 2s-.9 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2z"/></svg>
+        ${tk.btn}
+      </a>
+    `;
+    c.appendChild(tbox);
+  }
+
+  c.querySelectorAll('.play-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.getAttribute('data-index'));
+      speakSection(idx, btn);
+    });
+  });
+}
+
+function speakSection(idx, btn){
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.play-btn').forEach(b => b.classList.remove('speaking'));
+  const s = DATA[currentLang].sections[idx];
+  const spoken = s.eyebrow + '. ' + (s.text || s.lineup || '');
+  const utter = new SpeechSynthesisUtterance(spoken);
+  utter.lang = DATA[currentLang].lang;
+  const voice = pickVoice(DATA[currentLang].lang);
+  if (voice) utter.voice = voice;
+  utter.rate = 0.98;
+  utter.pitch = 1.0;
+  btn.classList.add('speaking');
+  duckAmbient(true);
+  utter.onend = () => { btn.classList.remove('speaking'); duckAmbient(false); };
+  utter.onerror = () => { btn.classList.remove('speaking'); duckAmbient(false); };
+  window.speechSynthesis.speak(utter);
+}
+
+document.getElementById('langBar').addEventListener('click', (e) => {
+  const btn = e.target.closest('.lang-btn');
+  if (!btn) return;
+  window.speechSynthesis.cancel();
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentLang = btn.getAttribute('data-lang');
+  renderContent();
+});
+
+document.getElementById('tapMoment').addEventListener('click', function(){
+  this.classList.add('hide');
+  startAmbient();
+});
+
+renderContent();
+
+/* ---- Ambient generative soundscape (original, synthesized — no copyrighted audio) ---- */
+let audioCtx = null;
+let masterGain = null;
+let ambientOn = true;
+let ambientNodes = [];
+
+function startAmbient(){
+  if (audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  masterGain = audioCtx.createGain();
+  masterGain.gain.value = 0.0;
+  masterGain.connect(audioCtx.destination);
+  masterGain.gain.linearRampToValueAtTime(0.16, audioCtx.currentTime + 2.5);
+
+  // warm detuned drone pad — includes a higher octave so phone speakers can actually reproduce it
+  [196, 293.66, 392, 587.33].forEach((freq, i) => {
+    const osc = audioCtx.createOscillator();
+    osc.type = i % 2 === 0 ? 'sine' : 'triangle';
+    osc.frequency.value = freq;
+    const g = audioCtx.createGain();
+    g.gain.value = i === 0 ? 0.9 : 0.4;
+    const lfo = audioCtx.createOscillator();
+    lfo.frequency.value = 0.05 + i * 0.03;
+    const lfoGain = audioCtx.createGain();
+    lfoGain.gain.value = 0.15;
+    lfo.connect(lfoGain);
+    lfoGain.connect(g.gain);
+    osc.connect(g);
+    g.connect(masterGain);
+    osc.start();
+    lfo.start();
+    ambientNodes.push(osc, lfo);
+  });
+
+  // soft filtered noise wash, like wind over stone
+  const bufferSize = audioCtx.sampleRate * 2;
+  const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = noiseBuffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.5;
+  const noise = audioCtx.createBufferSource();
+  noise.buffer = noiseBuffer;
+  noise.loop = true;
+  const noiseFilter = audioCtx.createBiquadFilter();
+  noiseFilter.type = 'bandpass';
+  noiseFilter.frequency.value = 900;
+  noiseFilter.Q.value = 0.6;
+  const noiseGain = audioCtx.createGain();
+  noiseGain.gain.value = 0.3;
+  noise.connect(noiseFilter);
+  noiseFilter.connect(noiseGain);
+  noiseGain.connect(masterGain);
+  noise.start();
+  ambientNodes.push(noise);
+
+  // occasional soft resonant tick, like a distant hand drum
+  scheduleTick();
+}
+
+function scheduleTick(){
+  if (!audioCtx) return;
+  const delay = 4 + Math.random() * 6;
+  setTimeout(() => {
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = 70 + Math.random() * 20;
+    const g = audioCtx.createGain();
+    g.gain.value = 0;
+    g.gain.linearRampToValueAtTime(0.18, audioCtx.currentTime + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+    osc.connect(g);
+    g.connect(masterGain);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.6);
+    scheduleTick();
+  }, delay * 1000);
+}
+
+document.getElementById('soundToggle').addEventListener('click', () => {
+  if (!audioCtx) { startAmbient(); ambientOn = true; }
+  else {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    ambientOn = !ambientOn;
+  }
+  const target = ambientOn ? 0.16 : 0;
+  if (masterGain) masterGain.gain.linearRampToValueAtTime(target, audioCtx.currentTime + 0.6);
+  document.getElementById('soundIconOn').style.display = ambientOn ? 'block' : 'none';
+  document.getElementById('soundIconOff').style.display = ambientOn ? 'none' : 'block';
+});
+
+function duckAmbient(down){
+  if (!masterGain || !audioCtx || !ambientOn) return;
+  const target = down ? 0.03 : 0.16;
+  masterGain.gain.linearRampToValueAtTime(target, audioCtx.currentTime + 0.4);
+}
+</script>
+
+</body>
+</html>
